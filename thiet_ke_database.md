@@ -66,6 +66,7 @@ interface User {
   created_at: Date
   updated_at: Date
   forgot_password_token: string
+  email_verify_token: string
   address: string // optional
   username: string // optional
   avatar: string
@@ -84,8 +85,7 @@ interface User {
   "data": {
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdXBlcmFkbWluQHN1cGVyYWRtaW4uY29tIiwidWF2IjoiMSIsImlhdCI6MTcxMjE5ODU4NSwiZXhwIjoxNzE0NzkwNTg1fQ.zna-DPcHW-jPg_3M5h5f4tHK8zLm7qvxJSiLGeYUCgQ",
     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdXBlcmFkbWluQHN1cGVyYWRtaW4uY29tIiwidWF2IjoiMSIsImlhdCI6MTcxMjE5ODU4NSwiZXhwIjoxNzEyODAzMzg1fQ.jRmIe7scz-COvneP8VtozJg1QdPxHDzfk-Ifiw3DUwk"
-  },
-  "message": "Tạo sản phẩm thành công!"
+  }
 }
 ```
 
