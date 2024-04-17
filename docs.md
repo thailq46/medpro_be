@@ -6,3 +6,6 @@
 2. Dotenv `https://www.npmjs.com/package/dotenv`
 3. Express-Validator `https://www.npmjs.com/package/express-validator`
 4. MongoDB ``
+5. JWT
+   `https://www.npmjs.com/package/jsonwebtoken`
+   `https://www.npmjs.com/package/@types/jsonwebtoken`

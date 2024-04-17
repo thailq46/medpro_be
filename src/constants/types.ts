@@ -1,0 +1,31 @@
+export enum GenderType {
+  Male = 0,
+  Female = 1
+}
+
+export enum RoleType {
+  Admin = 0,
+  Doctor = 1,
+  Patient = 2
+}
+
+export enum PositionType {
+  None = 0,
+  Master = 1, // Thạc sĩ
+  Doctor = 2, // Tiến sĩ
+  AssociateProfessor = 3, // Phó giáo sư
+  Professor = 4 // Giáo sư
+}
+
+export enum UserVerifyStatus {
+  Unverified = 0, // chưa xác thực email, mặc định = 0
+  Verified = 1, // đã xác thực emails
+  Banned = 2 // bị khoá
+}
+
+export enum TokenType {
+  AccessToken,
+  RefreshToken,
+  ForgotPasswordToken,
+  EmailVerifyToken
+}
