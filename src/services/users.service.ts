@@ -1,9 +1,10 @@
 import {ObjectId} from 'mongodb'
 import {envConfig} from '~/constants/config'
-import {RoleType, TokenType, UserVerifyStatus} from '~/constants/types'
+import {RoleType, TokenType, UserVerifyStatus} from '~/constants/enum'
 import {RegisterReqBody} from '~/models/request/User.request'
 import User from '~/models/schemas/User.schema'
 import databaseService from '~/services/database.service'
+import {hashPassword} from '~/utils/crypto'
 import {signToken} from '~/utils/jwt'
 
 class UsersService {
@@ -49,13 +50,15 @@ class UsersService {
       new User({
         ...payload,
         _id: user_id,
+        username: `user${user_id.toString()}`,
+        password: hashPassword(payload.password),
         date_of_birth: new Date(payload.date_of_birth)
       })
     )
     const [access_token, refresh_token] = await this.signAccessTokenAndRefreshToken({
       user_id: user_id.toString(),
       verify: UserVerifyStatus.Unverified,
-      role: RoleType.Patient
+      role: RoleType.User
     })
     return {
       access_token,

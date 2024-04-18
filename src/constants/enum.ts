@@ -6,7 +6,7 @@ export enum GenderType {
 export enum RoleType {
   Admin = 0,
   Doctor = 1,
-  Patient = 2
+  User = 2
 }
 
 export enum PositionType {

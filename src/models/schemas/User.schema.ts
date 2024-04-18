@@ -1,5 +1,5 @@
 import {ObjectId} from 'mongodb'
-import {GenderType, PositionType, RoleType, UserVerifyStatus} from '~/constants/types'
+import {GenderType, PositionType, RoleType, UserVerifyStatus} from '~/constants/enum'
 
 interface UserType {
   _id?: ObjectId
@@ -54,7 +54,7 @@ export default class User {
     this.address = user.address || ''
     this.username = user.username || ''
     this.avatar = user.avatar || ''
-    this.role = user.role || RoleType.Patient
+    this.role = user.role || RoleType.User
     this.phone_number = user.phone_number || ''
     this.position = user.position || PositionType.None
     this.verify = user.verify || UserVerifyStatus.Unverified

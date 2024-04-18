@@ -1,6 +1,6 @@
 import {checkSchema} from 'express-validator'
 import {USERS_MESSAGE} from '~/constants/messages'
-import {GenderType} from '~/constants/types'
+import {GenderType} from '~/constants/enum'
 import databaseService from '~/services/database.service'
 import usersService from '~/services/users.service'
 import validate from '~/utils/validate'
