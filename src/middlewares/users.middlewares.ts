@@ -1,4 +1,4 @@
-import {checkSchema} from 'express-validator'
+import {check, checkSchema} from 'express-validator'
 import {USERS_MESSAGE} from '~/constants/messages'
 import usersService from '~/services/users.service'
 import validate from '~/utils/validate'
@@ -14,6 +14,10 @@ import {ErrorWithStatus} from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatus'
 import databaseService from '~/services/database.service'
 import {hashPassword} from '~/utils/crypto'
+import {Request} from 'express'
+import {verifyAccessToken} from '~/utils/common'
+import {envConfig} from '~/constants/config'
+import {verifyToken} from '~/utils/jwt'
 
 export const registerValidator = validate(
   checkSchema(
@@ -83,6 +87,68 @@ export const loginValidator = validate(
         }
       },
       password: passwordCheckSchema
+    },
+    ['body']
+  )
+)
+
+export const accessTokenValidator = validate(
+  checkSchema(
+    {
+      Authorization: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGE.ACCESS_TOKEN_REQUIRED
+        },
+        custom: {
+          options: async (value: string, {req}) => {
+            if (!value) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNAUTHORIZED,
+                message: USERS_MESSAGE.ACCESS_TOKEN_REQUIRED
+              })
+            }
+            const accessToken = (value || '').split(' ')[1]
+            return await verifyAccessToken(accessToken, req as Request)
+          }
+        }
+      }
+    },
+    ['headers']
+  )
+)
+
+export const refreshTokenValidator = validate(
+  checkSchema(
+    {
+      refresh_token: {
+        notEmpty: {errorMessage: USERS_MESSAGE.REFRESH_TOKEN_IS_REQUIRED},
+        isString: {errorMessage: USERS_MESSAGE.REFRESH_TOKEN_MUST_BE_STRING},
+        custom: {
+          options: async (value: string, {req}) => {
+            if (!value) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNAUTHORIZED,
+                message: USERS_MESSAGE.REFRESH_TOKEN_IS_REQUIRED
+              })
+            }
+            const [decode_refresh_token, refresh_token] = await Promise.all([
+              await verifyToken({
+                token: value,
+                secretOrPrivateKey: envConfig.jwtSecretRefreshToken
+              }),
+              await databaseService.refreshTokens.findOne({token: value})
+            ])
+            if (!refresh_token) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNAUTHORIZED,
+                message: USERS_MESSAGE.USED_REFRESH_TOKEN_OR_NOT_EXISTS
+              })
+            }
+            ;(req as Request).decode_refresh_token = decode_refresh_token
+            return true
+          }
+        }
+      }
     },
     ['body']
   )
