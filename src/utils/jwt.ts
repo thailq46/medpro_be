@@ -1,6 +1,15 @@
 import jwt from 'jsonwebtoken'
 import {envConfig} from '~/constants/config'
 
+interface TokenPayload extends jwt.JwtPayload {
+  user_id: string
+  token_type: string
+  verify: string
+  role: string
+  exp: number
+  iat: number
+}
+
 export const signToken = ({
   payload,
   secretOrPrivateKey = envConfig.secretOrPrivateKey,
@@ -18,6 +27,24 @@ export const signToken = ({
         throw reject(err)
       }
       resolve(token as string)
+    })
+  })
+}
+
+export const verifyToken = ({
+  token,
+  secretOrPrivateKey = envConfig.secretOrPrivateKey
+}: {
+  token: string
+  secretOrPrivateKey?: string
+}) => {
+  return new Promise<TokenPayload>((resolve, reject) => {
+    jwt.verify(token, secretOrPrivateKey, (err, decoded) => {
+      if (err) {
+        return reject(err)
+      }
+      // console.log('jwt.verify ~ decoded', decoded)
+      resolve(decoded as TokenPayload)
     })
   })
 }

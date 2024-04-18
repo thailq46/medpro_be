@@ -1,21 +1,26 @@
 import {checkSchema} from 'express-validator'
 import {USERS_MESSAGE} from '~/constants/messages'
-import {GenderType} from '~/constants/enum'
-import databaseService from '~/services/database.service'
 import usersService from '~/services/users.service'
 import validate from '~/utils/validate'
+import {
+  nameCheckSchema,
+  emailCheckSchema,
+  dateOfBirthCheckSchema,
+  passwordCheckSchema,
+  genderCheckSchema,
+  confirmPasswordCheckSchema
+} from '~/constants/checkSchema'
+import {ErrorWithStatus} from '~/models/Errors'
+import HTTP_STATUS from '~/constants/httpStatus'
+import databaseService from '~/services/database.service'
+import {hashPassword} from '~/utils/crypto'
 
 export const registerValidator = validate(
   checkSchema(
     {
-      name: {
-        notEmpty: {errorMessage: USERS_MESSAGE.NAME_IS_REQUIRED},
-        isString: {errorMessage: USERS_MESSAGE.NAME_MUST_BE_STRING},
-        trim: true
-      },
+      name: nameCheckSchema,
       email: {
-        notEmpty: {errorMessage: USERS_MESSAGE.EMAIL_IS_REQUIRED},
-        isEmail: {errorMessage: USERS_MESSAGE.INVALID_EMAIL},
+        ...emailCheckSchema,
         custom: {
           options: async (value: string) => {
             const isExistEmail = await usersService.checkEmailExist(value)
@@ -24,61 +29,23 @@ export const registerValidator = validate(
             }
             return true
           }
-        },
-        trim: true
-      },
-      gender: {
-        notEmpty: {errorMessage: USERS_MESSAGE.GENDER_IS_REQUIRED},
-        isIn: {
-          options: [[GenderType.Male, GenderType.Female]],
-          errorMessage: USERS_MESSAGE.INVALID_GENDER
         }
       },
-      date_of_birth: {
-        notEmpty: {errorMessage: USERS_MESSAGE.DATE_BIRTH_IS_REQUIRED},
-        isISO8601: {
-          errorMessage: USERS_MESSAGE.INVALID_DATE_OF_BIRTH,
-          options: {
-            strict: true,
-            strictSeparator: true
+      gender: {
+        ...genderCheckSchema,
+        custom: {
+          options: (value: number) => {
+            if (typeof value !== 'number') {
+              throw new Error(USERS_MESSAGE.GENDER_MUST_BE_NUMBER)
+            }
+            return true
           }
         }
       },
-      password: {
-        notEmpty: {errorMessage: USERS_MESSAGE.PASSWORD_IS_REQUIRED},
-        isString: {errorMessage: USERS_MESSAGE.PASSWORD_MUST_BE_STRING},
-        isLength: {
-          options: {min: 6, max: 50},
-          errorMessage: USERS_MESSAGE.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
-        },
-        isStrongPassword: {
-          options: {
-            minLength: 6,
-            minLowercase: 1,
-            minUppercase: 1,
-            minNumbers: 1,
-            minSymbols: 1
-          },
-          errorMessage: USERS_MESSAGE.PASSWORD_MUST_BE_STRONG
-        }
-      },
+      date_of_birth: dateOfBirthCheckSchema,
+      password: passwordCheckSchema,
       confirm_password: {
-        notEmpty: {errorMessage: USERS_MESSAGE.PASSWORD_IS_REQUIRED},
-        isString: {errorMessage: USERS_MESSAGE.PASSWORD_MUST_BE_STRING},
-        isLength: {
-          options: {min: 6, max: 50},
-          errorMessage: USERS_MESSAGE.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
-        },
-        isStrongPassword: {
-          options: {
-            minLength: 6,
-            minLowercase: 1,
-            minUppercase: 1,
-            minNumbers: 1,
-            minSymbols: 1
-          },
-          errorMessage: USERS_MESSAGE.PASSWORD_MUST_BE_STRONG
-        },
+        ...confirmPasswordCheckSchema,
         custom: {
           options: (value: string, {req}) => {
             if (value !== req.body.password) {
@@ -88,6 +55,34 @@ export const registerValidator = validate(
           }
         }
       }
+    },
+    ['body']
+  )
+)
+
+export const loginValidator = validate(
+  checkSchema(
+    {
+      email: {
+        ...emailCheckSchema,
+        custom: {
+          options: async (value: string, {req}) => {
+            const user = await databaseService.users.findOne({
+              email: value,
+              password: hashPassword(req.body.password)
+            })
+            if (!user) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNAUTHORIZED,
+                message: USERS_MESSAGE.EMAIL_OR_PASSWORD_INCORRECT
+              })
+            }
+            req.user = user
+            return true
+          }
+        }
+      },
+      password: passwordCheckSchema
     },
     ['body']
   )

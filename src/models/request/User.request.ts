@@ -6,3 +6,8 @@ export interface RegisterReqBody {
   date_of_birth: string
   gender: number
 }
+
+export interface LoginReqBody {
+  email: string
+  password: string
+}
