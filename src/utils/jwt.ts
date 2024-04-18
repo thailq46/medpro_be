@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import {envConfig} from '~/constants/config'
 
-interface TokenPayload extends jwt.JwtPayload {
+export interface TokenPayload extends jwt.JwtPayload {
   user_id: string
   token_type: string
   verify: string

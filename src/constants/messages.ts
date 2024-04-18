@@ -30,9 +30,17 @@ export const USERS_MESSAGE = {
   LOGOUT_SUCCESS: 'Logout success',
 
   EMAIL_OR_PASSWORD_INCORRECT: 'Email or password is incorrect',
+  CHECK_EMAIL_TO_RESET_PASSWORD: 'Check email to reset password',
+  FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Forgot password token is required',
+  FORGOT_PASSWORD_TOKEN_MUST_BE_STRING: 'Forgot password token must be a string',
+  INVALID_FORGOT_PASSWORD_TOKEN: 'Invalid forgot password token',
 
   REFRESH_TOKEN_MUST_BE_STRING: 'Refresh token must be a string',
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
   USED_REFRESH_TOKEN_OR_NOT_EXISTS: 'Used refresh token or not exists',
-  ACCESS_TOKEN_REQUIRED: 'Access token is required'
+  ACCESS_TOKEN_REQUIRED: 'Access token is required',
+
+  USER_NOT_FOUND: 'User not found',
+  VERIFY_FORGOT_PASSWORD_SUCCESS: 'Verify forgot password success',
+  RESET_PASSWORD_SUCCESS: 'Reset password success'
 }

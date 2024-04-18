@@ -14,8 +14,13 @@ export const envConfig = {
   dbRefreshTokensCollection: process.env.DB_REFRESH_TOKENS_COLLECTION as string,
 
   secretOrPrivateKey: process.env.SECRET_OR_PRIVATE_KEY as string,
+
   jwtSecretAccessToken: process.env.JWT_ACCESS_TOKEN as string,
   jwtAccessTokenExpiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN as string,
+
   jwtSecretRefreshToken: process.env.JWT_REFRESH_TOKEN as string,
-  jwtRefreshTokenExpiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN as string
+  jwtRefreshTokenExpiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN as string,
+
+  jwtSecretForgotPasswordToken: process.env.JWT_FORGOT_PASSWORD_TOKEN as string,
+  jwtForgotPasswordTokenExpiresIn: process.env.JWT_FORGOT_PASSWORD_TOKEN_EXPIRES_IN as string
 }

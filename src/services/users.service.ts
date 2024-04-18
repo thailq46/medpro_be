@@ -1,6 +1,7 @@
 import {ObjectId} from 'mongodb'
 import {envConfig} from '~/constants/config'
 import {RoleType, TokenType, UserVerifyStatus} from '~/constants/enum'
+import {USERS_MESSAGE} from '~/constants/messages'
 import {RegisterReqBody} from '~/models/request/User.request'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import User from '~/models/schemas/User.schema'
@@ -75,6 +76,27 @@ class UsersService {
     })
   }
 
+  private signForgotPasswordToken({
+    user_id,
+    verify,
+    role
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    role: RoleType
+  }) {
+    return signToken({
+      payload: {
+        user_id,
+        token_type: TokenType.ForgotPasswordToken,
+        verify,
+        role
+      },
+      secretOrPrivateKey: envConfig.jwtSecretForgotPasswordToken,
+      options: {expiresIn: envConfig.jwtForgotPasswordTokenExpiresIn}
+    })
+  }
+
   async register(payload: RegisterReqBody) {
     const user_id = new ObjectId()
     await databaseService.users.insertOne(
@@ -129,6 +151,33 @@ class UsersService {
 
   async logout(refresh_token: string) {
     return await databaseService.refreshTokens.deleteOne({token: refresh_token})
+  }
+
+  async forgotPassword({user_id, verify, role}: {user_id: string; verify: UserVerifyStatus; role: RoleType}) {
+    const forgot_password_token = await this.signForgotPasswordToken({user_id, verify, role})
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      [{$set: {forgot_password_token, updated_at: '$$NOW'}}]
+    )
+    // Giả bộ gửi email kèm đường link đến email người dùng: https://example.com/reset-password?token=<forgot_password_token>
+    console.log('forgot_password_token', forgot_password_token)
+    return {
+      message: USERS_MESSAGE.CHECK_EMAIL_TO_RESET_PASSWORD
+    }
+  }
+
+  async resetPassword({user_id, password}: {user_id: string; password: string}) {
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      [{$set: {password: hashPassword(password), updated_at: '$$NOW'}}]
+    )
+    return {
+      message: USERS_MESSAGE.RESET_PASSWORD_SUCCESS
+    }
   }
 
   async checkEmailExist(email: string) {
