@@ -1,3 +1,4 @@
+import {ParamsDictionary} from 'express-serve-static-core'
 export interface RegisterReqBody {
   name: string
   password: string
@@ -39,4 +40,7 @@ export interface UpdateMeBody {
   phone_number?: string
   position?: number
   username?: string
+}
+export interface GetUserByUsernameReqParams extends ParamsDictionary {
+  username: string
 }

@@ -63,5 +63,6 @@ export const USERS_MESSAGE = {
   POSITION_IS_REQUIRED: 'Position is required',
   USERNAME_MUST_BE_STRING: 'Username must be a string',
   USERNAME_ALREADY_EXIST: 'Username already exist',
-  GET_LIST_USERS_SUCCESS: 'Get list users success'
+  GET_LIST_USERS_SUCCESS: 'Get list users success',
+  GET_USER_BY_USERNAME_SUCCESS: 'Get user by username success'
 }

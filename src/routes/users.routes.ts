@@ -1,5 +1,10 @@
 import {Router} from 'express'
-import {getListUsersController, getMeController, updateMeController} from '~/controllers/users.controllers'
+import {
+  getListUsersController,
+  getMeController,
+  getUserByUsernameController,
+  updateMeController
+} from '~/controllers/users.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware} from '~/middlewares/common.middlewares'
 import {updateMeValidator, verifiedUserValidator} from '~/middlewares/users.middlewares'
@@ -40,6 +45,15 @@ usersRouter.patch(
   ]),
   wrapRequestHandler(updateMeController)
 )
+
+/**
+ * Desscription: Get user by username
+ * Path: /users/:username
+ * Method: GET
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { username: string }
+ */
+usersRouter.get('/:username', accessTokenValidator, wrapRequestHandler(getUserByUsernameController))
 
 /**
  * Desscription: Get list users

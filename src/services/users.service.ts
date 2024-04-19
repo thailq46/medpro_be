@@ -1,4 +1,6 @@
+import {Response} from 'express'
 import {ObjectId} from 'mongodb'
+import {USERS_MESSAGE} from '~/constants/messages'
 import {UpdateMeBody} from '~/models/request/User.request'
 import databaseService from '~/services/database.service'
 
@@ -54,6 +56,26 @@ class UsersService {
       }
     )
     return users.toArray()
+  }
+
+  async getUserByUsername(username: string, res: Response) {
+    const user = await databaseService.users.findOne(
+      {username},
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    if (!user) {
+      return res.json({message: USERS_MESSAGE.USER_NOT_FOUND})
+    }
+    return res.json({
+      message: USERS_MESSAGE.GET_USER_BY_USERNAME_SUCCESS,
+      data: user
+    })
   }
 }
 
