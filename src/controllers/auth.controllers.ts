@@ -13,7 +13,7 @@ import {
   VerifyForgotPasswordReqBody
 } from '~/models/request/User.request'
 import User from '~/models/schemas/User.schema'
-import authService from '~/services/users.service'
+import authService from '~/services/auth.service'
 import {TokenPayload} from '~/utils/jwt'
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {

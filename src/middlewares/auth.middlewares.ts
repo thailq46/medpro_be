@@ -1,6 +1,6 @@
 import {checkSchema} from 'express-validator'
 import {USERS_MESSAGE} from '~/constants/messages'
-import usersService from '~/services/users.service'
+import usersService from '~/services/auth.service'
 import validate from '~/utils/validate'
 import {
   nameCheckSchema,

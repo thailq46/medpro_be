@@ -30,3 +30,13 @@ export interface EmailVerifyReqBody {
 export interface RefreshTokenReqBody {
   refresh_token: string
 }
+export interface UpdateMeBody {
+  name?: string
+  date_of_birth?: string
+  gender?: number
+  address?: string
+  avatar?: string
+  phone_number?: string
+  position?: number
+  username?: string
+}

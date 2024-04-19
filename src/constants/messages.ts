@@ -49,5 +49,18 @@ export const USERS_MESSAGE = {
   EMAIL_VERIFY_TOKEN_MUST_BE_STRING: 'Email verify token must be a string',
   EMAIL_VERIFY_SUCCESS: 'Email verify success',
   EMAIL_ALREADY_VERIFIED_BEFORE: 'Email already verified before',
-  RESEND_EMAIL_VERIFY_SUCCESS: 'Resend email verify success'
+  RESEND_EMAIL_VERIFY_SUCCESS: 'Resend email verify success',
+
+  GET_ME_SUCCESS: 'Get information account in use success',
+  USER_NOT_VERIFIED: 'User not verified',
+  UPDATE_ME_SUCCESS: 'Update information account in use success',
+
+  ADDRESS_MUST_BE_STRING: 'Address must be a string',
+  AVATAR_MUST_BE_STRING: 'Avatar must be a string',
+  PHONE_NUMBER_MUST_BE_STRING: 'Phone number must be a string',
+  INVALID_PHONE_NUMBER: 'Invalid phone number',
+  INVALID_POSITION: 'Invalid position',
+  POSITION_IS_REQUIRED: 'Position is required',
+  USERNAME_MUST_BE_STRING: 'Username must be a string',
+  USERNAME_ALREADY_EXIST: 'Username already exist'
 }
