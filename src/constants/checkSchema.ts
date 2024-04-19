@@ -1,5 +1,5 @@
 import {ParamSchema} from 'express-validator'
-import {GenderType} from '~/constants/enum'
+import {GenderType, PositionType} from '~/constants/enum'
 import {USERS_MESSAGE} from '~/constants/messages'
 import {numberEnumToArray} from '~/utils/common'
 
@@ -73,4 +73,19 @@ export const confirmPasswordCheckSchema: ParamSchema = {
     errorMessage: USERS_MESSAGE.CONFIRM_PASSWORD_MUST_BE_STRONG
   },
   trim: true
+}
+export const addressCheckSchema: ParamSchema = {
+  isString: {errorMessage: USERS_MESSAGE.ADDRESS_MUST_BE_STRING},
+  trim: true
+}
+export const avatarCheckSchema: ParamSchema = {
+  isString: {errorMessage: USERS_MESSAGE.AVATAR_MUST_BE_STRING},
+  trim: true
+}
+export const positionCheckSchema: ParamSchema = {
+  notEmpty: {errorMessage: USERS_MESSAGE.POSITION_IS_REQUIRED},
+  isIn: {
+    options: [numberEnumToArray(PositionType)],
+    errorMessage: USERS_MESSAGE.INVALID_POSITION
+  }
 }

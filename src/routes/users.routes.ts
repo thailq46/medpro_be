@@ -3,12 +3,13 @@ import {
   getListUsersController,
   getMeController,
   getUserByUsernameController,
-  updateMeController
+  updateMeController,
+  updateUserByUsernameController
 } from '~/controllers/users.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware} from '~/middlewares/common.middlewares'
-import {updateMeValidator, verifiedUserValidator} from '~/middlewares/users.middlewares'
-import {UpdateMeBody} from '~/models/request/User.request'
+import {updateMeValidator, updateUserByUsernameValidator, verifiedUserValidator} from '~/middlewares/users.middlewares'
+import {UpdateMeBody, UpdateUserByUsernameBody} from '~/models/request/User.request'
 import {wrapRequestHandler} from '~/utils/handlers'
 
 const usersRouter = Router()
@@ -33,16 +34,7 @@ usersRouter.patch(
   accessTokenValidator,
   verifiedUserValidator,
   updateMeValidator,
-  filterMiddleware<UpdateMeBody>([
-    'avatar',
-    'username',
-    'address',
-    'date_of_birth',
-    'gender',
-    'name',
-    'phone_number',
-    'position'
-  ]),
+  filterMiddleware<UpdateMeBody>(['avatar', 'username', 'address', 'date_of_birth', 'gender', 'name', 'phone_number']),
   wrapRequestHandler(updateMeController)
 )
 
@@ -54,6 +46,34 @@ usersRouter.patch(
  * Params: { username: string }
  */
 usersRouter.get('/:username', accessTokenValidator, wrapRequestHandler(getUserByUsernameController))
+
+/**
+ * Desscription: Update user by username
+ * Path: /users/:username
+ * Method: PATCH
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { username: string }
+ * Body: { UserSchema }
+ */
+usersRouter.patch(
+  '/:username',
+  accessTokenValidator,
+  verifiedUserValidator,
+  updateUserByUsernameValidator,
+  filterMiddleware<UpdateUserByUsernameBody>([
+    'address',
+    'avatar',
+    'date_of_birth',
+    'gender',
+    'name',
+    'phone_number',
+    'position',
+    'role',
+    'username',
+    'verify'
+  ]),
+  wrapRequestHandler(updateUserByUsernameController)
+)
 
 /**
  * Desscription: Get list users

@@ -38,9 +38,21 @@ export interface UpdateMeBody {
   address?: string
   avatar?: string
   phone_number?: string
-  position?: number
   username?: string
 }
 export interface GetUserByUsernameReqParams extends ParamsDictionary {
   username: string
+}
+
+export interface UpdateUserByUsernameBody {
+  name?: string
+  date_of_birth?: string
+  gender?: number
+  address?: string
+  avatar?: string
+  phone_number?: string
+  username?: string
+  position?: number
+  verify?: number
+  role?: number
 }

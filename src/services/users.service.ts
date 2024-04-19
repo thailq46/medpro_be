@@ -2,7 +2,7 @@ import {Response} from 'express'
 import {ObjectId} from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
 import {USERS_MESSAGE} from '~/constants/messages'
-import {UpdateMeBody} from '~/models/request/User.request'
+import {UpdateMeBody, UpdateUserByUsernameBody} from '~/models/request/User.request'
 import databaseService from '~/services/database.service'
 
 class UsersService {
@@ -70,6 +70,30 @@ class UsersService {
         }
       }
     )
+  }
+
+  async updateUserByUsername(username: string, payload: UpdateUserByUsernameBody) {
+    const _payload = payload.date_of_birth ? {...payload, date_of_birth: new Date(payload.date_of_birth)} : payload
+    const user = await databaseService.users.findOneAndUpdate(
+      {username},
+      [
+        {
+          $set: {
+            ...(_payload as UpdateUserByUsernameBody & {date_of_birth?: Date}),
+            updated_at: '$$NOW'
+          }
+        }
+      ],
+      {
+        returnDocument: 'after',
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    return user
   }
 }
 

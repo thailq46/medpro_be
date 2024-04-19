@@ -64,5 +64,13 @@ export const USERS_MESSAGE = {
   USERNAME_MUST_BE_STRING: 'Username must be a string',
   USERNAME_ALREADY_EXIST: 'Username already exist',
   GET_LIST_USERS_SUCCESS: 'Get list users success',
-  GET_USER_BY_USERNAME_SUCCESS: 'Get user by username success'
+  GET_USER_BY_USERNAME_SUCCESS: 'Get user by username success',
+  VERIFY_IS_REQUIRED: 'Verify is required',
+  ROLE_IS_REQUIRED: 'Role is required',
+  UPDATE_SUCCESS: 'Update success',
+  POSITION_MUST_BE_NUMBER: 'Position must be a number',
+  VERIFY_MUST_BE_A_NUMBER: 'Verify must be a number',
+  ROLE_MUST_BE_NUMBER: 'Role must be a number',
+  INVALID_ROLE: 'Invalid role',
+  INVALID_VERIFY: 'Invalid verify'
 }
