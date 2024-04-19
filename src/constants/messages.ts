@@ -72,5 +72,6 @@ export const USERS_MESSAGE = {
   VERIFY_MUST_BE_A_NUMBER: 'Verify must be a number',
   ROLE_MUST_BE_NUMBER: 'Role must be a number',
   INVALID_ROLE: 'Invalid role',
-  INVALID_VERIFY: 'Invalid verify'
+  INVALID_VERIFY: 'Invalid verify',
+  DELETE_SUCCESS: 'Delete success'
 }

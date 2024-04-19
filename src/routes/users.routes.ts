@@ -1,5 +1,6 @@
 import {Router} from 'express'
 import {
+  deleteUserByUsernameController,
   getListUsersController,
   getMeController,
   getUserByUsernameController,
@@ -73,6 +74,20 @@ usersRouter.patch(
     'verify'
   ]),
   wrapRequestHandler(updateUserByUsernameController)
+)
+
+/**
+ * Desscription: Delete user by username
+ * Path: /users/:username
+ * Method: DELETE
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { username: string }
+ */
+usersRouter.delete(
+  '/:username',
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(deleteUserByUsernameController)
 )
 
 /**

@@ -95,6 +95,11 @@ class UsersService {
     )
     return user
   }
+
+  async deleteUserByUsername(username: string) {
+    const user = await databaseService.users.findOneAndDelete({username})
+    return user
+  }
 }
 
 const usersService = new UsersService()

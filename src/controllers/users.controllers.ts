@@ -65,3 +65,16 @@ export const updateUserByUsernameController = async (
     data: user
   })
 }
+
+export const deleteUserByUsernameController = async (req: Request<GetUserByUsernameReqParams>, res: Response) => {
+  const {username} = req.params
+  const user = await usersService.deleteUserByUsername(username)
+  if (!user) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: USERS_MESSAGE.USER_NOT_FOUND
+    })
+  }
+  return res.json({
+    message: USERS_MESSAGE.DELETE_SUCCESS
+  })
+}
