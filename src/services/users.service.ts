@@ -11,29 +11,18 @@ import {hashPassword} from '~/utils/crypto'
 import {signToken, verifyToken} from '~/utils/jwt'
 
 class UsersService {
-  private async signAccessToken({user_id, verify, role}: {user_id: string; verify: UserVerifyStatus; role: RoleType}) {
+  private async signAccessToken({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
     return await signToken({
       payload: {
         user_id,
         token_type: TokenType.AccessToken,
-        verify,
-        role
+        verify
       },
       secretOrPrivateKey: envConfig.jwtSecretAccessToken,
       options: {expiresIn: envConfig.jwtAccessTokenExpiresIn}
     })
   }
-  private async signRefreshToken({
-    user_id,
-    verify,
-    role,
-    exp
-  }: {
-    user_id: string
-    verify: UserVerifyStatus
-    role: RoleType
-    exp?: number
-  }) {
+  private async signRefreshToken({user_id, verify, exp}: {user_id: string; verify: UserVerifyStatus; exp?: number}) {
     // When getting a new refresh token, the exp field must match the old refresh token
     if (exp) {
       return await signToken({
@@ -41,7 +30,6 @@ class UsersService {
           user_id,
           token_type: TokenType.RefreshToken,
           verify,
-          role,
           exp
         },
         secretOrPrivateKey: envConfig.jwtSecretRefreshToken
@@ -51,23 +39,14 @@ class UsersService {
       payload: {
         user_id,
         token_type: TokenType.RefreshToken,
-        verify,
-        role
+        verify
       },
       secretOrPrivateKey: envConfig.jwtSecretRefreshToken,
       options: {expiresIn: envConfig.jwtRefreshTokenExpiresIn}
     })
   }
-  private signAccessTokenAndRefreshToken({
-    user_id,
-    verify,
-    role
-  }: {
-    user_id: string
-    verify: UserVerifyStatus
-    role: RoleType
-  }) {
-    return Promise.all([this.signAccessToken({user_id, verify, role}), this.signRefreshToken({user_id, verify, role})])
+  private signAccessTokenAndRefreshToken({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
+    return Promise.all([this.signAccessToken({user_id, verify}), this.signRefreshToken({user_id, verify})])
   }
 
   private decodeRefreshToken(refresh_token: string) {
@@ -77,34 +56,24 @@ class UsersService {
     })
   }
 
-  private signForgotPasswordToken({
-    user_id,
-    verify,
-    role
-  }: {
-    user_id: string
-    verify: UserVerifyStatus
-    role: RoleType
-  }) {
+  private signForgotPasswordToken({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
     return signToken({
       payload: {
         user_id,
         token_type: TokenType.ForgotPasswordToken,
-        verify,
-        role
+        verify
       },
       secretOrPrivateKey: envConfig.jwtSecretForgotPasswordToken,
       options: {expiresIn: envConfig.jwtForgotPasswordTokenExpiresIn}
     })
   }
 
-  private signEmailVerifyToken({user_id, verify, role}: {user_id: string; verify: UserVerifyStatus; role: RoleType}) {
+  private signEmailVerifyToken({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
     return signToken({
       payload: {
         user_id,
         token_type: TokenType.EmailVerifyToken,
-        verify,
-        role
+        verify
       },
       secretOrPrivateKey: envConfig.jwtSecretEmailVerifyToken,
       options: {expiresIn: envConfig.jwtEmailVerifyTokenExpiresIn}
@@ -115,8 +84,7 @@ class UsersService {
     const user_id = new ObjectId()
     const email_verify_token = await this.signEmailVerifyToken({
       user_id: user_id.toString(),
-      verify: UserVerifyStatus.Unverified,
-      role: RoleType.User
+      verify: UserVerifyStatus.Unverified
     })
     await databaseService.users.insertOne(
       new User({
@@ -130,8 +98,7 @@ class UsersService {
     )
     const [access_token, refresh_token] = await this.signAccessTokenAndRefreshToken({
       user_id: user_id.toString(),
-      verify: UserVerifyStatus.Unverified,
-      role: RoleType.User
+      verify: UserVerifyStatus.Unverified
     })
     const {iat, exp} = await this.decodeRefreshToken(refresh_token)
     await databaseService.refreshTokens.insertOne(
@@ -148,11 +115,10 @@ class UsersService {
     }
   }
 
-  async login({user_id, verify, role}: {user_id: string; verify: UserVerifyStatus; role: RoleType}) {
+  async login({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
     const [access_token, refresh_token] = await this.signAccessTokenAndRefreshToken({
       user_id,
-      verify,
-      role
+      verify
     })
     const {iat, exp} = await this.decodeRefreshToken(refresh_token)
     await databaseService.refreshTokens.insertOne(
@@ -173,8 +139,8 @@ class UsersService {
     return await databaseService.refreshTokens.deleteOne({token: refresh_token})
   }
 
-  async forgotPassword({user_id, verify, role}: {user_id: string; verify: UserVerifyStatus; role: RoleType}) {
-    const forgot_password_token = await this.signForgotPasswordToken({user_id, verify, role})
+  async forgotPassword({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
+    const forgot_password_token = await this.signForgotPasswordToken({user_id, verify})
     await databaseService.users.updateOne(
       {
         _id: new ObjectId(user_id)
@@ -218,10 +184,36 @@ class UsersService {
       },
       [{$set: {email_verify_token: '', verify: UserVerifyStatus.Verified, updated_at: '$$NOW'}}]
     )
-    return {
+    return res.json({
       message: USERS_MESSAGE.EMAIL_VERIFY_SUCCESS,
       data: result
+    })
+  }
+
+  async resendVerifyEmail(user_id: string, res: Response) {
+    const user = await databaseService.users.findOne({_id: new ObjectId(user_id)})
+    if (!user) {
+      return res.json({message: USERS_MESSAGE.USER_NOT_FOUND})
     }
+    if (user.verify === UserVerifyStatus.Verified) {
+      return res.json({message: USERS_MESSAGE.EMAIL_ALREADY_VERIFIED_BEFORE})
+    }
+    const email_verify_token = await this.signEmailVerifyToken({
+      user_id,
+      verify: UserVerifyStatus.Verified
+    })
+    const result = await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      [{$set: {email_verify_token, updated_at: '$$NOW'}}]
+    )
+    // Giả bộ gửi email kèm đường link đến email người dùng: https://example.com/verify-email?token=<email_verify_token>
+    console.log('email_verify_token', email_verify_token)
+    return res.json({
+      message: USERS_MESSAGE.RESEND_EMAIL_VERIFY_SUCCESS,
+      data: result
+    })
   }
 
   async checkEmailExist(email: string) {

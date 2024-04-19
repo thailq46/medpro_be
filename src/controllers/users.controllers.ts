@@ -26,8 +26,8 @@ export const registerController = async (req: Request<ParamsDictionary, any, Reg
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   const {user} = req as {user: User}
   const user_id = user._id as ObjectId
-  const {verify, role} = user
-  const results = await usersService.login({user_id: user_id.toString(), verify, role})
+  const {verify} = user
+  const results = await usersService.login({user_id: user_id.toString(), verify})
   return res.json({
     message: USERS_MESSAGE.LOGIN_SUCCESS,
     data: results
@@ -46,11 +46,10 @@ export const forgotPasswordController = async (
   req: Request<ParamsDictionary, any, ForgotPasswordReqBody>,
   res: Response
 ) => {
-  const {_id, verify, role} = req.user as User
+  const {_id, verify} = req.user as User
   const result = await usersService.forgotPassword({
     user_id: (_id as ObjectId).toString(),
-    verify,
-    role
+    verify
   })
   return res.json(result)
 }
@@ -77,4 +76,9 @@ export const resetPasswordController = async (
 export const emailVerifyController = async (req: Request<ParamsDictionary, any, EmailVerifyReqBody>, res: Response) => {
   const {user_id} = req.decoded_email_verify_token as TokenPayload
   return await usersService.emailVerify(user_id, res)
+}
+
+export const resendVerifyEmailController = async (req: Request, res: Response) => {
+  const {user_id} = req.decode_authorization as TokenPayload
+  return await usersService.resendVerifyEmail(user_id, res)
 }
