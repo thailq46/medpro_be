@@ -247,6 +247,12 @@ class UsersService {
     }
   }
 
+  async changePassword(user_id: string, new_password: string) {
+    return await databaseService.users.findOneAndUpdate({_id: new ObjectId(user_id)}, [
+      {$set: {password: hashPassword(new_password), updated_at: '$$NOW'}}
+    ])
+  }
+
   async checkEmailExist(email: string) {
     try {
       const user = await databaseService.users.findOne({email})

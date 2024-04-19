@@ -17,7 +17,7 @@ import {hashPassword} from '~/utils/crypto'
 import {Request} from 'express'
 import {verifyAccessToken} from '~/utils/common'
 import {envConfig} from '~/constants/config'
-import {verifyToken} from '~/utils/jwt'
+import {TokenPayload, verifyToken} from '~/utils/jwt'
 import {ObjectId} from 'mongodb'
 import {JsonWebTokenError} from 'jsonwebtoken'
 import {capitalize} from 'lodash'
@@ -304,6 +304,52 @@ export const emailVerifyTokenValidator = validate(
                 message: capitalize((error as JsonWebTokenError).message),
                 status: HTTP_STATUS.UNAUTHORIZED
               })
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
+)
+
+export const changePasswordValidator = validate(
+  checkSchema(
+    {
+      old_password: {
+        notEmpty: {errorMessage: USERS_MESSAGE.PASSWORD_IS_REQUIRED},
+        isString: {errorMessage: USERS_MESSAGE.PASSWORD_MUST_BE_STRING},
+        custom: {
+          options: async (value: string, {req}) => {
+            const {user_id} = (req as Request).decode_authorization as TokenPayload
+            const user = await databaseService.users.findOne({
+              _id: new ObjectId(user_id)
+            })
+            if (!user) {
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGE.USER_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            const {password} = user
+            if (password !== hashPassword(value)) {
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGE.OLD_PASSWORD_INCORRECT,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            return true
+          }
+        }
+      },
+      new_password: passwordCheckSchema,
+      confirm_new_password: {
+        ...confirmPasswordCheckSchema,
+        custom: {
+          options: (value: string, {req}) => {
+            if (value !== req.body.new_password) {
+              throw new Error(USERS_MESSAGE.PASSWORD_AND_CONFIRM_PASSWORD_DO_NOT_MATCH)
             }
             return true
           }

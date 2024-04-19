@@ -1,5 +1,6 @@
 import {Router} from 'express'
 import {
+  changePasswordController,
   emailVerifyController,
   forgotPasswordController,
   loginController,
@@ -12,6 +13,7 @@ import {
 } from '~/controllers/auth.controllers'
 import {
   accessTokenValidator,
+  changePasswordValidator,
   emailVerifyTokenValidator,
   forgotPasswordValidator,
   loginValidator,
@@ -100,5 +102,19 @@ authRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler
  * Body: { refresh_token: string }
  */
 authRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshTokenController))
+
+/**
+ * Desscription: Change password
+ * Path: /auth/change-password
+ * Method: PUT
+ * Headers: { Authorization: Bearer <access_token> }
+ * Body: { old_password: string, new_password: string, confirm_new_password: string }
+ */
+authRouter.put(
+  '/change-password',
+  accessTokenValidator,
+  changePasswordValidator,
+  wrapRequestHandler(changePasswordController)
+)
 
 export default authRouter

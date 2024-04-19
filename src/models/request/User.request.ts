@@ -56,3 +56,8 @@ export interface UpdateUserByUsernameBody {
   verify?: number
   role?: number
 }
+export interface ChangePasswordReqBody {
+  old_password: string
+  new_password: string
+  confirm_password: string
+}

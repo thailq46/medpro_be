@@ -3,6 +3,7 @@ import {ParamsDictionary} from 'express-serve-static-core'
 import {ObjectId} from 'mongodb'
 import {USERS_MESSAGE} from '~/constants/messages'
 import {
+  ChangePasswordReqBody,
   EmailVerifyReqBody,
   ForgotPasswordReqBody,
   LoginReqBody,
@@ -94,5 +95,17 @@ export const refreshTokenController = async (
   return res.json({
     message: USERS_MESSAGE.REFRESH_TOKEN_SUCCESS,
     result
+  })
+}
+
+export const changePasswordController = async (
+  req: Request<ParamsDictionary, any, ChangePasswordReqBody>,
+  res: Response
+) => {
+  const {user_id} = req.decode_authorization as TokenPayload
+  const {new_password} = req.body
+  await authService.changePassword(user_id, new_password)
+  return res.json({
+    message: USERS_MESSAGE.CHANGE_PASSWORD_SUCCESS
   })
 }

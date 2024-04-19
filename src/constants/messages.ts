@@ -15,6 +15,7 @@ export const USERS_MESSAGE = {
   PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50: 'Password length must be from 6 to 50',
   PASSWORD_MUST_BE_STRONG:
     'Password must be strong 6-50 characters, and contain at least 1 lowercase, 1 uppercase, 1 number, and 1 special character',
+  OLD_PASSWORD_INCORRECT: 'Old password is incorrect',
 
   CONFIRM_PASSWORD_IS_REQUIRED: 'Confirm password is required',
   CONFIRM_PASSWORD_MUST_BE_STRING: 'Confirm password must be a string',
@@ -73,5 +74,6 @@ export const USERS_MESSAGE = {
   ROLE_MUST_BE_NUMBER: 'Role must be a number',
   INVALID_ROLE: 'Invalid role',
   INVALID_VERIFY: 'Invalid verify',
-  DELETE_SUCCESS: 'Delete success'
+  DELETE_SUCCESS: 'Delete success',
+  CHANGE_PASSWORD_SUCCESS: 'Change password success'
 }
