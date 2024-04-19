@@ -1,5 +1,6 @@
 import {Response} from 'express'
 import {ObjectId} from 'mongodb'
+import HTTP_STATUS from '~/constants/httpStatus'
 import {USERS_MESSAGE} from '~/constants/messages'
 import {UpdateMeBody} from '~/models/request/User.request'
 import databaseService from '~/services/database.service'
@@ -58,8 +59,8 @@ class UsersService {
     return users.toArray()
   }
 
-  async getUserByUsername(username: string, res: Response) {
-    const user = await databaseService.users.findOne(
+  async getUserByUsername(username: string) {
+    return await databaseService.users.findOne(
       {username},
       {
         projection: {
@@ -69,13 +70,6 @@ class UsersService {
         }
       }
     )
-    if (!user) {
-      return res.json({message: USERS_MESSAGE.USER_NOT_FOUND})
-    }
-    return res.json({
-      message: USERS_MESSAGE.GET_USER_BY_USERNAME_SUCCESS,
-      data: user
-    })
   }
 }
 
