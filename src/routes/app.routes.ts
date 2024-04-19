@@ -1,8 +1,8 @@
 import {Express} from 'express-serve-static-core'
-import usersRouter from '~/routes/users.routes'
+import authRouter from '~/routes/auth.routes'
 
 function router(app: Express) {
-  app.use('/users', usersRouter)
+  app.use('/auth', authRouter)
 }
 
 export default router

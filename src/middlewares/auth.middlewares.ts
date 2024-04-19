@@ -1,4 +1,4 @@
-import {check, checkSchema} from 'express-validator'
+import {checkSchema} from 'express-validator'
 import {USERS_MESSAGE} from '~/constants/messages'
 import usersService from '~/services/users.service'
 import validate from '~/utils/validate'

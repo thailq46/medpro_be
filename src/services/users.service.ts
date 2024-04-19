@@ -1,7 +1,7 @@
-import {Request, Response} from 'express'
+import {Response} from 'express'
 import {ObjectId} from 'mongodb'
 import {envConfig} from '~/constants/config'
-import {RoleType, TokenType, UserVerifyStatus} from '~/constants/enum'
+import {TokenType, UserVerifyStatus} from '~/constants/enum'
 import {USERS_MESSAGE} from '~/constants/messages'
 import {RegisterReqBody} from '~/models/request/User.request'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
@@ -216,6 +216,37 @@ class UsersService {
     })
   }
 
+  async refreshToken({
+    user_id,
+    verify,
+    refresh_token,
+    exp
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    refresh_token: string
+    exp: number
+  }) {
+    const [new_access_token, new_refresh_token] = await Promise.all([
+      this.signAccessToken({user_id, verify}),
+      this.signRefreshToken({user_id, verify, exp}),
+      databaseService.refreshTokens.deleteOne({token: refresh_token})
+    ])
+    const decoded_refresh_token = await this.decodeRefreshToken(new_refresh_token)
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({
+        user_id: new ObjectId(user_id),
+        token: new_refresh_token,
+        iat: decoded_refresh_token.iat,
+        exp: decoded_refresh_token.exp
+      })
+    )
+    return {
+      new_access_token,
+      new_refresh_token
+    }
+  }
+
   async checkEmailExist(email: string) {
     try {
       const user = await databaseService.users.findOne({email})
@@ -226,5 +257,5 @@ class UsersService {
   }
 }
 
-const usersService = new UsersService()
-export default usersService
+const authService = new UsersService()
+export default authService

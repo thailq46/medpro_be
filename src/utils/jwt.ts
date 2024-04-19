@@ -4,7 +4,7 @@ import {envConfig} from '~/constants/config'
 export interface TokenPayload extends jwt.JwtPayload {
   user_id: string
   token_type: string
-  verify: string
+  verify: number
   exp: number
   iat: number
 }

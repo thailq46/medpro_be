@@ -4,11 +4,12 @@ import {
   forgotPasswordController,
   loginController,
   logoutController,
+  refreshTokenController,
   registerController,
   resendVerifyEmailController,
   resetPasswordController,
   verifyForgotPasswordController
-} from '~/controllers/users.controllers'
+} from '~/controllers/auth.controllers'
 import {
   accessTokenValidator,
   emailVerifyTokenValidator,
@@ -18,50 +19,50 @@ import {
   registerValidator,
   resetPasswordValidator,
   verifyForgotPasswordTokenValidator
-} from '~/middlewares/users.middlewares'
-import {wrapRequestHandler} from './../utils/handlers'
+} from '~/middlewares/auth.middlewares'
+import {wrapRequestHandler} from '../utils/handlers'
 
-const usersRouter = Router()
+const authRouter = Router()
 /**
  * Desscription: Register new user
- * Path: /users/register
+ * Path: /auth/register
  * Method: POST
  * Body: { name: string, email: string, password: string, confirm_password: string, date_of_birth: ISO8601, gender: GenderType }
  */
-usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
+authRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 
 /**
  * Desscription: Login user
- * Path: /users/login
+ * Path: /auth/login
  * Method: POST
  * Body: { email: string, password: string }
  */
-usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+authRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 
 /**
  * Desscription: Logout user
- * Path: /users/logout
+ * Path: /auth/logout
  * Method: POST
  * Headers: { Authorization: Bearer <access_token> }
  * Body: { refresh_token: string }
  */
-usersRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
+authRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
 
 /**
  * Desscription: Submit email to reset password, then send email to user
- * Path: /users/forgot-password
+ * Path: /auth/forgot-password
  * Method: POST
  * Body: { email: string }
  */
-usersRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController))
+authRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController))
 
 /**
  * Desscription: Verify link in email to reset password
- * Path: /users/verify-forgot-password
+ * Path: /auth/verify-forgot-password
  * Method: POST
  * Body: { forgot_password_token: string }
  */
-usersRouter.post(
+authRouter.post(
   '/verify-forgot-password',
   verifyForgotPasswordTokenValidator,
   wrapRequestHandler(verifyForgotPasswordController)
@@ -69,26 +70,35 @@ usersRouter.post(
 
 /**
  * Desscription: Reset password
- * Path: /users/reset-password
+ * Path: /auth/reset-password
  * Method: POST
  * Body: { forgot_password_token: string, password: string, confirm_password: string }
  */
-usersRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))
+authRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))
 
 /**
  * Desscription: Verify email when user client click on the link in email
- * Path: /users/verify-email
+ * Path: /auth/verify-email
  * Method: POST
  * Body: { email_verify_token : string }
  */
-usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(emailVerifyController))
+authRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(emailVerifyController))
 
 /**
  * Desscription: Verify email when user client click on the link in email
- * Path: /users/resend-verify-email
+ * Path: /auth/resend-verify-email
  * Method: POST
  * Headers: { Authorization: Bearer <access_token> }
  * Body: {}
  */
-usersRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
-export default usersRouter
+authRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
+
+/**
+ * Desscription: Refresh Token
+ * Path: /auth/refresh-token
+ * Method: POST
+ * Body: { refresh_token: string }
+ */
+authRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshTokenController))
+
+export default authRouter

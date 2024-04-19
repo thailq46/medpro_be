@@ -7,16 +7,17 @@ import {
   ForgotPasswordReqBody,
   LoginReqBody,
   LogoutReqBody,
+  RefreshTokenReqBody,
   RegisterReqBody,
   ResetPasswordReqBody,
   VerifyForgotPasswordReqBody
 } from '~/models/request/User.request'
 import User from '~/models/schemas/User.schema'
-import usersService from '~/services/users.service'
+import authService from '~/services/users.service'
 import {TokenPayload} from '~/utils/jwt'
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
-  const results = await usersService.register(req.body)
+  const results = await authService.register(req.body)
   return res.json({
     message: USERS_MESSAGE.REGISTER_SUCCESS,
     data: results
@@ -27,7 +28,7 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
   const {user} = req as {user: User}
   const user_id = user._id as ObjectId
   const {verify} = user
-  const results = await usersService.login({user_id: user_id.toString(), verify})
+  const results = await authService.login({user_id: user_id.toString(), verify})
   return res.json({
     message: USERS_MESSAGE.LOGIN_SUCCESS,
     data: results
@@ -35,7 +36,7 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
 }
 export const logoutController = async (req: Request<ParamsDictionary, any, LogoutReqBody>, res: Response) => {
   const {refresh_token} = req.body
-  const result = await usersService.logout(refresh_token)
+  const result = await authService.logout(refresh_token)
   return res.json({
     message: USERS_MESSAGE.LOGOUT_SUCCESS,
     data: result
@@ -47,7 +48,7 @@ export const forgotPasswordController = async (
   res: Response
 ) => {
   const {_id, verify} = req.user as User
-  const result = await usersService.forgotPassword({
+  const result = await authService.forgotPassword({
     user_id: (_id as ObjectId).toString(),
     verify
   })
@@ -69,16 +70,29 @@ export const resetPasswordController = async (
 ) => {
   const {user_id} = req.decoded_forgot_password_token as TokenPayload
   const {password} = req.body
-  const result = await usersService.resetPassword({user_id, password})
+  const result = await authService.resetPassword({user_id, password})
   return res.json(result)
 }
 
 export const emailVerifyController = async (req: Request<ParamsDictionary, any, EmailVerifyReqBody>, res: Response) => {
   const {user_id} = req.decoded_email_verify_token as TokenPayload
-  return await usersService.emailVerify(user_id, res)
+  return await authService.emailVerify(user_id, res)
 }
 
 export const resendVerifyEmailController = async (req: Request, res: Response) => {
   const {user_id} = req.decode_authorization as TokenPayload
-  return await usersService.resendVerifyEmail(user_id, res)
+  return await authService.resendVerifyEmail(user_id, res)
+}
+
+export const refreshTokenController = async (
+  req: Request<ParamsDictionary, any, RefreshTokenReqBody>,
+  res: Response
+) => {
+  const {refresh_token} = req.body
+  const {user_id, verify, exp} = req.decode_refresh_token as TokenPayload
+  const result = await authService.refreshToken({user_id, verify, refresh_token, exp})
+  return res.json({
+    message: USERS_MESSAGE.REFRESH_TOKEN_SUCCESS,
+    result
+  })
 }

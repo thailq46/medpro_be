@@ -39,6 +39,7 @@ export const USERS_MESSAGE = {
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
   USED_REFRESH_TOKEN_OR_NOT_EXISTS: 'Used refresh token or not exists',
   ACCESS_TOKEN_REQUIRED: 'Access token is required',
+  REFRESH_TOKEN_SUCCESS: 'Refresh token success',
 
   USER_NOT_FOUND: 'User not found',
   VERIFY_FORGOT_PASSWORD_SUCCESS: 'Verify forgot password success',
