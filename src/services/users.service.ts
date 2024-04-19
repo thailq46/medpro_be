@@ -41,6 +41,20 @@ class UsersService {
     )
     return user
   }
+
+  async getListUsers() {
+    const users = await databaseService.users.find(
+      {},
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    return users.toArray()
+  }
 }
 
 const usersService = new UsersService()

@@ -22,3 +22,11 @@ export const updateMeController = async (req: Request<ParamsDictionary, any, Upd
     data: result
   })
 }
+
+export const getListUsersController = async (req: Request, res: Response) => {
+  const result = await usersService.getListUsers()
+  return res.json({
+    message: USERS_MESSAGE.GET_LIST_USERS_SUCCESS,
+    data: result
+  })
+}
