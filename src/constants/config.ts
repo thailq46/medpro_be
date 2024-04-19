@@ -22,5 +22,8 @@ export const envConfig = {
   jwtRefreshTokenExpiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN as string,
 
   jwtSecretForgotPasswordToken: process.env.JWT_FORGOT_PASSWORD_TOKEN as string,
-  jwtForgotPasswordTokenExpiresIn: process.env.JWT_FORGOT_PASSWORD_TOKEN_EXPIRES_IN as string
+  jwtForgotPasswordTokenExpiresIn: process.env.JWT_FORGOT_PASSWORD_TOKEN_EXPIRES_IN as string,
+
+  jwtSecretEmailVerifyToken: process.env.JWT_EMAIL_VERIFY_TOKEN as string,
+  jwtEmailVerifyTokenExpiresIn: process.env.JWT_EMAIL_VERIFY_TOKEN_EXPIRES_IN as string
 }

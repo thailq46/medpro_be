@@ -1,3 +1,4 @@
+import {Request, Response} from 'express'
 import {ObjectId} from 'mongodb'
 import {envConfig} from '~/constants/config'
 import {RoleType, TokenType, UserVerifyStatus} from '~/constants/enum'
@@ -97,13 +98,32 @@ class UsersService {
     })
   }
 
+  private signEmailVerifyToken({user_id, verify, role}: {user_id: string; verify: UserVerifyStatus; role: RoleType}) {
+    return signToken({
+      payload: {
+        user_id,
+        token_type: TokenType.EmailVerifyToken,
+        verify,
+        role
+      },
+      secretOrPrivateKey: envConfig.jwtSecretEmailVerifyToken,
+      options: {expiresIn: envConfig.jwtEmailVerifyTokenExpiresIn}
+    })
+  }
+
   async register(payload: RegisterReqBody) {
     const user_id = new ObjectId()
+    const email_verify_token = await this.signEmailVerifyToken({
+      user_id: user_id.toString(),
+      verify: UserVerifyStatus.Unverified,
+      role: RoleType.User
+    })
     await databaseService.users.insertOne(
       new User({
         ...payload,
         _id: user_id,
         username: `user${user_id.toString()}`,
+        email_verify_token,
         password: hashPassword(payload.password),
         date_of_birth: new Date(payload.date_of_birth)
       })
@@ -177,6 +197,30 @@ class UsersService {
     )
     return {
       message: USERS_MESSAGE.RESET_PASSWORD_SUCCESS
+    }
+  }
+
+  async emailVerify(user_id: string, res: Response) {
+    const user = await databaseService.users.findOne({_id: new ObjectId(user_id)})
+    if (!user) {
+      return res.json({
+        message: USERS_MESSAGE.USER_NOT_FOUND
+      })
+    }
+    if (user.email_verify_token === '' || user.verify === UserVerifyStatus.Verified) {
+      return res.json({
+        message: USERS_MESSAGE.EMAIL_ALREADY_VERIFIED_BEFORE
+      })
+    }
+    const result = await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      [{$set: {email_verify_token: '', verify: UserVerifyStatus.Verified, updated_at: '$$NOW'}}]
+    )
+    return {
+      message: USERS_MESSAGE.EMAIL_VERIFY_SUCCESS,
+      data: result
     }
   }
 

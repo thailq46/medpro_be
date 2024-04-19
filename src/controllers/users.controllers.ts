@@ -3,6 +3,7 @@ import {ParamsDictionary} from 'express-serve-static-core'
 import {ObjectId} from 'mongodb'
 import {USERS_MESSAGE} from '~/constants/messages'
 import {
+  EmailVerifyReqBody,
   ForgotPasswordReqBody,
   LoginReqBody,
   LogoutReqBody,
@@ -71,4 +72,9 @@ export const resetPasswordController = async (
   const {password} = req.body
   const result = await usersService.resetPassword({user_id, password})
   return res.json(result)
+}
+
+export const emailVerifyController = async (req: Request<ParamsDictionary, any, EmailVerifyReqBody>, res: Response) => {
+  const {user_id} = req.decoded_email_verify_token as TokenPayload
+  return await usersService.emailVerify(user_id, res)
 }

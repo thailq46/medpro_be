@@ -24,3 +24,6 @@ export interface ResetPasswordReqBody {
   password: string
   confirm_password: string
 }
+export interface EmailVerifyReqBody {
+  email_verify_token: string
+}
