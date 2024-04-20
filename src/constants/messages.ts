@@ -90,5 +90,6 @@ export const CATEGORIES_MESSAGE = {
   PARENT_ID_MUST_BE_STRING: 'Parent id must be a string',
   INVALID_PARENT_ID: 'Invalid parent id',
   CREATE_SUCCESS: 'Create category successfully',
+  UPDATE_SUCCESS: 'Update category successfully',
   CATEGORY_NOT_FOUND: 'Category not found'
 }

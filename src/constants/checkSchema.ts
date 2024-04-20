@@ -1,6 +1,6 @@
 import {ParamSchema} from 'express-validator'
 import {GenderType, PositionType} from '~/constants/enum'
-import {USERS_MESSAGE} from '~/constants/messages'
+import {CATEGORIES_MESSAGE, USERS_MESSAGE} from '~/constants/messages'
 import {numberEnumToArray} from '~/utils/common'
 
 export const nameCheckSchema: ParamSchema = {
@@ -88,4 +88,28 @@ export const positionCheckSchema: ParamSchema = {
     options: [numberEnumToArray(PositionType)],
     errorMessage: USERS_MESSAGE.INVALID_POSITION
   }
+}
+
+export const nameCategoryCheckSchema: ParamSchema = {
+  notEmpty: {errorMessage: CATEGORIES_MESSAGE.NAME_IS_REQUIRED},
+  isString: {errorMessage: CATEGORIES_MESSAGE.NAME_MUST_BE_STRING},
+  isLength: {
+    options: {min: 1, max: 255},
+    errorMessage: CATEGORIES_MESSAGE.NAME_MUST_BE_LENGTH_1_255
+  },
+  trim: true
+}
+
+export const slugCategoryCheckSchema: ParamSchema = {
+  notEmpty: {errorMessage: CATEGORIES_MESSAGE.SLUG_IS_REQUIRED},
+  isString: {errorMessage: CATEGORIES_MESSAGE.SLUG_MUST_BE_STRING},
+  matches: {
+    options: /^\S+$/,
+    errorMessage: CATEGORIES_MESSAGE.SLUG_NOT_CONTAIN_SPACE
+  },
+  isLength: {
+    options: {max: 255},
+    errorMessage: CATEGORIES_MESSAGE.SLUG_NOT_EXCEED_255
+  },
+  trim: true
 }

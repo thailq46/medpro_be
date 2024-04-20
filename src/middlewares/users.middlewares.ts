@@ -151,8 +151,11 @@ export const updateUserByUsernameValidator = validate(
         },
         trim: true,
         custom: {
-          options: async (value: string) => {
-            const user = await databaseService.users.findOne({username: value})
+          options: async (value: string, {req}) => {
+            const usernameToUpdate = req.params?.username
+            const user = await databaseService.users.findOne({
+              $and: [{username: value}, {username: {$ne: usernameToUpdate}}]
+            })
             if (user) {
               throw new Error(USERS_MESSAGE.USERNAME_ALREADY_EXIST)
             }
