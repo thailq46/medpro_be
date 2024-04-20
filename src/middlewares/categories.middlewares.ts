@@ -1,4 +1,4 @@
-import {checkSchema} from 'express-validator'
+import {check, checkSchema} from 'express-validator'
 import {ObjectId} from 'mongodb'
 import {CATEGORIES_MESSAGE} from '~/constants/messages'
 import databaseService from '~/services/database.service'
@@ -91,3 +91,5 @@ export const updateCategoriesValidator = validate(
     ['body']
   )
 )
+
+export const deleteCategoriesValidator = validate(checkSchema({}))

@@ -1,7 +1,13 @@
 import {Request, Response} from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
+import HTTP_STATUS from '~/constants/httpStatus'
 import {CATEGORIES_MESSAGE} from '~/constants/messages'
-import {CreateCateReqBody, UpdateCateReqBody, UpdateCateReqParams} from '~/models/request/Category.request'
+import {
+  CreateCateReqBody,
+  DeleteCateReqParams,
+  UpdateCateReqBody,
+  UpdateCateReqParams
+} from '~/models/request/Category.request'
 import categoriesService from '~/services/categories.service'
 
 export const createCategoriesController = async (
@@ -21,4 +27,9 @@ export const updateCategoriesController = async (
 ) => {
   const {id} = req.params
   return await categoriesService.updateCategory(id, req.body, res)
+}
+
+export const deleteCategoriesController = async (req: Request<DeleteCateReqParams>, res: Response) => {
+  const {id} = req.params
+  return await categoriesService.deleteCategory(id, res)
 }

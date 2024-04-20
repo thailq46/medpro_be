@@ -1,8 +1,17 @@
 import {Router} from 'express'
-import {createCategoriesController, updateCategoriesController} from '~/controllers/categories.controllers'
+import {
+  createCategoriesController,
+  deleteCategoriesController,
+  updateCategoriesController
+} from '~/controllers/categories.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {createCategoriesValidator, updateCategoriesValidator} from '~/middlewares/categories.middlewares'
+import {
+  createCategoriesValidator,
+  deleteCategoriesValidator,
+  updateCategoriesValidator
+} from '~/middlewares/categories.middlewares'
 import {isUserLoggedInValidator} from '~/middlewares/common.middlewares'
+import {verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {wrapRequestHandler} from '~/utils/handlers'
 
 const categoriesRouter = Router()
@@ -17,6 +26,7 @@ const categoriesRouter = Router()
 categoriesRouter.post(
   '/create',
   isUserLoggedInValidator(accessTokenValidator),
+  verifiedUserValidator,
   createCategoriesValidator,
   wrapRequestHandler(createCategoriesController)
 )
@@ -32,8 +42,22 @@ categoriesRouter.post(
 categoriesRouter.put(
   '/update/:id',
   isUserLoggedInValidator(accessTokenValidator),
+  verifiedUserValidator,
   updateCategoriesValidator,
   wrapRequestHandler(updateCategoriesController)
 )
 
+/**
+ * Desscription: Delete category
+ * Path: /categories/delete/:id
+ * Method: DELETE
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { id: string }
+ */
+categoriesRouter.delete(
+  '/delete/:id',
+  isUserLoggedInValidator(accessTokenValidator),
+  verifiedUserValidator,
+  wrapRequestHandler(deleteCategoriesController)
+)
 export default categoriesRouter

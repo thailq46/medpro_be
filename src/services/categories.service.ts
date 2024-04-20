@@ -42,6 +42,26 @@ class CategoriesService {
       data: result
     })
   }
+  async deleteCategory(id: string, res: Response) {
+    const isParent = await databaseService.categories.findOne({parent_id: new ObjectId(id)})
+    if (isParent) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: CATEGORIES_MESSAGE.CATEGORY_IS_PARENT,
+        data: null
+      })
+    }
+    const category = await databaseService.categories.findOneAndDelete({_id: new ObjectId(id)})
+    if (!category) {
+      return res.status(HTTP_STATUS.NOT_FOUND).json({
+        message: CATEGORIES_MESSAGE.CATEGORY_NOT_FOUND,
+        data: null
+      })
+    }
+    return res.json({
+      message: CATEGORIES_MESSAGE.DELETE_SUCCESS,
+      data: category
+    })
+  }
 }
 
 const categoriesService = new CategoriesService()
