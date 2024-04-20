@@ -93,5 +93,6 @@ export const CATEGORIES_MESSAGE = {
   UPDATE_SUCCESS: 'Update category successfully',
   DELETE_SUCCESS: 'Delete category successfully',
   CATEGORY_NOT_FOUND: 'Category not found',
-  CATEGORY_IS_PARENT: 'Category is parent'
+  CATEGORY_IS_PARENT: 'Category is parent',
+  GET_SUCCESS: 'Get categories successfully'
 }

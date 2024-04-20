@@ -42,6 +42,7 @@ class CategoriesService {
       data: result
     })
   }
+
   async deleteCategory(id: string, res: Response) {
     const isParent = await databaseService.categories.findOne({parent_id: new ObjectId(id)})
     if (isParent) {
@@ -61,6 +62,14 @@ class CategoriesService {
       message: CATEGORIES_MESSAGE.DELETE_SUCCESS,
       data: category
     })
+  }
+
+  async getFullCategories() {
+    return await databaseService.categories.find().toArray()
+  }
+
+  async getCategoryById(id: string) {
+    return await databaseService.categories.findOne({_id: new ObjectId(id)})
   }
 }
 

@@ -2,14 +2,12 @@ import {Router} from 'express'
 import {
   createCategoriesController,
   deleteCategoriesController,
+  getCategoryByIdController,
+  getFullCategoriesController,
   updateCategoriesController
 } from '~/controllers/categories.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {
-  createCategoriesValidator,
-  deleteCategoriesValidator,
-  updateCategoriesValidator
-} from '~/middlewares/categories.middlewares'
+import {createCategoriesValidator, updateCategoriesValidator} from '~/middlewares/categories.middlewares'
 import {isUserLoggedInValidator} from '~/middlewares/common.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {wrapRequestHandler} from '~/utils/handlers'
@@ -60,4 +58,20 @@ categoriesRouter.delete(
   verifiedUserValidator,
   wrapRequestHandler(deleteCategoriesController)
 )
+
+/**
+ * Desscription: Get categories by id
+ * Path: /categories/:id
+ * Method: GET
+ * Params: { id: string }
+ */
+categoriesRouter.get('/:id', wrapRequestHandler(getCategoryByIdController))
+
+/**
+ * Desscription: Get full list categories
+ * Path: /categories
+ * Method: GET
+ */
+categoriesRouter.get('/', wrapRequestHandler(getFullCategoriesController))
+
 export default categoriesRouter

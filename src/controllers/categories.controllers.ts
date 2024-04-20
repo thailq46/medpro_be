@@ -5,6 +5,7 @@ import {CATEGORIES_MESSAGE} from '~/constants/messages'
 import {
   CreateCateReqBody,
   DeleteCateReqParams,
+  GetCateReqParams,
   UpdateCateReqBody,
   UpdateCateReqParams
 } from '~/models/request/Category.request'
@@ -32,4 +33,27 @@ export const updateCategoriesController = async (
 export const deleteCategoriesController = async (req: Request<DeleteCateReqParams>, res: Response) => {
   const {id} = req.params
   return await categoriesService.deleteCategory(id, res)
+}
+
+export const getFullCategoriesController = async (req: Request, res: Response) => {
+  const result = await categoriesService.getFullCategories()
+  return res.json({
+    message: CATEGORIES_MESSAGE.GET_SUCCESS,
+    data: result
+  })
+}
+
+export const getCategoryByIdController = async (req: Request<GetCateReqParams>, res: Response) => {
+  const {id} = req.params
+  const result = await categoriesService.getCategoryById(id)
+  if (!result) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: CATEGORIES_MESSAGE.CATEGORY_NOT_FOUND,
+      data: null
+    })
+  }
+  return res.json({
+    message: CATEGORIES_MESSAGE.GET_SUCCESS,
+    data: result
+  })
 }

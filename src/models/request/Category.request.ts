@@ -1,4 +1,3 @@
-import e from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
 export interface CreateCateReqBody {
   name: string
@@ -14,5 +13,8 @@ export interface UpdateCateReqParams extends ParamsDictionary {
   id: string
 }
 export interface DeleteCateReqParams extends ParamsDictionary {
+  id: string
+}
+export interface GetCateReqParams extends ParamsDictionary {
   id: string
 }
