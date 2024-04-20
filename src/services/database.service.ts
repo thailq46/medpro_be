@@ -1,5 +1,6 @@
 import {Collection, Db, MongoClient} from 'mongodb'
 import {envConfig} from '~/constants/config'
+import Category from '~/models/schemas/Category.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import User from '~/models/schemas/User.schema'
 
@@ -30,6 +31,9 @@ class DatabaseService {
   }
   get refreshTokens(): Collection<RefreshToken> {
     return this.db.collection(envConfig.dbRefreshTokensCollection)
+  }
+  get categories(): Collection<Category> {
+    return this.db.collection(envConfig.dbCategoriesCollection)
   }
 }
 

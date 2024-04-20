@@ -77,3 +77,18 @@ export const USERS_MESSAGE = {
   DELETE_SUCCESS: 'Delete success',
   CHANGE_PASSWORD_SUCCESS: 'Change password success'
 }
+
+export const CATEGORIES_MESSAGE = {
+  NAME_IS_REQUIRED: 'Name is required',
+  NAME_MUST_BE_STRING: 'Name must be a string',
+  NAME_MUST_BE_LENGTH_1_255: 'Name must be from 1 to 255 characters',
+  SLUG_IS_REQUIRED: 'Slug is required',
+  SLUG_MUST_BE_STRING: 'Slug must be a string',
+  SLUG_NOT_CONTAIN_SPACE: 'Slug must not contain only whitespace',
+  SLUG_NOT_EXCEED_255: 'Slug must not exceed 255 characters',
+  SLUG_ALREADY_EXIST: 'Slug already exist',
+  PARENT_ID_MUST_BE_STRING: 'Parent id must be a string',
+  INVALID_PARENT_ID: 'Invalid parent id',
+  CREATE_SUCCESS: 'Create category successfully',
+  CATEGORY_NOT_FOUND: 'Category not found'
+}
