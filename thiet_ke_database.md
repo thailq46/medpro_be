@@ -158,7 +158,7 @@ interface Categories {
 
 ```ts
 // Các hình thức đặt khám
-interface MedicalBookingFormType {
+interface MedicalBookingForms {
   _id: ObjectId
   name: string
   image: string

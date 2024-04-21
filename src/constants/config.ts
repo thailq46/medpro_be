@@ -13,6 +13,7 @@ export const envConfig = {
   dbUsersCollection: process.env.DB_USERS_COLLECTION as string,
   dbRefreshTokensCollection: process.env.DB_REFRESH_TOKENS_COLLECTION as string,
   dbCategoriesCollection: process.env.DB_CATEGORIES_COLLECTION as string,
+  dbMedicalBookingFormsCollection: process.env.DB_MEDICAL_BOOKING_FORMS_COLLECTION as string,
 
   secretOrPrivateKey: process.env.SECRET_OR_PRIVATE_KEY as string,
 
