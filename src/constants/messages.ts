@@ -75,7 +75,8 @@ export const USERS_MESSAGE = {
   INVALID_ROLE: 'Invalid role',
   INVALID_VERIFY: 'Invalid verify',
   DELETE_SUCCESS: 'Delete success',
-  CHANGE_PASSWORD_SUCCESS: 'Change password success'
+  CHANGE_PASSWORD_SUCCESS: 'Change password success',
+  IMAGE_NOT_FOUND: 'Image not found'
 }
 
 export const CATEGORIES_MESSAGE = {

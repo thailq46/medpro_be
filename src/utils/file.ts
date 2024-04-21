@@ -24,7 +24,7 @@ export const getNameFromFullname = (fullname: string) => {
 
 export const handleUploadImage = (req: Request) => {
   const form = formidable({
-    uploadDir: path.resolve('uploads'),
+    uploadDir: UPLOAD_IMAGE_TEMP_DIR,
     keepExtensions: true,
     maxFiles: MAX_FILES_IMAGE,
     filter: ({name, originalFilename, mimetype}) => {
