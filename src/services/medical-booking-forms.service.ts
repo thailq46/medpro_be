@@ -10,6 +10,7 @@ class MedicalBookingFormsService {
   async createMedicalBookingForms(payload: CreateMedicalBookingFormsReqBody) {
     return databaseService.medicalBookingForms.insertOne(new MedicalBookingForms(payload))
   }
+
   async updateMedicalBookingForms(id: string, payload: UpdateMedicalBookingFormsReqBody) {
     return databaseService.medicalBookingForms.findOneAndUpdate(
       {
@@ -25,6 +26,10 @@ class MedicalBookingFormsService {
       ],
       {returnDocument: 'after'}
     )
+  }
+
+  async deleteMedicalBookingForms(id: string) {
+    return databaseService.medicalBookingForms.findOneAndDelete({_id: new ObjectId(id)})
   }
 }
 

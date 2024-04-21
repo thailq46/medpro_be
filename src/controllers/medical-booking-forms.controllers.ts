@@ -39,3 +39,15 @@ export const updateMedicalBookingFormsController = async (
     data: result
   })
 }
+
+export const deleteMedicalBookingFormsController = async (
+  req: Request<GetMedicalBookingFormsParams>,
+  res: Response
+) => {
+  const {id} = req.params
+  const result = await medicalBookingFormsService.deleteMedicalBookingForms(id)
+  return res.json({
+    message: MEDICAL_BOOKING_FORMS_MESSAGE.DELETE_SUCCESS,
+    data: result
+  })
+}

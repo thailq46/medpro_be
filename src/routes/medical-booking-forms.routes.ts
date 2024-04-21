@@ -1,12 +1,14 @@
 import {Router} from 'express'
 import {
   createMedicalBookingFormsController,
+  deleteMedicalBookingFormsController,
   updateMedicalBookingFormsController
 } from '~/controllers/medical-booking-forms.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware, isUserLoggedInValidator} from '~/middlewares/common.middlewares'
 import {
   createMedicalBookingFormsValidator,
+  deleteMedicalBookingFormsValidator,
   updateMedicalBookingFormsValidator
 } from '~/middlewares/medical-booking-forms.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
@@ -44,5 +46,20 @@ medicalBookingFormsRouter.patch(
   updateMedicalBookingFormsValidator,
   filterMiddleware<UpdateMedicalBookingFormsReqBody>(['name', 'image']),
   wrapRequestHandler(updateMedicalBookingFormsController)
+)
+
+/**
+ * Desscription: Delete medical booking forms
+ * Path: /medical-booking-forms/delete/:id
+ * Method: DELETE
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { id: string }
+ */
+medicalBookingFormsRouter.delete(
+  '/delete/:id',
+  isUserLoggedInValidator(accessTokenValidator),
+  verifiedUserValidator,
+  deleteMedicalBookingFormsValidator,
+  wrapRequestHandler(deleteMedicalBookingFormsController)
 )
 export default medicalBookingFormsRouter

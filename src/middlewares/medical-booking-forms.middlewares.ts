@@ -2,6 +2,7 @@ import {ParamSchema, checkSchema} from 'express-validator'
 import validate from '~/utils/validate'
 import {MEDICAL_BOOKING_FORMS_MESSAGE} from '~/constants/messages'
 import databaseService from '~/services/database.service'
+import {ObjectId} from 'mongodb'
 
 const nameCheckSchema: ParamSchema = {
   notEmpty: {errorMessage: MEDICAL_BOOKING_FORMS_MESSAGE.NAME_IS_REQUIRED},
@@ -58,5 +59,28 @@ export const updateMedicalBookingFormsValidator = validate(
       image: imageCheckSchema
     },
     ['body']
+  )
+)
+
+export const deleteMedicalBookingFormsValidator = validate(
+  checkSchema(
+    {
+      id: {
+        notEmpty: {errorMessage: MEDICAL_BOOKING_FORMS_MESSAGE.NOT_FOUND},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(MEDICAL_BOOKING_FORMS_MESSAGE.INVALID_ID)
+            }
+            const isExist = await databaseService.medicalBookingForms.findOne({_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(MEDICAL_BOOKING_FORMS_MESSAGE.NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
   )
 )
