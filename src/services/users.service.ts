@@ -1,7 +1,4 @@
-import {Response} from 'express'
 import {ObjectId} from 'mongodb'
-import HTTP_STATUS from '~/constants/httpStatus'
-import {USERS_MESSAGE} from '~/constants/messages'
 import {UpdateMeBody, UpdateUserByUsernameBody} from '~/models/request/User.request'
 import databaseService from '~/services/database.service'
 

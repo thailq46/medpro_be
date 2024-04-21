@@ -109,7 +109,8 @@ export const MEDICAL_BOOKING_FORMS_MESSAGE = {
   DELETE_SUCCESS: 'Delete medical booking form successfully',
   MEDICAL_BOOKING_FORMS_NOT_FOUND: 'Medical booking form not found',
   GET_SUCCESS: 'Get medical booking forms successfully',
-  NAME_ALREADY_EXIST: 'Name already exist'
+  NAME_ALREADY_EXIST: 'Name already exist',
+  NOT_FOUND: 'Medical booking form not found'
 }
 
 export const MEDIAS_MESSAGE = {
