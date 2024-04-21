@@ -4,11 +4,13 @@ import {envConfig} from '~/constants/config'
 import databaseService from '~/services/database.service'
 import router from '~/routes/app.routes'
 import {defaultErrorHandler} from '~/middlewares/error.middlewares'
+import {initFolder} from '~/utils/file'
 config()
 
 const app = express()
 const port = envConfig.port
 
+initFolder()
 databaseService.connect()
 
 app.use(express.json())

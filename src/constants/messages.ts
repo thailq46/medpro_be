@@ -110,3 +110,7 @@ export const MEDICAL_BOOKING_FORMS_MESSAGE = {
   GET_SUCCESS: 'Get medical booking forms successfully',
   NAME_ALREADY_EXIST: 'Name already exist'
 }
+
+export const MEDIAS_MESSAGE = {
+  UPLOAD_SUCCESS: 'Upload media successfully'
+}

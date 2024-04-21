@@ -9,3 +9,8 @@
 5. JWT
    `https://www.npmjs.com/package/jsonwebtoken`
    `https://www.npmjs.com/package/@types/jsonwebtoken`
+6. Formidable
+   `https://www.npmjs.com/package/formidable`
+   `https://www.npmjs.com/package/@types/formidable`
+7. Sharp
+   `https://www.npmjs.com/package/sharp`

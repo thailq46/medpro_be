@@ -29,3 +29,14 @@ export enum TokenType {
   ForgotPasswordToken,
   EmailVerifyToken
 }
+
+export enum MediaType {
+  Image = 0,
+  Video = 1,
+  HLS = 2
+}
+
+export interface Media {
+  url: string
+  type: MediaType
+}

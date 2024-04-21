@@ -1,9 +1,3 @@
-## Connect DB
-
-```js
-const connection = `mongodb+srv://thailq:thailq123@twitter.hdyolge.mongodb.net/`
-```
-
 ### Authentication
 
 [[P1]: Basic Authentication](https://duthanhduoc.com/blog/p1-giai-ngo-authentication-basic-authentication)
@@ -11,6 +5,25 @@ const connection = `mongodb+srv://thailq:thailq123@twitter.hdyolge.mongodb.net/`
 [[P3]: JWT ](https://duthanhduoc.com/blog/p3-giai-ngo-authentication-jwt)
 
 `Token là một chuỗi ký tự được tạo ra để đại diện cho một đối tượng hoặc một quyền truy cập nào đó`
+
+####
+
+```ts
+export const uploadImageController = async (req: Request, res: Response, next: NextFunction) => {
+  const form = formidable({})
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      throw err
+    }
+    console.log(files, fields)
+    return res.json('Image uploaded successfully')
+  })
+  return res.json('hehe')
+}
+=> Lỗi `Cannot set headers after they are sent to the client` sẽ xảy ra chúng ta đã set kết quả về cho client rồi sau đó chúng ta lại set tiếp lên lỗi
+=> Trong ví dụ này nó lỗi vì khi callback chưa chạy xong thì đã  return res.json('hehe') và xong khi callback chạy xong nó lại  return res.json('Image uploaded successfully') trong khi chúng ta đã return rồi lên gây ra lỗi
+```
 
 # Thiết kế Schema Medpro bằng MongoDB
 
