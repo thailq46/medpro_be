@@ -51,3 +51,30 @@ export const deleteMedicalBookingFormsController = async (
     data: result
   })
 }
+
+export const getMedicalBookingFormsByIdController = async (
+  req: Request<GetMedicalBookingFormsParams>,
+  res: Response
+) => {
+  const {id} = req.params
+  const isExist = await databaseService.medicalBookingForms.findOne({_id: new ObjectId(id)})
+  if (!isExist) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: MEDICAL_BOOKING_FORMS_MESSAGE.NOT_FOUND
+    })
+  }
+  const result = await medicalBookingFormsService.getMedicalBookingFormsById(id)
+
+  return res.json({
+    message: MEDICAL_BOOKING_FORMS_MESSAGE.GET_SUCCESS,
+    data: result
+  })
+}
+
+export const getFullMedicalBookingFormsController = async (req: Request, res: Response) => {
+  const result = await medicalBookingFormsService.getFullMedicalBookingForms()
+  return res.json({
+    message: MEDICAL_BOOKING_FORMS_MESSAGE.GET_SUCCESS,
+    data: result
+  })
+}

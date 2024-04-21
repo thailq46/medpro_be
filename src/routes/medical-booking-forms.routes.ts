@@ -2,6 +2,8 @@ import {Router} from 'express'
 import {
   createMedicalBookingFormsController,
   deleteMedicalBookingFormsController,
+  getFullMedicalBookingFormsController,
+  getMedicalBookingFormsByIdController,
   updateMedicalBookingFormsController
 } from '~/controllers/medical-booking-forms.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
@@ -62,4 +64,20 @@ medicalBookingFormsRouter.delete(
   deleteMedicalBookingFormsValidator,
   wrapRequestHandler(deleteMedicalBookingFormsController)
 )
+
+/**
+ * Desscription: Get medical booking forms by id
+ * Path: /medical-booking-forms/:id
+ * Method: GET
+ * Params: { id: string }
+ */
+medicalBookingFormsRouter.get('/:id', wrapRequestHandler(getMedicalBookingFormsByIdController))
+
+/**
+ * Desscription: Get full list medical booking forms
+ * Path: /medical-booking-forms
+ * Method: GET
+ */
+medicalBookingFormsRouter.get('/', wrapRequestHandler(getFullMedicalBookingFormsController))
+
 export default medicalBookingFormsRouter

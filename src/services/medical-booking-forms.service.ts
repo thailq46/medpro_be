@@ -31,6 +31,14 @@ class MedicalBookingFormsService {
   async deleteMedicalBookingForms(id: string) {
     return databaseService.medicalBookingForms.findOneAndDelete({_id: new ObjectId(id)})
   }
+
+  async getMedicalBookingFormsById(id: string) {
+    return databaseService.medicalBookingForms.findOne({_id: new ObjectId(id)})
+  }
+
+  async getFullMedicalBookingForms() {
+    return databaseService.medicalBookingForms.find({}).toArray()
+  }
 }
 
 const medicalBookingFormsService = new MedicalBookingFormsService()
