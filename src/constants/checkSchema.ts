@@ -1,6 +1,7 @@
 import {ParamSchema} from 'express-validator'
 import {GenderType, PositionType} from '~/constants/enum'
-import {CATEGORIES_MESSAGE, USERS_MESSAGE} from '~/constants/messages'
+import {CATEGORIES_MESSAGE, HOSPITALS_MESSAGE, USERS_MESSAGE} from '~/constants/messages'
+import {CHECK_WHITE_SPACE_REGEX} from '~/constants/regax'
 import {numberEnumToArray} from '~/utils/common'
 
 export const nameCheckSchema: ParamSchema = {
@@ -76,10 +77,18 @@ export const confirmPasswordCheckSchema: ParamSchema = {
 }
 export const addressCheckSchema: ParamSchema = {
   isString: {errorMessage: USERS_MESSAGE.ADDRESS_MUST_BE_STRING},
+  isLength: {
+    options: {max: 255},
+    errorMessage: USERS_MESSAGE.ADDRESS_NOT_EXCEED_255
+  },
   trim: true
 }
 export const avatarCheckSchema: ParamSchema = {
   isString: {errorMessage: USERS_MESSAGE.AVATAR_MUST_BE_STRING},
+  isLength: {
+    options: {max: 255},
+    errorMessage: USERS_MESSAGE.AVATAR_NOT_EXCEED_255
+  },
   trim: true
 }
 export const positionCheckSchema: ParamSchema = {
@@ -100,16 +109,26 @@ export const nameCategoryCheckSchema: ParamSchema = {
   trim: true
 }
 
-export const slugCategoryCheckSchema: ParamSchema = {
+export const slugCheckSchema: ParamSchema = {
   notEmpty: {errorMessage: CATEGORIES_MESSAGE.SLUG_IS_REQUIRED},
   isString: {errorMessage: CATEGORIES_MESSAGE.SLUG_MUST_BE_STRING},
   matches: {
-    options: /^\S+$/,
+    options: CHECK_WHITE_SPACE_REGEX,
     errorMessage: CATEGORIES_MESSAGE.SLUG_NOT_CONTAIN_SPACE
   },
   isLength: {
     options: {max: 255},
     errorMessage: CATEGORIES_MESSAGE.SLUG_NOT_EXCEED_255
+  },
+  trim: true
+}
+
+export const timeWorkCheckSchema: ParamSchema = {
+  optional: {options: {nullable: true}},
+  isString: {errorMessage: HOSPITALS_MESSAGE.TIME_MUST_BE_STRING},
+  isLength: {
+    options: {max: 5},
+    errorMessage: HOSPITALS_MESSAGE.TIME_MUST_BE_STRING
   },
   trim: true
 }

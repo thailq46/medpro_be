@@ -5,7 +5,6 @@ import {TokenPayload} from '~/utils/jwt'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {GetUserByUsernameReqParams, UpdateMeBody, UpdateUserByUsernameBody} from '~/models/request/User.request'
 import HTTP_STATUS from '~/constants/httpStatus'
-import databaseService from '~/services/database.service'
 
 export const getMeController = async (req: Request, res: Response) => {
   const {user_id} = req.decode_authorization as TokenPayload

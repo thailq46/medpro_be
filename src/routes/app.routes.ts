@@ -5,6 +5,7 @@ import medicalBookingFormsRouter from '~/routes/medical-booking-forms.routes'
 import usersRouter from '~/routes/users.routes'
 import mediasRouter from '~/routes/medias.routes'
 import staticRouter from '~/routes/static.routes'
+import hospitalsRouter from '~/routes/hospitals.routes'
 
 function router(app: Express) {
   app.use('/auth', authRouter)
@@ -13,6 +14,7 @@ function router(app: Express) {
   app.use('/medical-booking-forms', medicalBookingFormsRouter)
   app.use('/medias', mediasRouter)
   app.use('/static', staticRouter)
+  app.use('/hospitals', hospitalsRouter)
 }
 
 export default router

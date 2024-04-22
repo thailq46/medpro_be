@@ -9,7 +9,7 @@ export const USERS_MESSAGE = {
   INVALID_GENDER: 'Gender must be 0 or 1',
   INVALID_DATE_OF_BIRTH: 'Date of birth must be in ISO8601 format',
   DATE_BIRTH_IS_REQUIRED: 'Date of birth is required',
-
+  AVATAR_NOT_EXCEED_255: 'Avatar must not exceed 255 characters',
   PASSWORD_IS_REQUIRED: 'Password is required',
   PASSWORD_MUST_BE_STRING: 'Password must be a string',
   PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50: 'Password length must be from 6 to 50',
@@ -76,7 +76,8 @@ export const USERS_MESSAGE = {
   INVALID_VERIFY: 'Invalid verify',
   DELETE_SUCCESS: 'Delete success',
   CHANGE_PASSWORD_SUCCESS: 'Change password success',
-  IMAGE_NOT_FOUND: 'Image not found'
+  IMAGE_NOT_FOUND: 'Image not found',
+  ADDRESS_NOT_EXCEED_255: 'Address must not exceed 255 characters'
 }
 
 export const CATEGORIES_MESSAGE = {
@@ -116,4 +117,24 @@ export const MEDICAL_BOOKING_FORMS_MESSAGE = {
 
 export const MEDIAS_MESSAGE = {
   UPLOAD_SUCCESS: 'Upload media successfully'
+}
+
+export const HOSPITALS_MESSAGE = {
+  CATEGORY_ID_IS_REQUIRED: 'CategoryId is required',
+  INVALID_CATEGORY_ID: 'Invalid categoryId',
+  CATEGORY_NOT_FOUND: 'Category not found',
+  NAME_ALREADY_EXIST: 'Name already exist',
+  SESSION_IS_REQUIRED: 'Session is required',
+  SESSION_MUST_BE_STRING: 'Session must be a string',
+  SESSION_NOT_EXCEED_255: 'Session must not exceed 255 characters',
+  TIME_MUST_BE_STRING: 'Start time must be a string',
+  TIME_LENGTH_MUST_BE_5: 'Start time length must be 5 characters',
+  HOTLINE_MUST_BE_STRING: 'Hotline must be a string',
+  INVALID_PHONE_NUMBER: 'Invalid phone number',
+  IMAGES_MUST_BE_ARRAY: 'Images must be an array',
+  IMAGE_MUST_BE_STRING: 'Image must be a string',
+  ADDRESS_IS_REQUIRED: 'Address is required',
+  TYPES_MUST_BE_ARRAY: 'Types must be an array',
+  INVALID_OBJECT_ID: 'Invalid ObjectId',
+  CREATE_HOSPITAL_SUCCESS: 'Create hospital successfully'
 }

@@ -16,8 +16,7 @@ import {
 } from './../constants/checkSchema'
 import databaseService from '~/services/database.service'
 import {numberEnumToArray} from '~/utils/common'
-
-const CHECK_PHONE_NUMBER_REGEX = /^(-84|\+84|0)[3,5,7,8,9]\d{8,8}$/
+import {CHECK_PHONE_NUMBER_REGEX} from '~/constants/regax'
 
 export const verifiedUserValidator = (req: Request, res: Response, next: NextFunction) => {
   const {verify} = req.decode_authorization as TokenPayload

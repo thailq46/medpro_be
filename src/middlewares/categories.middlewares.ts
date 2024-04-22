@@ -3,14 +3,14 @@ import {ObjectId} from 'mongodb'
 import {CATEGORIES_MESSAGE} from '~/constants/messages'
 import databaseService from '~/services/database.service'
 import validate from '~/utils/validate'
-import {nameCategoryCheckSchema, slugCategoryCheckSchema} from '~/constants/checkSchema'
+import {nameCategoryCheckSchema, slugCheckSchema} from '~/constants/checkSchema'
 
 export const createCategoriesValidator = validate(
   checkSchema(
     {
       name: nameCategoryCheckSchema,
       slug: {
-        ...slugCategoryCheckSchema,
+        ...slugCheckSchema,
         custom: {
           options: async (value: string) => {
             const isExist = await databaseService.categories.findOne({slug: value})
@@ -51,7 +51,7 @@ export const updateCategoriesValidator = validate(
       name: {optional: true, ...nameCategoryCheckSchema},
       slug: {
         optional: true,
-        ...slugCategoryCheckSchema,
+        ...slugCheckSchema,
         custom: {
           options: async (value: string, {req}) => {
             const categoryId = req.params?.id

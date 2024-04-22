@@ -1,6 +1,6 @@
 import {ObjectId} from 'mongodb'
 
-interface MedicalBookingFormsType {
+export interface MedicalBookingFormsType {
   _id?: ObjectId
   name: string
   image?: string | null

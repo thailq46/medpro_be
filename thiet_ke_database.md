@@ -181,7 +181,7 @@ interface MedicalBookingForms {
 ```
 
 ```ts
-interface HospitalTrees {
+interface Hospitals {
   _id: ObjectId
   categoryId: ObjectId
   name: string
@@ -191,9 +191,9 @@ interface HospitalTrees {
   end_time: string // "17:30"
   hotline: string
   address: string
-  avatar: string
-  banner: string
-  images: string[]
+  avatar: string | null
+  banner: string | null
+  images: string[] | null
   types: MedicalBookingFormType[]
   created_at: Date
   updated_at: Date
@@ -217,8 +217,6 @@ interface Specialties {
   updated_at: Date
 }
 ```
-
-- Nếu is_service là false thì services là null thì Chuyên khoa đấy không có dịch vụ -> Sẽ chuyển đến chọn bác sĩ để khám bệnh luôn
 
 ### Services
 
