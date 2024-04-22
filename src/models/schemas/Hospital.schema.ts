@@ -5,6 +5,7 @@ interface HospitalsType {
   categoryId: ObjectId
   name: string
   slug: string
+  description: string
   session?: string // Thời gian làm việc : Thứ 2 -> Thứ 6
   start_time?: string | null // "08:00"
   end_time?: string | null // "17:30"
@@ -23,6 +24,7 @@ export default class Hospital {
   categoryId: ObjectId
   name: string
   slug: string
+  description: string
   session: string // Thời gian làm việc : Thứ 2 -> Thứ 6
   start_time: string | null // "08:00"
   end_time: string | null // "17:30"
@@ -42,6 +44,7 @@ export default class Hospital {
     _id,
     avatar,
     banner,
+    description,
     created_at,
     end_time,
     hotline,
@@ -56,6 +59,7 @@ export default class Hospital {
     this.categoryId = categoryId
     this.name = name
     this.slug = slug
+    this.description = description
     this.session = session || ''
     this.start_time = start_time || ''
     this.end_time = end_time || ''
