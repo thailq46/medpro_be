@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {createHospitalController} from '~/controllers/hospitals.controllers'
+import {createHospitalController, getFullHospitalsController} from '~/controllers/hospitals.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {isUserLoggedInValidator} from '~/middlewares/common.middlewares'
 import {createHospitalValidator} from '~/middlewares/hospitals.middlewares'
@@ -22,5 +22,12 @@ hospitalsRoutes.post(
   createHospitalValidator,
   wrapRequestHandler(createHospitalController)
 )
+
+/**
+ * Desscription: Get full list hospitals
+ * Path: /hospitals
+ * Method: GET
+ */
+hospitalsRoutes.get('/', wrapRequestHandler(getFullHospitalsController))
 
 export default hospitalsRoutes

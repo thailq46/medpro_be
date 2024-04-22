@@ -13,6 +13,10 @@ class HospitalsService {
       })
     )
   }
+
+  async getFullHospitals() {
+    return await databaseService.hospitals.find().toArray()
+  }
 }
 
 const hospitalsService = new HospitalsService()

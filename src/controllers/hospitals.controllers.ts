@@ -14,3 +14,11 @@ export const createHospitalController = async (
     data: result
   })
 }
+
+export const getFullHospitalsController = async (req: Request, res: Response) => {
+  const result = await hospitalsService.getFullHospitals()
+  return res.json({
+    message: HOSPITALS_MESSAGE.GET_HOSPITALS_SUCCESS,
+    data: result
+  })
+}

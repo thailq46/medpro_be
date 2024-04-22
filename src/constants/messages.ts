@@ -136,5 +136,6 @@ export const HOSPITALS_MESSAGE = {
   ADDRESS_IS_REQUIRED: 'Address is required',
   TYPES_MUST_BE_ARRAY: 'Types must be an array',
   INVALID_OBJECT_ID: 'Invalid ObjectId',
-  CREATE_HOSPITAL_SUCCESS: 'Create hospital successfully'
+  CREATE_HOSPITAL_SUCCESS: 'Create hospital successfully',
+  GET_HOSPITALS_SUCCESS: 'Get hospitals successfully'
 }
