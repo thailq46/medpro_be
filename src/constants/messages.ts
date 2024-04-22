@@ -140,5 +140,8 @@ export const HOSPITALS_MESSAGE = {
   DESC_MUST_BE_STRING: 'Description must be a string',
   DESC_NOT_EXCEED_500: 'Description must not exceed 500 characters',
   CREATE_HOSPITAL_SUCCESS: 'Create hospital successfully',
-  GET_HOSPITALS_SUCCESS: 'Get hospitals successfully'
+  GET_HOSPITALS_SUCCESS: 'Get hospitals successfully',
+  UPDATE_HOSPITAL_SUCCESS: 'Update hospital successfully',
+  SLUG_ALREADY_EXIST: 'Slug already exist',
+  HOSPITAL_NOT_FOUND: 'Hospital not found'
 }
