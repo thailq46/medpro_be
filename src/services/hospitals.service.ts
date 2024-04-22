@@ -33,6 +33,14 @@ class HospitalsService {
       {returnDocument: 'after'}
     )
   }
+
+  async deleteHospital(id: string) {
+    return await databaseService.hospitals.findOneAndDelete({_id: new ObjectId(id)})
+  }
+
+  async getHospitalsById(id: string) {
+    return await databaseService.hospitals.findOne({_id: new ObjectId(id)})
+  }
 }
 
 const hospitalsService = new HospitalsService()

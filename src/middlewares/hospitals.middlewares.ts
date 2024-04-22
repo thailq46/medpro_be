@@ -253,3 +253,26 @@ export const updateHospitalValidator = validate(
     ['body']
   )
 )
+
+export const checkParamsHospitalValidator = validate(
+  checkSchema(
+    {
+      id: {
+        notEmpty: {errorMessage: HOSPITALS_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(HOSPITALS_MESSAGE.INVALID_CATEGORY_ID)
+            }
+            const isExist = await databaseService.hospitals.findOne({_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(HOSPITALS_MESSAGE.HOSPITAL_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
+  )
+)

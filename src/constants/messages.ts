@@ -142,6 +142,8 @@ export const HOSPITALS_MESSAGE = {
   CREATE_HOSPITAL_SUCCESS: 'Create hospital successfully',
   GET_HOSPITALS_SUCCESS: 'Get hospitals successfully',
   UPDATE_HOSPITAL_SUCCESS: 'Update hospital successfully',
+  DELETE_HOSPITAL_SUCCESS: 'Delete hospital successfully',
   SLUG_ALREADY_EXIST: 'Slug already exist',
-  HOSPITAL_NOT_FOUND: 'Hospital not found'
+  HOSPITAL_NOT_FOUND: 'Hospital not found',
+  HOSPITAL_ID_IS_REQUIRED: 'HospitalId is required'
 }

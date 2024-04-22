@@ -30,7 +30,26 @@ export const updateHospitalController = async (
   }
   const result = await hospitalsService.updateHospital(id, req.body)
   return res.json({
-    message: HOSPITALS_MESSAGE.UPDATE_HOSPITAL_SUCCESS
+    message: HOSPITALS_MESSAGE.UPDATE_HOSPITAL_SUCCESS,
+    data: result
+  })
+}
+
+export const deleteHospitalController = async (req: Request<GetHospitalsParamsReq>, res: Response) => {
+  const {id} = req.params
+  const result = await hospitalsService.deleteHospital(id)
+  return res.json({
+    message: HOSPITALS_MESSAGE.DELETE_HOSPITAL_SUCCESS,
+    data: result
+  })
+}
+
+export const getHospitalsByIdController = async (req: Request<GetHospitalsParamsReq>, res: Response) => {
+  const {id} = req.params
+  const result = await hospitalsService.getHospitalsById(id)
+  return res.json({
+    message: HOSPITALS_MESSAGE.GET_HOSPITALS_SUCCESS,
+    data: result
   })
 }
 
