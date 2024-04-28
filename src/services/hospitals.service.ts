@@ -9,7 +9,7 @@ class HospitalsService {
       new Hospital({
         ...payload,
         categoryId: new ObjectId(payload.categoryId),
-        types: payload.types.map((type) => new ObjectId(type))
+        booking_forms: payload.booking_forms.map((type) => new ObjectId(type))
       })
     )
   }
@@ -26,7 +26,7 @@ class HospitalsService {
           $set: {
             ...payload,
             categoryId: new ObjectId(payload.categoryId),
-            types: payload.types?.map((type) => new ObjectId(type)) || []
+            booking_forms: payload.booking_forms?.map((type) => new ObjectId(type))
           }
         }
       ],

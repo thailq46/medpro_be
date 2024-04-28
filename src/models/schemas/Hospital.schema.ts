@@ -14,7 +14,8 @@ interface HospitalsType {
   avatar?: string | null
   banner?: string | null
   images?: string[] | null
-  types: ObjectId[] // Medical Booking Forms
+  booking_forms: ObjectId[]
+  types: number[]
   created_at?: Date
   updated_at?: Date
 }
@@ -33,7 +34,8 @@ export default class Hospital {
   avatar: string | null
   banner: string | null
   images: string[] | null
-  types: ObjectId[] // Medical Booking Forms
+  booking_forms: ObjectId[]
+  types: number[]
   created_at: Date
   updated_at: Date
   constructor({
@@ -51,6 +53,7 @@ export default class Hospital {
     images,
     session,
     slug,
+    booking_forms,
     start_time,
     updated_at
   }: HospitalsType) {
@@ -69,6 +72,7 @@ export default class Hospital {
     this.banner = banner || null
     this.images = images || null
     this.types = types
+    this.booking_forms = booking_forms
     this.created_at = created_at || date
     this.updated_at = updated_at || date
   }

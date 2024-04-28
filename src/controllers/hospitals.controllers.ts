@@ -22,12 +22,12 @@ export const updateHospitalController = async (
   res: Response
 ) => {
   const {id} = req.params
-  const isExist = await databaseService.hospitals.findOne({_id: new ObjectId(id)})
-  if (!isExist) {
-    return res.status(404).json({
-      message: HOSPITALS_MESSAGE.HOSPITAL_NOT_FOUND
-    })
-  }
+  // const isExist = await databaseService.hospitals.findOne({_id: new ObjectId(id)})
+  // if (!isExist) {
+  //   return res.status(404).json({
+  //     message: HOSPITALS_MESSAGE.HOSPITAL_NOT_FOUND
+  //   })
+  // }
   const result = await hospitalsService.updateHospital(id, req.body)
   return res.json({
     message: HOSPITALS_MESSAGE.UPDATE_HOSPITAL_SUCCESS,

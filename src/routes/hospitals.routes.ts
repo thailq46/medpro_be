@@ -46,6 +46,7 @@ hospitalsRoutes.patch(
   '/update/:id',
   isUserLoggedInValidator(accessTokenValidator),
   verifiedUserValidator,
+  checkParamsHospitalValidator,
   updateHospitalValidator,
   filterMiddleware<UpdateHospitalsReqBody>([
     'avatar',
@@ -60,7 +61,8 @@ hospitalsRoutes.patch(
     'session',
     'slug',
     'start_time',
-    'types'
+    'types',
+    'booking_forms'
   ]),
   wrapRequestHandler(updateHospitalController)
 )

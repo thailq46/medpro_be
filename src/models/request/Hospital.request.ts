@@ -12,7 +12,8 @@ export interface CreateHospitalsReqBody {
   avatar: string | null
   banner: string | null
   images: string[] | null
-  types: string[]
+  types: number[]
+  booking_forms: string[]
 }
 export interface UpdateHospitalsReqBody {
   categoryId?: string
@@ -27,7 +28,8 @@ export interface UpdateHospitalsReqBody {
   avatar?: string | null
   banner?: string | null
   images?: string[] | null
-  types?: string[]
+  booking_forms?: string[]
+  types?: number[]
 }
 export interface GetHospitalsParamsReq extends ParamsDictionary {
   id: string
