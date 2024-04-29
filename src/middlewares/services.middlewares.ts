@@ -119,6 +119,7 @@ export const updateServicesValidator = validate(
       },
       price: {
         optional: true,
+        notEmpty: {errorMessage: SERVICES_MESSAGE.PRICE_IS_REQUIRED},
         custom: {
           options: (value: number) => {
             if (typeof value !== 'number') {

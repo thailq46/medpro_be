@@ -197,3 +197,22 @@ export const SPECIALTIES_MESSAGE = {
   ID_IS_REQUIRED: 'Id is required',
   SPECIALTIES_NOT_FOUND: 'Specialties not found'
 }
+
+export const DOCTORS_MESSAGE = {
+  ID_IS_REQUIRED: 'Id is required',
+  DOCTOR_ID_IS_REQUIRED: 'DoctorId is required',
+  INVALID_OBJECT_ID: 'Invalid ObjectId',
+  DOCTOR_NOT_FOUND: 'Doctor not found',
+  YOU_ARE_NOT_A_DOCTOR: 'You are not a doctor',
+  SPECIALTY_ID_IS_REQUIRED: 'SpecialtyId is required',
+  SPECIALTY_NOT_FOUND: 'Specialty not found',
+  THERAPY_IS_REQUIRED: 'Therapy is required',
+  THERAPY_MUST_BE_STRING: 'Therapy must be a string',
+  THERAPY_NOT_EXCEED_255: 'Therapy must not exceed 255 characters',
+  PRICE_IS_REQUIRED: 'Price is required',
+  PRICE_MUST_BE_NUMBER: 'Price must be a number',
+  CREATE_DOCTORS_SUCCESS: 'Create doctors successfully',
+  UPDATE_DOCTORS_SUCCESS: 'Update doctors successfully',
+  DELETE_DOCTORS_SUCCESS: 'Delete doctors successfully',
+  GET_DOCTORS_SUCCESS: 'Get doctors successfully'
+}

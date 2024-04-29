@@ -1,6 +1,7 @@
 import {Collection, Db, MongoClient} from 'mongodb'
 import {envConfig} from '~/constants/config'
 import Category from '~/models/schemas/Category.schema'
+import Doctor from '~/models/schemas/Doctor.schema'
 import Hospital from '~/models/schemas/Hospital.schema'
 import MedicalBookingForms from '~/models/schemas/MedicalBookingForms.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
@@ -50,6 +51,9 @@ class DatabaseService {
   }
   get specialties(): Collection<Specialty> {
     return this.db.collection(envConfig.dbSpecialtiesCollection)
+  }
+  get doctors(): Collection<Doctor> {
+    return this.db.collection(envConfig.dbDoctorsCollection)
   }
 }
 
