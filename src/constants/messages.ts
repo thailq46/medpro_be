@@ -181,3 +181,19 @@ export const SERVICES_MESSAGE = {
   DELETE_SERVICES_SUCCESS: 'Delete services successfully',
   GET_SERVICES_SUCCESS: 'Get services successfully'
 }
+
+export const SPECIALTIES_MESSAGE = {
+  HOSPITAL_ID_IS_REQUIRED: 'HospitalId is required',
+  HOSPITAL_ID_MUST_BE_STRING: 'HospitalId must be a string',
+  INVALID_HOSPITAL_ID: 'Invalid hospitalId',
+  HOSPITAL_NOT_FOUND: 'Hospital not found',
+  CREATE_SPECIALTY_SUCCESS: 'Create specialty successfully',
+  GET_SPECIALTIES_SUCCESS: 'Get specialties successfully',
+  UPDATE_SPECIALTY_SUCCESS: 'Update specialty successfully',
+  DELETE_SPECIALTY_SUCCESS: 'Delete specialty successfully',
+  SPECIALTY_NOT_FOUND: 'Specialty not found',
+  SPECIALTY_ID_IS_REQUIRED: 'SpecialtyId is required',
+  INVALID_OBJECT_ID: 'Invalid ObjectId',
+  ID_IS_REQUIRED: 'Id is required',
+  SPECIALTIES_NOT_FOUND: 'Specialties not found'
+}

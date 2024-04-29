@@ -5,6 +5,7 @@ import Hospital from '~/models/schemas/Hospital.schema'
 import MedicalBookingForms from '~/models/schemas/MedicalBookingForms.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Service from '~/models/schemas/Service.schema'
+import Specialty from '~/models/schemas/Specialty.schema'
 import User from '~/models/schemas/User.schema'
 
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@medprobe.kctpk6e.mongodb.net/?retryWrites=true&w=majority&appName=MedproBE`
@@ -46,6 +47,9 @@ class DatabaseService {
   }
   get services(): Collection<Service> {
     return this.db.collection(envConfig.dbServicesCollection)
+  }
+  get specialties(): Collection<Specialty> {
+    return this.db.collection(envConfig.dbSpecialtiesCollection)
   }
 }
 

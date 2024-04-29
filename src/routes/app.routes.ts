@@ -7,6 +7,7 @@ import mediasRouter from '~/routes/medias.routes'
 import staticRouter from '~/routes/static.routes'
 import hospitalsRouter from '~/routes/hospitals.routes'
 import servicesRoutes from '~/routes/services.routes'
+import specialtiesRouter from '~/routes/specialties.routes'
 
 function router(app: Express) {
   app.use('/auth', authRouter)
@@ -17,6 +18,7 @@ function router(app: Express) {
   app.use('/static', staticRouter)
   app.use('/hospitals', hospitalsRouter)
   app.use('/services', servicesRoutes)
+  app.use('/specialties', specialtiesRouter)
 }
 
 export default router

@@ -34,10 +34,10 @@ export const createServicesValidator = validate(
             if (!ObjectId.isValid(value)) {
               throw new Error(SERVICES_MESSAGE.INVALID_OBJECT_ID)
             }
-            // const isExist = await databaseService.specialties.findOne({_id: new ObjectId(value)})
-            // if (!isExist) {
-            //   throw new Error(SERVICES_MESSAGE.SPECIALTY_NOT_FOUND)
-            // }
+            const isExist = await databaseService.specialties.findOne({_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(SERVICES_MESSAGE.SPECIALTY_NOT_FOUND)
+            }
             return true
           }
         }
@@ -98,10 +98,10 @@ export const updateServicesValidator = validate(
             if (!ObjectId.isValid(value)) {
               throw new Error(SERVICES_MESSAGE.INVALID_OBJECT_ID)
             }
-            // const isExist = await databaseService.specialties.findOne({_id: new ObjectId(value)})
-            // if (!isExist) {
-            //   throw new Error(SERVICES_MESSAGE.SPECIALTY_NOT_FOUND)
-            // }
+            const isExist = await databaseService.specialties.findOne({_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(SERVICES_MESSAGE.SPECIALTY_NOT_FOUND)
+            }
             return true
           }
         }

@@ -16,6 +16,7 @@ export const envConfig = {
   dbMedicalBookingFormsCollection: process.env.DB_MEDICAL_BOOKING_FORMS_COLLECTION as string,
   dbHospitalsCollection: process.env.DB_HOSPITALS_COLLECTION as string,
   dbServicesCollection: process.env.DB_SERVICES_COLLECTION as string,
+  dbSpecialtiesCollection: process.env.DB_SPECIALTIES_COLLECTION as string,
 
   secretOrPrivateKey: process.env.SECRET_OR_PRIVATE_KEY as string,
 
