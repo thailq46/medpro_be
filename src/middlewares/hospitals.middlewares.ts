@@ -3,7 +3,9 @@ import {ObjectId} from 'mongodb'
 import {
   addressCheckSchema,
   avatarCheckSchema,
+  descriptionCheckSchema,
   nameCheckSchema,
+  sessionCheckSchema,
   slugCheckSchema,
   timeWorkCheckSchema
 } from '~/constants/checkSchema'
@@ -58,25 +60,8 @@ export const createHospitalValidator = validate(
           }
         }
       },
-      description: {
-        notEmpty: {errorMessage: HOSPITALS_MESSAGE.DESC_IS_REQUIRED},
-        isString: {errorMessage: HOSPITALS_MESSAGE.DESC_MUST_BE_STRING},
-        isLength: {options: {max: 500}, errorMessage: HOSPITALS_MESSAGE.DESC_NOT_EXCEED_500},
-        trim: true
-      },
-      session: {
-        notEmpty: {
-          errorMessage: HOSPITALS_MESSAGE.SESSION_IS_REQUIRED
-        },
-        isString: {
-          errorMessage: HOSPITALS_MESSAGE.SESSION_MUST_BE_STRING
-        },
-        isLength: {
-          options: {max: 255},
-          errorMessage: HOSPITALS_MESSAGE.SESSION_NOT_EXCEED_255
-        },
-        trim: true
-      },
+      description: descriptionCheckSchema,
+      session: sessionCheckSchema,
       start_time: timeWorkCheckSchema,
       end_time: timeWorkCheckSchema,
       hotline: {
@@ -209,15 +194,11 @@ export const updateHospitalValidator = validate(
       },
       description: {
         optional: true,
-        isString: {errorMessage: HOSPITALS_MESSAGE.DESC_MUST_BE_STRING},
-        isLength: {options: {max: 500}, errorMessage: HOSPITALS_MESSAGE.DESC_NOT_EXCEED_500},
-        trim: true
+        ...descriptionCheckSchema
       },
       session: {
         optional: true,
-        isString: {errorMessage: HOSPITALS_MESSAGE.SESSION_MUST_BE_STRING},
-        isLength: {options: {max: 255}, errorMessage: HOSPITALS_MESSAGE.SESSION_NOT_EXCEED_255},
-        trim: true
+        ...sessionCheckSchema
       },
       start_time: {optional: true, ...timeWorkCheckSchema},
       end_time: {optional: true, ...timeWorkCheckSchema},

@@ -40,3 +40,13 @@ export interface Media {
   url: string
   type: MediaType
 }
+
+export enum HospitalsType {
+  Benhviencong = 0,
+  Benhvientu = 1,
+  Phongkham = 2,
+  Phongmach = 3,
+  Xetnghiem = 4,
+  Ytetainha = 5,
+  Tiemchung = 6
+}

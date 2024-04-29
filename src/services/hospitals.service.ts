@@ -26,7 +26,8 @@ class HospitalsService {
           $set: {
             ...payload,
             categoryId: new ObjectId(payload.categoryId),
-            booking_forms: payload.booking_forms?.map((type) => new ObjectId(type))
+            booking_forms: payload.booking_forms?.map((type) => new ObjectId(type)),
+            updated_at: '$$NOW'
           }
         }
       ],

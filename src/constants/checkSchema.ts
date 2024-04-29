@@ -1,12 +1,30 @@
 import {ParamSchema} from 'express-validator'
 import {GenderType, PositionType} from '~/constants/enum'
-import {CATEGORIES_MESSAGE, HOSPITALS_MESSAGE, USERS_MESSAGE} from '~/constants/messages'
+import {COMMON_MESSAGE, HOSPITALS_MESSAGE, USERS_MESSAGE} from '~/constants/messages'
 import {CHECK_WHITE_SPACE_REGEX} from '~/constants/regax'
 import {numberEnumToArray} from '~/utils/common'
 
 export const nameCheckSchema: ParamSchema = {
-  notEmpty: {errorMessage: USERS_MESSAGE.NAME_IS_REQUIRED},
-  isString: {errorMessage: USERS_MESSAGE.NAME_MUST_BE_STRING},
+  notEmpty: {errorMessage: COMMON_MESSAGE.NAME_IS_REQUIRED},
+  isString: {errorMessage: COMMON_MESSAGE.NAME_MUST_BE_STRING},
+  trim: true,
+  isLength: {
+    options: {max: 255},
+    errorMessage: COMMON_MESSAGE.NAME_NOT_EXCEED_255
+  }
+}
+
+export const slugCheckSchema: ParamSchema = {
+  notEmpty: {errorMessage: COMMON_MESSAGE.SLUG_IS_REQUIRED},
+  isString: {errorMessage: COMMON_MESSAGE.SLUG_MUST_BE_STRING},
+  matches: {
+    options: CHECK_WHITE_SPACE_REGEX,
+    errorMessage: COMMON_MESSAGE.SLUG_NOT_CONTAIN_SPACE
+  },
+  isLength: {
+    options: {max: 255},
+    errorMessage: COMMON_MESSAGE.SLUG_NOT_EXCEED_255
+  },
   trim: true
 }
 
@@ -99,36 +117,36 @@ export const positionCheckSchema: ParamSchema = {
   }
 }
 
-export const nameCategoryCheckSchema: ParamSchema = {
-  notEmpty: {errorMessage: CATEGORIES_MESSAGE.NAME_IS_REQUIRED},
-  isString: {errorMessage: CATEGORIES_MESSAGE.NAME_MUST_BE_STRING},
-  isLength: {
-    options: {min: 1, max: 255},
-    errorMessage: CATEGORIES_MESSAGE.NAME_MUST_BE_LENGTH_1_255
-  },
-  trim: true
-}
-
-export const slugCheckSchema: ParamSchema = {
-  notEmpty: {errorMessage: CATEGORIES_MESSAGE.SLUG_IS_REQUIRED},
-  isString: {errorMessage: CATEGORIES_MESSAGE.SLUG_MUST_BE_STRING},
-  matches: {
-    options: CHECK_WHITE_SPACE_REGEX,
-    errorMessage: CATEGORIES_MESSAGE.SLUG_NOT_CONTAIN_SPACE
-  },
-  isLength: {
-    options: {max: 255},
-    errorMessage: CATEGORIES_MESSAGE.SLUG_NOT_EXCEED_255
-  },
-  trim: true
-}
-
 export const timeWorkCheckSchema: ParamSchema = {
   optional: {options: {nullable: true}},
   isString: {errorMessage: HOSPITALS_MESSAGE.TIME_MUST_BE_STRING},
   isLength: {
     options: {max: 5},
-    errorMessage: HOSPITALS_MESSAGE.TIME_MUST_BE_STRING
+    errorMessage: HOSPITALS_MESSAGE.TIME_LENGTH_MUST_BE_5
+  },
+  trim: true
+}
+
+export const descriptionCheckSchema: ParamSchema = {
+  notEmpty: {errorMessage: COMMON_MESSAGE.DESC_IS_REQUIRED},
+  isString: {errorMessage: COMMON_MESSAGE.DESC_MUST_BE_STRING},
+  trim: true,
+  isLength: {
+    options: {max: 400},
+    errorMessage: COMMON_MESSAGE.DESC_NOT_EXCEED_400
+  }
+}
+
+export const sessionCheckSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: COMMON_MESSAGE.SESSION_IS_REQUIRED
+  },
+  isString: {
+    errorMessage: COMMON_MESSAGE.SESSION_MUST_BE_STRING
+  },
+  isLength: {
+    options: {max: 255},
+    errorMessage: COMMON_MESSAGE.SESSION_NOT_EXCEED_255
   },
   trim: true
 }

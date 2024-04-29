@@ -79,7 +79,9 @@ export const updateMeValidator = validate(
         },
         custom: {
           options: async (value: string) => {
-            const user = await databaseService.users.findOne({username: value})
+            const user = await databaseService.users.findOne({
+              $and: [{username: value}, {username: {$ne: value}}]
+            })
             if (user) {
               throw new Error(USERS_MESSAGE.USERNAME_ALREADY_EXIST)
             }

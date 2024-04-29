@@ -174,9 +174,23 @@ interface Categories {
 interface MedicalBookingForms {
   _id: ObjectId
   name: string
+  slug: string
   image: string
+  hospital_id: ObjectId
   created_at: Date
   updated_at: Date
+}
+```
+
+```ts
+enum HospitalsType {
+  Benhviencong = 0,
+  Benhvientu = 1,
+  Phongkham = 2,
+  Phongmach = 3,
+  Xetnghiem = 4,
+  Ytetainha = 5,
+  Tiemchung = 6
 }
 ```
 
@@ -194,7 +208,8 @@ interface Hospitals {
   avatar: string | null
   banner: string | null
   images: string[] | null
-  types: MedicalBookingFormType[]
+  booking_forms: MedicalBookingFormType[]
+  types: HospitalsType[]
   created_at: Date
   updated_at: Date
 }
@@ -211,8 +226,8 @@ interface Specialties {
   _id: ObjectId
   hostipal_id: ObjectId
   name: string
+  slug: string
   description: string
-  services: Services[] | null
   created_at: Date
   updated_at: Date
 }
@@ -226,9 +241,11 @@ interface Specialties {
 interface Services {
   _id: ObjectId
   name: string
+  hospital_id: ObjectId
+  specialty_id: ObjectId | null
   description: string
-  price_min: number
-  price_max: number
+  price: number
+  note: string
   created_at: Date
   updated_at: Date
 }
@@ -251,7 +268,7 @@ enum TimeType {
 ```ts
 interface Schedules {
   _id: ObjectId
-  doctor_id: ObjectId
+  doctor_id: DoctorInfor
   current_number: number // số bệnh nhân hiện tại
   max_number: number // số bệnh nhân nhận max
   date: Date // ngày khám bệnh
@@ -268,7 +285,7 @@ interface DoctorInfor {
   _id: ObjectId
   doctor_id: ObjectId
   specialty_id: ObjectId
-  description_info: string
+  description: string
   therapy: string // Chuyên trị
   price: string
   session: string // Lịch làm việc
@@ -292,6 +309,7 @@ interface Booking {
   status: StatusType
   doctor_id: ObjectId
   patient_id: ObjectId
+  total_price: number
   date: Date
   time_type: TimeType
 }

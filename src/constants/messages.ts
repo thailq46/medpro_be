@@ -1,7 +1,24 @@
-export const USERS_MESSAGE = {
-  VALIDATION_ERROR: 'Validation error',
+import {HospitalsType} from '~/constants/enum'
+import {numberEnumToArray} from '~/utils/common'
+
+export const COMMON_MESSAGE = {
   NAME_IS_REQUIRED: 'Name is required',
   NAME_MUST_BE_STRING: 'Name must be a string',
+  NAME_NOT_EXCEED_255: 'Name must not exceed 255 characters',
+  SLUG_IS_REQUIRED: 'Slug is required',
+  SLUG_MUST_BE_STRING: 'Slug must be a string',
+  SLUG_NOT_CONTAIN_SPACE: 'Slug must not contain only whitespace',
+  SLUG_NOT_EXCEED_255: 'Slug must not exceed 255 characters',
+  DESC_IS_REQUIRED: 'Description is required',
+  DESC_MUST_BE_STRING: 'Description must be a string',
+  DESC_NOT_EXCEED_400: 'Description must not exceed 400 characters',
+  SESSION_IS_REQUIRED: 'Session is required',
+  SESSION_MUST_BE_STRING: 'Session must be a string',
+  SESSION_NOT_EXCEED_255: 'Session must not exceed 255 characters'
+}
+
+export const USERS_MESSAGE = {
+  VALIDATION_ERROR: 'Validation error',
   EMAIL_IS_REQUIRED: 'Email is required',
   INVALID_EMAIL: 'Invalid email',
   GENDER_IS_REQUIRED: 'Gender is required',
@@ -124,9 +141,6 @@ export const HOSPITALS_MESSAGE = {
   INVALID_CATEGORY_ID: 'Invalid categoryId',
   CATEGORY_NOT_FOUND: 'Category not found',
   NAME_ALREADY_EXIST: 'Name already exist',
-  SESSION_IS_REQUIRED: 'Session is required',
-  SESSION_MUST_BE_STRING: 'Session must be a string',
-  SESSION_NOT_EXCEED_255: 'Session must not exceed 255 characters',
   TIME_MUST_BE_STRING: 'Start time must be a string',
   TIME_LENGTH_MUST_BE_5: 'Start time length must be 5 characters',
   HOTLINE_MUST_BE_STRING: 'Hotline must be a string',
@@ -134,16 +148,36 @@ export const HOSPITALS_MESSAGE = {
   IMAGES_MUST_BE_ARRAY: 'Images must be an array',
   IMAGE_MUST_BE_STRING: 'Image must be a string',
   ADDRESS_IS_REQUIRED: 'Address is required',
+  BOOKING_FORMS_MUST_BE_ARRAY: 'Booking forms must be an array',
+  BOOKING_FORMS_IS_REQUIRED: 'Booking forms is required',
+  TYPES_IS_REQUIRED: 'Types is required',
   TYPES_MUST_BE_ARRAY: 'Types must be an array',
   INVALID_OBJECT_ID: 'Invalid ObjectId',
-  DESC_IS_REQUIRED: 'Description is required',
-  DESC_MUST_BE_STRING: 'Description must be a string',
-  DESC_NOT_EXCEED_500: 'Description must not exceed 500 characters',
   CREATE_HOSPITAL_SUCCESS: 'Create hospital successfully',
   GET_HOSPITALS_SUCCESS: 'Get hospitals successfully',
   UPDATE_HOSPITAL_SUCCESS: 'Update hospital successfully',
   DELETE_HOSPITAL_SUCCESS: 'Delete hospital successfully',
   SLUG_ALREADY_EXIST: 'Slug already exist',
   HOSPITAL_NOT_FOUND: 'Hospital not found',
-  HOSPITAL_ID_IS_REQUIRED: 'HospitalId is required'
+  HOSPITAL_ID_IS_REQUIRED: 'HospitalId is required',
+  BOOKING_FORM_NOT_FOUND: 'Some booking forms not found in medicalBookingForms collection.',
+  INVALID_TYPES: `Types must be ${numberEnumToArray(HospitalsType).join(', ')}`
+}
+
+export const SERVICES_MESSAGE = {
+  HOSPITAL_ID_IS_REQUIRED: 'HospitalId is required',
+  ID_IS_REQUIRED: 'Id is required',
+  INVALID_HOSPITAL_ID: 'Invalid hospitalId',
+  HOSPITAL_NOT_FOUND: 'Hospital not found',
+  INVALID_OBJECT_ID: 'Invalid ObjectId',
+  SPECIALTY_NOT_FOUND: 'Specialty not found',
+  NOTE_NOT_EXCEED_255: 'Note must not exceed 255 characters',
+  PRICE_IS_REQUIRED: 'Price is required',
+  PRICE_MUST_BE_NUMBER: 'Price must be a number',
+  NOTE_MUST_BE_STRING: 'Note must be a string',
+  SERVICES_NOT_FOUND: 'Services not found',
+  CREATE_SERVICES_SUCCESS: 'Create services successfully',
+  UPDATE_SERVICES_SUCCESS: 'Update services successfully',
+  DELETE_SERVICES_SUCCESS: 'Delete services successfully',
+  GET_SERVICES_SUCCESS: 'Get services successfully'
 }

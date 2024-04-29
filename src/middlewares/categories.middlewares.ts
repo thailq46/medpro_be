@@ -3,12 +3,12 @@ import {ObjectId} from 'mongodb'
 import {CATEGORIES_MESSAGE} from '~/constants/messages'
 import databaseService from '~/services/database.service'
 import validate from '~/utils/validate'
-import {nameCategoryCheckSchema, slugCheckSchema} from '~/constants/checkSchema'
+import {nameCheckSchema, slugCheckSchema} from '~/constants/checkSchema'
 
 export const createCategoriesValidator = validate(
   checkSchema(
     {
-      name: nameCategoryCheckSchema,
+      name: nameCheckSchema,
       slug: {
         ...slugCheckSchema,
         custom: {
@@ -48,7 +48,7 @@ export const createCategoriesValidator = validate(
 export const updateCategoriesValidator = validate(
   checkSchema(
     {
-      name: {optional: true, ...nameCategoryCheckSchema},
+      name: {optional: true, ...nameCheckSchema},
       slug: {
         optional: true,
         ...slugCheckSchema,
