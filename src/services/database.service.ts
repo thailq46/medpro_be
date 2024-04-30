@@ -5,6 +5,7 @@ import Doctor from '~/models/schemas/Doctor.schema'
 import Hospital from '~/models/schemas/Hospital.schema'
 import MedicalBookingForms from '~/models/schemas/MedicalBookingForms.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
+import Schedule from '~/models/schemas/Schedule.schema'
 import Service from '~/models/schemas/Service.schema'
 import Specialty from '~/models/schemas/Specialty.schema'
 import User from '~/models/schemas/User.schema'
@@ -54,6 +55,9 @@ class DatabaseService {
   }
   get doctors(): Collection<Doctor> {
     return this.db.collection(envConfig.dbDoctorsCollection)
+  }
+  get schedules(): Collection<Schedule> {
+    return this.db.collection(envConfig.dbSchedulesCollection)
   }
 }
 

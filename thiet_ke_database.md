@@ -254,7 +254,7 @@ interface Services {
 ### Schedules
 
 ```ts
-enum TimeType {
+enum TimeScheduleType {
   T1 = '8:00 AM - 9:00 AM'
   T2 = '9:00 AM - 10:00 AM'
   T3 = '10:00 AM - 11:00 AM'
@@ -271,7 +271,7 @@ interface Schedules {
   doctor_id: DoctorInfor
   current_number: number // số bệnh nhân hiện tại
   max_number: number // số bệnh nhân nhận max
-  date: Date // ngày khám bệnh
+  date: string // ngày khám bệnh
   time_type: TimeType[]
   created_at: Date
   updated_at: Date

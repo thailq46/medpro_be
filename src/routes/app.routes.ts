@@ -9,6 +9,7 @@ import hospitalsRouter from '~/routes/hospitals.routes'
 import servicesRoutes from '~/routes/services.routes'
 import specialtiesRouter from '~/routes/specialties.routes'
 import doctorsRouter from '~/routes/doctors.routes'
+import schedulesRouter from '~/routes/schedule.routes'
 
 function router(app: Express) {
   app.use('/auth', authRouter)
@@ -21,6 +22,7 @@ function router(app: Express) {
   app.use('/services', servicesRoutes)
   app.use('/specialties', specialtiesRouter)
   app.use('/doctors', doctorsRouter)
+  app.use('/schedules', schedulesRouter)
 }
 
 export default router

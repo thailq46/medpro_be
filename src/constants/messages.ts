@@ -1,4 +1,4 @@
-import {HospitalsType} from '~/constants/enum'
+import {HospitalsType, TimeScheduleType} from '~/constants/enum'
 import {numberEnumToArray} from '~/utils/common'
 
 export const COMMON_MESSAGE = {
@@ -215,4 +215,30 @@ export const DOCTORS_MESSAGE = {
   UPDATE_DOCTORS_SUCCESS: 'Update doctors successfully',
   DELETE_DOCTORS_SUCCESS: 'Delete doctors successfully',
   GET_DOCTORS_SUCCESS: 'Get doctors successfully'
+}
+
+export const SCHEDULES_MESSAGE = {
+  DOCTOR_ID_IS_REQUIRED: 'DoctorId is required',
+  DOCTOR_ID_MUST_BE_A_STRING: 'DoctorId must be a string',
+  INVALID_OBJECT_ID: 'Invalid ObjectId',
+  DOCTOR_NOT_FOUND: 'Doctor not found',
+  MAX_NUMBER_IS_REQUIRED: 'Max number is required',
+  MAX_NUMBER_MUST_BE_A_NUMBER: 'Max number must be a number',
+  MAX_NUMBER_MUST_BE_LESS_THAN_100: 'Max number must be less than 100',
+  DATE_IS_REQUIRED: 'Date is required',
+  DATE_MUST_BE_A_STRING: 'Date must be a string',
+  DATE_MUST_BE_LESS_THAN_10_CHARACTERS: 'Date must be less than 10 characters',
+  TIME_TYPE_IS_REQUIRED: 'Time type is required',
+  TIME_TYPE_MUST_BE_AN_ARRAY: 'Time type must be an array',
+  TIME_TYPE_MUST_NOT_BE_EMPTY: 'Time type must not be empty',
+  TIME_TYPE_MUST_BE_IN_THE_RANGE: `Time type must be in the range ${[TimeScheduleType.T1, TimeScheduleType.T2, TimeScheduleType.T3, TimeScheduleType.T4, TimeScheduleType.T5, TimeScheduleType.T6, TimeScheduleType.T7].join(', ')}`,
+  CURRENT_NUMBER_MUST_BE_A_NUMBER: 'Current number must be a number',
+  CURRENT_NUMBER_MUST_BE_LESS_THAN_100: 'Current number must be less than 100',
+  SCHEDULE_ID_IS_REQUIRED: 'ScheduleId is required',
+  SCHEDULE_ID_MUST_BE_A_STRING: 'ScheduleId must be a string',
+  SCHEDULE_NOT_FOUND: 'Schedule not found',
+  CREATE_SCHEDULES_SUCCESSFULLY: 'Create schedules successfully',
+  UPDATE_SCHEDULES_SUCCESSFULLY: 'Update schedules successfully',
+  DELETE_SCHEDULES_SUCCESSFULLY: 'Delete schedules successfully',
+  GET_SCHEDULES_SUCCESSFULLY: 'Get schedules successfully'
 }
