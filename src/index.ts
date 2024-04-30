@@ -7,11 +7,22 @@ import {defaultErrorHandler} from '~/middlewares/error.middlewares'
 import {initFolder} from '~/utils/file'
 config()
 
+databaseService.connect().then(() => {
+  databaseService.indexUsers()
+  databaseService.indexRefreshTokens()
+  databaseService.indexCategories()
+  databaseService.indexMedicalBookingForms()
+  databaseService.indexHospitals()
+  databaseService.indexServices()
+  databaseService.indexSpecialties()
+  databaseService.indexDoctors()
+  databaseService.indexSchedules()
+})
+
 const app = express()
 const port = envConfig.port
 
 initFolder()
-databaseService.connect()
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))

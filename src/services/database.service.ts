@@ -59,6 +59,55 @@ class DatabaseService {
   get schedules(): Collection<Schedule> {
     return this.db.collection(envConfig.dbSchedulesCollection)
   }
+
+  async indexUsers() {
+    const isExist = await this.users.indexExists(['email_1_password_1', 'email_1', 'username_1'])
+    if (!isExist) {
+      this.users.createIndex({email: 1, password: 1})
+      this.users.createIndex({email: 1}, {unique: true})
+      this.users.createIndex({username: 1}, {unique: true})
+    }
+  }
+  // Mongodb có 1 background task là một tác vụ chạy ngầm, nó sẽ chạy khoảng 60s 1 lần (sau 1 phút nó sẽ chạy 1 lần) để kiểm tra xem thử còn thời gian sống (TTL - time to live ) hay không, nếu hết thời gian sống thì nó sẽ xóa dữ liệu đó đi
+  async indexRefreshTokens() {
+    const isExist = await this.refreshTokens.indexExists(['token_1', 'exp_1'])
+    if (!isExist) {
+      this.refreshTokens.createIndex({token: 1})
+      this.refreshTokens.createIndex({exp: 1}, {expireAfterSeconds: 0})
+    }
+  }
+  async indexCategories() {
+    const isExist = await this.categories.indexExists(['slug_1', 'parent_id_1'])
+    if (!isExist) {
+      this.categories.createIndex({slug: 1}, {unique: true})
+      this.categories.createIndex({parent_id: 1})
+    }
+  }
+  async indexMedicalBookingForms() {
+    const isExist = await this.medicalBookingForms.indexExists(['name_1'])
+    if (!isExist) {
+      this.medicalBookingForms.createIndex({name: 1}, {unique: true})
+    }
+  }
+  async indexHospitals() {
+    const isExist = await this.hospitals.indexExists(['slug_1', 'name_1'])
+    if (!isExist) {
+      this.hospitals.createIndex({slug: 1}, {unique: true})
+      this.hospitals.createIndex({name: 1}, {unique: true})
+    }
+  }
+  async indexServices() {}
+
+  async indexSpecialties() {}
+
+  async indexSchedules() {}
+
+  async indexDoctors() {
+    const isExist = await this.doctors.indexExists(['doctor_id_1'])
+    if (!isExist) {
+      this.doctors.createIndex({doctor_id: 1}, {unique: true})
+    }
+  }
 }
 
 const databaseService = new DatabaseService()

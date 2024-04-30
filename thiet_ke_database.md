@@ -144,6 +144,10 @@ Một user thì có thể có nhiều refresh token (Không giới hạn), nên 
 
 Và đôi lúc chúng ta chỉ quan tâm đến refresh token mà không cần biết user là ai. Vậy nên ta tạo ra một collection riêng để lưu refresh token
 
+- Khi tạo ra 1 RefreshToken mới thì nó phải trùng với thời điểm hết hạn của refresh_token cũ mà người dùng gửi lên
+- iat: thời điểm refresh_token đc tạo
+- exp: thời điểm refresh_token hết hạn
+
 ```ts
 interface RefreshToken {
   _id: ObjectId
@@ -313,4 +317,13 @@ interface Booking {
   date: Date
   time_type: TimeType
 }
+```
+
+- Index trong MongoDB làm tốn dung lượng bộ nhớ DB nhưng bù lại giúp query nhanh hơn
+
+```ts
+1. Khi compound index rồi thì có cần index từng trường nữa hay không?
+=> Nên vì VD khi compound 2 field là age và sex nhưng lúc query riêng biệt thì vẫn lên index riêng biệt nó
+
+2. Về index text => 1 collection chỉ được index 1 field text => nếu muốn index nhiều field thì phải index cùng 1 lúc nhiều thằng như compound
 ```
