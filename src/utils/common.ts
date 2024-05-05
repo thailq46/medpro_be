@@ -7,6 +7,21 @@ import {envConfig} from '~/constants/config'
 import {verifyToken} from '~/utils/jwt'
 import {capitalize, pick} from 'lodash'
 
+interface IMetaData {
+  total_page?: number
+  limit?: number
+  current_page?: number
+  total_items?: number
+}
+
+export const responseMessage = ({message, data, meta = {}}: {message: string; data?: any; meta?: IMetaData}) => {
+  return {
+    message,
+    data,
+    meta
+  }
+}
+
 export const numberEnumToArray = (numberEnum: {[key: string]: string | number}) => {
   return Object.values(numberEnum).filter((value) => typeof value === 'number') as number[]
 }

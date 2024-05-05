@@ -54,12 +54,12 @@ class HospitalsService {
           {$unwind: {path: '$category'}},
           {
             $project: {
-              categoryId: 0,
-              category: {
-                _id: 0,
-                created_at: 0,
-                updated_at: 0
-              }
+              categoryId: 0
+              // category: {
+              //   _id: 0,
+              //   created_at: 0,
+              //   updated_at: 0
+              // }
             }
           },
           {$skip: limit * (page - 1)},
@@ -129,12 +129,12 @@ class HospitalsService {
         {$unwind: {path: '$category'}},
         {
           $project: {
-            categoryId: 0,
-            category: {
-              _id: 0,
-              created_at: 0,
-              updated_at: 0
-            }
+            categoryId: 0
+            // category: {
+            //   _id: 0,
+            //   created_at: 0,
+            //   updated_at: 0
+            // }
           }
         }
       ])

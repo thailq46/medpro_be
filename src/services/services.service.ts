@@ -35,11 +35,77 @@ class ServicesService {
     return await databaseService.services.findOneAndDelete({_id: new ObjectId(id)})
   }
 
-  async getFullServices() {
-    return await databaseService.services.find().toArray()
+  async getFullServices({limit, page}: {limit: number; page: number}) {
+    const [services, totalItems] = await Promise.all([
+      databaseService.services
+        .aggregate([
+          {
+            $lookup: {
+              from: 'hospitals',
+              localField: 'hospital_id',
+              foreignField: '_id',
+              as: 'hospital'
+            }
+          },
+          {
+            $lookup: {
+              from: 'specialties',
+              localField: 'specialty_id',
+              foreignField: '_id',
+              as: 'specialty'
+            }
+          },
+          {$unwind: {path: '$hospital'}},
+          {$project: {hospital_id: 0, specialty_id: 0}},
+          {$skip: (page - 1) * limit},
+          {$limit: limit}
+        ])
+        .toArray()
+        .then((data) => {
+          if (!data) return null
+          data.forEach((service) => {
+            service.specialty.length > 0 ? (service.specialty = service.specialty[0]) : (service.specialty = null)
+          })
+          return data
+        }),
+      databaseService.services.countDocuments()
+    ])
+    return {services, totalItems}
   }
+
   async getServicesById(id: string) {
-    return await databaseService.services.findOne({_id: new ObjectId(id)})
+    const service = await databaseService.services
+      .aggregate([
+        {$match: {_id: new ObjectId(id)}},
+        {
+          $lookup: {
+            from: 'hospitals',
+            localField: 'hospital_id',
+            foreignField: '_id',
+            as: 'hospital'
+          }
+        },
+        {
+          $lookup: {
+            from: 'specialties',
+            localField: 'specialty_id',
+            foreignField: '_id',
+            as: 'specialty'
+          }
+        },
+        {$unwind: {path: '$hospital'}},
+        {$project: {hospital_id: 0, specialty_id: 0}}
+      ])
+      .toArray()
+      .then((data) => {
+        if (!data) return null
+        data.forEach((service) => {
+          service.specialty.length > 0 ? (service.specialty = service.specialty[0]) : (service.specialty = null)
+        })
+        return data
+      })
+    // eslint-disable-next-line no-extra-boolean-cast
+    return !!service?.length ? service[0] : null
   }
 }
 

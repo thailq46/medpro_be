@@ -7,7 +7,7 @@ import {
   updateServicesController
 } from '~/controllers/services.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {filterMiddleware, isUserLoggedInValidator} from '~/middlewares/common.middlewares'
+import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
   checkParamsServiceID,
   createServicesValidator,
@@ -88,6 +88,6 @@ servicesRoutes.get('/:id', checkParamsServiceID, wrapRequestHandler(getServicesB
  * Path: /services
  * Method: GET
  */
-servicesRoutes.get('/', wrapRequestHandler(getFullServicesController))
+servicesRoutes.get('/', paginationValidator, wrapRequestHandler(getFullServicesController))
 
 export default servicesRoutes
