@@ -2,6 +2,7 @@ import {Request, Response} from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {ObjectId} from 'mongodb'
 import {HOSPITALS_MESSAGE} from '~/constants/messages'
+import {Pagination} from '~/models/request/Common.request'
 import {CreateHospitalsReqBody, GetHospitalsParamsReq, UpdateHospitalsReqBody} from '~/models/request/Hospital.request'
 import databaseService from '~/services/database.service'
 import hospitalsService from '~/services/hospitals.service'
@@ -49,14 +50,26 @@ export const getHospitalsByIdController = async (req: Request<GetHospitalsParams
   const result = await hospitalsService.getHospitalsById(id)
   return res.json({
     message: HOSPITALS_MESSAGE.GET_HOSPITALS_SUCCESS,
-    data: result
+    data: result,
+    meta: {}
   })
 }
 
-export const getFullHospitalsController = async (req: Request, res: Response) => {
-  const result = await hospitalsService.getFullHospitals()
+export const getFullHospitalsController = async (
+  req: Request<ParamsDictionary, any, any, Pagination>,
+  res: Response
+) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const {hospitals, totalItems} = await hospitalsService.getFullHospitals({limit, page})
   return res.json({
     message: HOSPITALS_MESSAGE.GET_HOSPITALS_SUCCESS,
-    data: result
+    data: hospitals,
+    meta: {
+      total_page: Math.ceil(totalItems / limit),
+      limit,
+      current_page: page,
+      total_items: totalItems
+    }
   })
 }

@@ -7,7 +7,7 @@ import {
   updateHospitalController
 } from '~/controllers/hospitals.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {filterMiddleware, isUserLoggedInValidator} from '~/middlewares/common.middlewares'
+import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
   createHospitalValidator,
   checkParamsHospitalValidator,
@@ -94,7 +94,8 @@ hospitalsRoutes.get('/:id', checkParamsHospitalValidator, wrapRequestHandler(get
  * Desscription: Get full list hospitals
  * Path: /hospitals
  * Method: GET
+ * Query: { limit: number, page: number }
  */
-hospitalsRoutes.get('/', wrapRequestHandler(getFullHospitalsController))
+hospitalsRoutes.get('/', paginationValidator, wrapRequestHandler(getFullHospitalsController))
 
 export default hospitalsRoutes
