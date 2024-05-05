@@ -228,7 +228,7 @@ interface Hospitals {
 // Chuyên khoa
 interface Specialties {
   _id: ObjectId
-  hostipal_id: ObjectId
+  hospital_id: ObjectId
   name: string
   slug: string
   description: string

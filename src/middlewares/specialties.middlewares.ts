@@ -11,7 +11,7 @@ export const createSpecialtiesValidator = validate(
       name: nameCheckSchema,
       slug: slugCheckSchema,
       description: descriptionCheckSchema,
-      hostipal_id: {
+      hospital_id: {
         notEmpty: {errorMessage: SPECIALTIES_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
         isString: {errorMessage: SPECIALTIES_MESSAGE.HOSPITAL_ID_MUST_BE_STRING},
         custom: {
@@ -38,7 +38,7 @@ export const updateSpecialtiesValidator = validate(
       name: {optional: true, ...nameCheckSchema},
       slug: {optional: true, ...slugCheckSchema},
       description: {optional: true, ...descriptionCheckSchema},
-      hostipal_id: {
+      hospital_id: {
         optional: true,
         notEmpty: {errorMessage: SPECIALTIES_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
         isString: {errorMessage: SPECIALTIES_MESSAGE.HOSPITAL_ID_MUST_BE_STRING},

@@ -1,4 +1,5 @@
 import {ObjectId} from 'mongodb'
+import {Pagination} from '~/models/request/Common.request'
 import {CreateSpecialtiesReqBody, UpdateSpecialtiesReqBody} from '~/models/request/Specialty.request'
 import Specialty from '~/models/schemas/Specialty.schema'
 import databaseService from '~/services/database.service'
@@ -8,7 +9,7 @@ class SpecialtiesService {
     return await databaseService.specialties.insertOne(
       new Specialty({
         ...payload,
-        hostipal_id: new ObjectId(payload.hostipal_id)
+        hospital_id: new ObjectId(payload.hospital_id)
       })
     )
   }
@@ -20,7 +21,7 @@ class SpecialtiesService {
         {
           $set: {
             ...payload,
-            hostipal_id: new ObjectId(payload.hostipal_id),
+            hospital_id: new ObjectId(payload.hospital_id),
             updated_at: '$$NOW'
           }
         }
@@ -34,11 +35,47 @@ class SpecialtiesService {
   }
 
   async getSpecialtyById(id: string) {
-    return await databaseService.specialties.findOne({_id: new ObjectId(id)})
+    const specialty = await databaseService.specialties
+      .aggregate([
+        {$match: {_id: new ObjectId(id)}},
+        {
+          $lookup: {
+            from: 'hospitals',
+            localField: 'hospital_id',
+            foreignField: '_id',
+            as: 'hospital'
+          }
+        },
+        {$unwind: {path: '$hospital', preserveNullAndEmptyArrays: true}},
+        {$project: {hospital_id: 0}}
+      ])
+      .toArray()
+
+    // eslint-disable-next-line no-extra-boolean-cast
+    return !!specialty.length ? specialty[0] : null
   }
 
-  async getFullSpecialties() {
-    return await databaseService.specialties.find().toArray()
+  async getFullSpecialties({limit, page}: Pagination) {
+    const [specialties, totalItems] = await Promise.all([
+      databaseService.specialties
+        .aggregate([
+          {
+            $lookup: {
+              from: 'hospitals',
+              localField: 'hospital_id',
+              foreignField: '_id',
+              as: 'hospital'
+            }
+          },
+          {$unwind: {path: '$hospital', preserveNullAndEmptyArrays: true}},
+          {$project: {hospital_id: 0}},
+          {$skip: limit * (page - 1)},
+          {$limit: limit}
+        ])
+        .toArray(),
+      databaseService.specialties.countDocuments()
+    ])
+    return {specialties, totalItems}
   }
 }
 

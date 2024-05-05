@@ -7,7 +7,7 @@ import {
   updateSpecialtiesController
 } from '~/controllers/specialties.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {filterMiddleware, isUserLoggedInValidator} from '~/middlewares/common.middlewares'
+import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
   checkParamsSpecialtyID,
   createSpecialtiesValidator,
@@ -48,7 +48,7 @@ specialtiesRouter.patch(
   verifiedUserValidator,
   checkParamsSpecialtyID,
   updateSpecialtiesValidator,
-  filterMiddleware<UpdateSpecialtiesReqBody>(['description', 'hostipal_id', 'name', 'slug']),
+  filterMiddleware<UpdateSpecialtiesReqBody>(['description', 'hospital_id', 'name', 'slug']),
   wrapRequestHandler(updateSpecialtiesController)
 )
 
@@ -73,5 +73,5 @@ specialtiesRouter.get('/:id', checkParamsSpecialtyID, wrapRequestHandler(getSpec
  * Path: /specialties
  * Method: GET
  */
-specialtiesRouter.get('/', wrapRequestHandler(getFullSpecialtiesController))
+specialtiesRouter.get('/', paginationValidator, wrapRequestHandler(getFullSpecialtiesController))
 export default specialtiesRouter
