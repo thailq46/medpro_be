@@ -7,7 +7,7 @@ import {
   updateDoctorsController
 } from '~/controllers/doctors.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {filterMiddleware, isUserLoggedInValidator} from '~/middlewares/common.middlewares'
+import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {checkParamsDoctorsID, createDoctorsValidator, updateDoctorsValidator} from '~/middlewares/doctors.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {UpdateDoctorsReqBody} from '~/models/request/Doctor.request'
@@ -78,5 +78,5 @@ doctorsRouter.get('/:doctor_id', checkParamsDoctorsID, wrapRequestHandler(getDoc
  * Method: GET
  * Headers: { Authorization: Bearer <access_token> }
  */
-doctorsRouter.get('/', wrapRequestHandler(getFullDoctorsController))
+doctorsRouter.get('/', paginationValidator, wrapRequestHandler(getFullDoctorsController))
 export default doctorsRouter
