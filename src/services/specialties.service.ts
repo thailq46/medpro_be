@@ -46,8 +46,44 @@ class SpecialtiesService {
             as: 'hospital'
           }
         },
-        {$unwind: {path: '$hospital', preserveNullAndEmptyArrays: true}},
-        {$project: {hospital_id: 0}}
+        {$unwind: {path: '$hospital'}},
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'hospital.categoryId',
+            foreignField: '_id',
+            as: 'hospital.category'
+          }
+        },
+        {
+          $lookup: {
+            from: 'medical_booking_forms',
+            localField: 'hospital.booking_forms',
+            foreignField: '_id',
+            as: 'hospital.booking_forms'
+          }
+        },
+        {
+          $addFields: {
+            'hospital.booking_forms': {
+              $map: {
+                input: '$hospital.booking_forms',
+                as: 'item',
+                in: {
+                  name: '$$item.name',
+                  image: '$$item.image'
+                }
+              }
+            }
+          }
+        },
+        {
+          $project: {
+            hospital_id: 0,
+            hospital: {categoryId: 0}
+          }
+        },
+        {$unwind: {path: '$hospital.category'}}
       ])
       .toArray()
 
@@ -67,8 +103,44 @@ class SpecialtiesService {
               as: 'hospital'
             }
           },
-          {$unwind: {path: '$hospital', preserveNullAndEmptyArrays: true}},
-          {$project: {hospital_id: 0}},
+          {$unwind: {path: '$hospital'}},
+          {
+            $lookup: {
+              from: 'categories',
+              localField: 'hospital.categoryId',
+              foreignField: '_id',
+              as: 'hospital.category'
+            }
+          },
+          {
+            $lookup: {
+              from: 'medical_booking_forms',
+              localField: 'hospital.booking_forms',
+              foreignField: '_id',
+              as: 'hospital.booking_forms'
+            }
+          },
+          {
+            $addFields: {
+              'hospital.booking_forms': {
+                $map: {
+                  input: '$hospital.booking_forms',
+                  as: 'item',
+                  in: {
+                    name: '$$item.name',
+                    image: '$$item.image'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $project: {
+              hospital_id: 0,
+              hospital: {categoryId: 0}
+            }
+          },
+          {$unwind: {path: '$hospital.category'}},
           {$skip: limit * (page - 1)},
           {$limit: limit}
         ])
