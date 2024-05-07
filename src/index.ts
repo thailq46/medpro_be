@@ -5,7 +5,11 @@ import databaseService from '~/services/database.service'
 import router from '~/routes/app.routes'
 import {defaultErrorHandler} from '~/middlewares/error.middlewares'
 import {initFolder} from '~/utils/file'
+import {initializeApp} from 'firebase/app'
+import {firebaseConfig} from '~/firebase/firebase.config'
 config()
+
+initializeApp(firebaseConfig)
 
 databaseService.connect().then(() => {
   databaseService.indexUsers()

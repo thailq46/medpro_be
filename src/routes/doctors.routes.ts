@@ -77,6 +77,7 @@ doctorsRouter.get('/:doctor_id', checkParamsDoctorsID, wrapRequestHandler(getDoc
  * Path: /doctors
  * Method: GET
  * Headers: { Authorization: Bearer <access_token> }
+ * Query: { limit: number, page: number }
  */
 doctorsRouter.get('/', paginationValidator, wrapRequestHandler(getFullDoctorsController))
 export default doctorsRouter

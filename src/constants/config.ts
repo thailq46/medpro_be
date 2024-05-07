@@ -32,5 +32,18 @@ export const envConfig = {
   jwtForgotPasswordTokenExpiresIn: process.env.JWT_FORGOT_PASSWORD_TOKEN_EXPIRES_IN as string,
 
   jwtSecretEmailVerifyToken: process.env.JWT_EMAIL_VERIFY_TOKEN as string,
-  jwtEmailVerifyTokenExpiresIn: process.env.JWT_EMAIL_VERIFY_TOKEN_EXPIRES_IN as string
+  jwtEmailVerifyTokenExpiresIn: process.env.JWT_EMAIL_VERIFY_TOKEN_EXPIRES_IN as string,
+
+  firebaseApiKey: process.env.FIREBASE_API_KEY as string,
+  firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN as string,
+  firebaseProjectId: process.env.FIREBASE_PROJECT_ID as string,
+  firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET as string,
+  firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID as string,
+  firebaseAppId: process.env.FIREBASE_APP_ID as string,
+  firebaseMeasurementId: process.env.FIREBASE_MEASUREMENT_ID as string,
+
+  ggdriver_client_id: process.env.GG_DRIVER_CLIENT_ID as string,
+  ggdriver_client_secret: process.env.GG_DRIVER_CLIENT_SECRET as string,
+  ggdriver_redirec_uri: process.env.GG_DRIVER_REDIRECT_URI as string,
+  ggdriver_refresh_token: process.env.GG_DRIVER_REFRESH_TOKEN as string
 }

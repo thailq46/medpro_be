@@ -72,6 +72,7 @@ specialtiesRouter.get('/:id', checkParamsSpecialtyID, wrapRequestHandler(getSpec
  * Desscription: Get full specialties
  * Path: /specialties
  * Method: GET
+ * Query: { limit: number, page: number }
  */
 specialtiesRouter.get('/', paginationValidator, wrapRequestHandler(getFullSpecialtiesController))
 export default specialtiesRouter

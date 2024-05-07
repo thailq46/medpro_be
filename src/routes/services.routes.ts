@@ -87,6 +87,7 @@ servicesRoutes.get('/:id', checkParamsServiceID, wrapRequestHandler(getServicesB
  * Desscription: Get full services
  * Path: /services
  * Method: GET
+ * Query: { limit: number, page: number }
  */
 servicesRoutes.get('/', paginationValidator, wrapRequestHandler(getFullServicesController))
 
