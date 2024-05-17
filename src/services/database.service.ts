@@ -10,7 +10,10 @@ import Service from '~/models/schemas/Service.schema'
 import Specialty from '~/models/schemas/Specialty.schema'
 import User from '~/models/schemas/User.schema'
 
-const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@medprobe.kctpk6e.mongodb.net/?retryWrites=true&w=majority&appName=MedproBE`
+const dbUsername = encodeURIComponent(envConfig.dbUsername)
+const dbPassword = encodeURIComponent(envConfig.dbPassword)
+
+const uri = `mongodb+srv://${dbUsername}:${dbPassword}@medprobe.kctpk6e.mongodb.net/?retryWrites=true&w=majority&appName=MedproBE`
 
 class DatabaseService {
   private client: MongoClient

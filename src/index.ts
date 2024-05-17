@@ -5,7 +5,6 @@ import router from '~/routes/app.routes'
 import {defaultErrorHandler} from '~/middlewares/error.middlewares'
 import {initFolder} from '~/utils/file'
 import {initializeApp} from 'firebase/app'
-import {firebaseConfig} from '~/firebase/firebase.config'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import cors from 'cors'
@@ -37,7 +36,8 @@ const port = envConfig.port
 app.use(limiter)
 app.use(helmet())
 const corsOptions: cors.CorsOptions = {
-  origin: isProduction ? envConfig.clientUrl : '*',
+  origin: '*',
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
