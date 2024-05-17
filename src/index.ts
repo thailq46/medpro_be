@@ -1,6 +1,5 @@
 import express from 'express'
-import {config} from 'dotenv'
-import {envConfig} from '~/constants/config'
+import {envConfig, isProduction} from '~/constants/config'
 import databaseService from '~/services/database.service'
 import router from '~/routes/app.routes'
 import {defaultErrorHandler} from '~/middlewares/error.middlewares'
@@ -11,8 +10,6 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import cors from 'cors'
 
-config()
-
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
@@ -20,7 +17,7 @@ const limiter = rateLimit({
   legacyHeaders: false
 })
 
-initializeApp(firebaseConfig)
+// initializeApp(firebaseConfig)
 
 databaseService.connect().then(() => {
   databaseService.indexUsers()
@@ -40,7 +37,7 @@ const port = envConfig.port
 app.use(limiter)
 app.use(helmet())
 const corsOptions: cors.CorsOptions = {
-  origin: envConfig.clientUrl,
+  origin: isProduction ? envConfig.clientUrl : '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
