@@ -4,6 +4,8 @@ config()
 
 export const envConfig = {
   port: (process.env.PORT as string) || 4000,
+  clientUrl: process.env.CLIENT_URL as string,
+
   passwordSecret: process.env.PASSWORD_SECRET as string,
 
   dbName: process.env.DB_NAME as string,
@@ -45,5 +47,18 @@ export const envConfig = {
   ggdriver_client_id: process.env.GG_DRIVER_CLIENT_ID as string,
   ggdriver_client_secret: process.env.GG_DRIVER_CLIENT_SECRET as string,
   ggdriver_redirec_uri: process.env.GG_DRIVER_REDIRECT_URI as string,
-  ggdriver_refresh_token: process.env.GG_DRIVER_REFRESH_TOKEN as string
+  ggdriver_refresh_token: process.env.GG_DRIVER_REFRESH_TOKEN as string,
+
+  ggmail_client_id: process.env.GG_MAIL_CLIENT_ID as string,
+  ggmail_client_secret: process.env.GG_MAIL_CLIENT_SECRET as string,
+  ggmail_refresh_token: process.env.GG_MAIL_REFRESH_TOKEN as string,
+
+  mail_mailer: process.env.MAIL_MAILER as string,
+  mail_host: process.env.MAIL_HOST as string,
+  mail_port: process.env.MAIL_PORT as string,
+  mail_username: process.env.MAIL_USERNAME as string,
+  mail_password: process.env.MAIL_PASSWORD as string,
+  mail_encryption: process.env.MAIL_ENCRYPTION as string,
+  mail_from_address: process.env.MAIL_FROM_ADDRESS as string,
+  mail_from_name: process.env.MAIl_FROM_NAME as string
 }

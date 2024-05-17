@@ -29,10 +29,11 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
   const {user} = req as {user: User}
   const user_id = user._id as ObjectId
   const {verify} = user
+  console.log('loginController ~ user', user)
   const results = await authService.login({user_id: user_id.toString(), verify})
   return res.json({
     message: USERS_MESSAGE.LOGIN_SUCCESS,
-    data: results
+    data: {...results, role: user.role}
   })
 }
 export const logoutController = async (req: Request<ParamsDictionary, any, LogoutReqBody>, res: Response) => {

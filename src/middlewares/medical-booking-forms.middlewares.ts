@@ -3,6 +3,7 @@ import validate from '~/utils/validate'
 import {MEDICAL_BOOKING_FORMS_MESSAGE} from '~/constants/messages'
 import databaseService from '~/services/database.service'
 import {ObjectId} from 'mongodb'
+import {slugCheckSchema} from '~/constants/checkSchema'
 
 const nameCheckSchema: ParamSchema = {
   notEmpty: {errorMessage: MEDICAL_BOOKING_FORMS_MESSAGE.NAME_IS_REQUIRED},
@@ -32,6 +33,18 @@ export const createMedicalBookingFormsValidator = validate(
           }
         }
       },
+      slug: {
+        ...slugCheckSchema,
+        custom: {
+          options: async (value: string) => {
+            const isExist = await databaseService.medicalBookingForms.findOne({slug: value})
+            if (isExist) {
+              throw new Error(MEDICAL_BOOKING_FORMS_MESSAGE.SLUG_ALREADY_EXIST)
+            }
+            return true
+          }
+        }
+      },
       image: imageCheckSchema
     },
     ['body']
@@ -51,6 +64,23 @@ export const updateMedicalBookingFormsValidator = validate(
             })
             if (isExist) {
               throw new Error(MEDICAL_BOOKING_FORMS_MESSAGE.NAME_ALREADY_EXIST)
+            }
+            return true
+          }
+        }
+      },
+      slug: {
+        optional: true,
+        ...slugCheckSchema,
+        custom: {
+          options: async (value: string, {req}) => {
+            const Id = req.params?.id
+            const isExist = await databaseService.medicalBookingForms.findOne({
+              slug: value,
+              _id: {$ne: new ObjectId(Id)}
+            })
+            if (isExist) {
+              throw new Error(MEDICAL_BOOKING_FORMS_MESSAGE.SLUG_ALREADY_EXIST)
             }
             return true
           }

@@ -129,7 +129,8 @@ export const MEDICAL_BOOKING_FORMS_MESSAGE = {
   GET_SUCCESS: 'Get medical booking forms successfully',
   NAME_ALREADY_EXIST: 'Name already exist',
   NOT_FOUND: 'Medical booking form not found',
-  INVALID_ID: 'Invalid id'
+  INVALID_ID: 'Invalid id',
+  SLUG_ALREADY_EXIST: 'Slug already exist'
 }
 
 export const MEDIAS_MESSAGE = {

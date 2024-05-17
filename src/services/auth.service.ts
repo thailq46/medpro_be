@@ -8,6 +8,7 @@ import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import User from '~/models/schemas/User.schema'
 import databaseService from '~/services/database.service'
 import {hashPassword} from '~/utils/crypto'
+import {sendMail} from '~/utils/email'
 import {signToken, verifyToken} from '~/utils/jwt'
 
 class UsersService {
@@ -109,9 +110,15 @@ class UsersService {
         exp
       })
     )
+    await sendMail({
+      to: payload.email,
+      subject: 'Verify email',
+      htmlContent: `<a href="http://localhost:${envConfig.port}/verify-email?token=${email_verify_token}"> Verify Email nek</a>`
+    })
     return {
       access_token,
-      refresh_token
+      refresh_token,
+      email_verify_token
     }
   }
 
@@ -210,9 +217,14 @@ class UsersService {
     )
     // Giả bộ gửi email kèm đường link đến email người dùng: https://example.com/verify-email?token=<email_verify_token>
     console.log('email_verify_token', email_verify_token)
+    await sendMail({
+      to: user.email,
+      subject: 'Verify email',
+      htmlContent: `<a href="http://localhost:${envConfig.port}/verify-email?token=${email_verify_token}"> Verify Email nek</a>`
+    })
     return res.json({
-      message: USERS_MESSAGE.RESEND_EMAIL_VERIFY_SUCCESS,
-      data: result
+      message: USERS_MESSAGE.RESEND_EMAIL_VERIFY_SUCCESS
+      // data: result
     })
   }
 

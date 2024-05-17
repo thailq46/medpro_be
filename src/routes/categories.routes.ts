@@ -30,7 +30,7 @@ categoriesRouter.post(
 )
 
 /**
- * Desscription: Create new category
+ * Desscription: Update new category
  * Path: /categories/update/:id
  * Method: PUT
  * Headers: { Authorization: Bearer <access_token> }

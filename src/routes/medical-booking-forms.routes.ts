@@ -39,14 +39,14 @@ medicalBookingFormsRouter.post(
  * Path: /medical-booking-forms/update/:id
  * Method: PATCH
  * Headers: { Authorization: Bearer <access_token> }
- * Body: { name: string, image: string }
+ * Body: { name: string, slug: string, image: string }
  */
 medicalBookingFormsRouter.patch(
   '/update/:id',
   isUserLoggedInValidator(accessTokenValidator),
   verifiedUserValidator,
   updateMedicalBookingFormsValidator,
-  filterMiddleware<UpdateMedicalBookingFormsReqBody>(['name', 'image']),
+  filterMiddleware<UpdateMedicalBookingFormsReqBody>(['name', 'image', 'slug']),
   wrapRequestHandler(updateMedicalBookingFormsController)
 )
 
