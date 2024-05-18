@@ -4,7 +4,6 @@ import databaseService from '~/services/database.service'
 import router from '~/routes/app.routes'
 import {defaultErrorHandler} from '~/middlewares/error.middlewares'
 import {initFolder} from '~/utils/file'
-import {initializeApp} from 'firebase/app'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import cors from 'cors'
@@ -15,8 +14,6 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false
 })
-
-// initializeApp(firebaseConfig)
 
 databaseService.connect().then(() => {
   databaseService.indexUsers()

@@ -18,7 +18,6 @@ const limiter = (0, express_rate_limit_1.default)({
     standardHeaders: true,
     legacyHeaders: false
 });
-// initializeApp(firebaseConfig)
 database_service_1.default.connect().then(() => {
     database_service_1.default.indexUsers();
     database_service_1.default.indexRefreshTokens();
