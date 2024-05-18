@@ -12,7 +12,6 @@ export const envConfig = {
   port: (process.env.PORT as string) || 10000,
   host: process.env.HOST as string,
   clientUrl: process.env.CLIENT_URL as string,
-  mongoUri: process.env.MONGODB_URI as string,
   passwordSecret: process.env.PASSWORD_SECRET as string,
 
   dbName: process.env.DB_NAME as string,
