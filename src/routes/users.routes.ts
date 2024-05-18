@@ -96,6 +96,6 @@ usersRouter.delete(
  * Method: GET
  * Headers: { Authorization: Bearer <access_token> }
  */
-usersRouter.get('/', accessTokenValidator, wrapRequestHandler(getListUsersController))
+usersRouter.get('/', wrapRequestHandler(getListUsersController))
 
 export default usersRouter

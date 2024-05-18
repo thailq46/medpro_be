@@ -8,8 +8,6 @@
     "dev": "npx nodemon",
     "dev:prod": "npx nodemon --env=production",
     "build": "rimraf ./dist && tsc && tsc-alias",
-    "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist",
     "start:dev": "node dist/index.js --env=development",
     "start:prod": "node dist/index.js --env=production",
     "production": "npm run build && node dist/index.js --env=production",
@@ -19,11 +17,6 @@
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write ."
   },
-  "pre-commit": [
-    "ts.check",
-    "build",
-    "add-build"
-  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
