@@ -9,9 +9,13 @@ import Schedule from '~/models/schemas/Schedule.schema'
 import Service from '~/models/schemas/Service.schema'
 import Specialty from '~/models/schemas/Specialty.schema'
 import User from '~/models/schemas/User.schema'
+import {config} from 'dotenv'
+config()
 
-const dbUsername = encodeURIComponent(envConfig.dbUsername)
-const dbPassword = encodeURIComponent(envConfig.dbPassword)
+// const dbUsername = encodeURIComponent(envConfig.dbUsername)
+// const dbPassword = encodeURIComponent(envConfig.dbPassword)
+const dbUsername = encodeURIComponent(process.env.DB_USERNAME as string)
+const dbPassword = encodeURIComponent(process.env.DB_PASSWORD as string)
 
 const uri = `mongodb+srv://${dbUsername}:${dbPassword}@medprobe.kctpk6e.mongodb.net/?retryWrites=true&w=majority&appName=MedproBE`
 

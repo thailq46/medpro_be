@@ -1,9 +1,9 @@
 import express from 'express'
-import {envConfig, isProduction} from '~/constants/config'
-import databaseService from '~/services/database.service'
-import router from '~/routes/app.routes'
-import {defaultErrorHandler} from '~/middlewares/error.middlewares'
-import {initFolder} from '~/utils/file'
+import {envConfig} from './constants/config'
+import databaseService from './services/database.service'
+import router from './routes/app.routes'
+import {defaultErrorHandler} from './middlewares/error.middlewares'
+import {initFolder} from './utils/file'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import cors from 'cors'
@@ -13,12 +13,9 @@ const port = envConfig.port
 
 const corsOptions: cors.CorsOptions = {
   origin: '*',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
-  // allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }
-
-app.options('', cors(corsOptions))
 app.use(cors(corsOptions))
 
 const limiter = rateLimit({
@@ -27,7 +24,8 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false
 })
-
+app.use(limiter)
+app.use(helmet())
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.indexRefreshTokens()
@@ -39,9 +37,6 @@ databaseService.connect().then(() => {
   databaseService.indexDoctors()
   databaseService.indexSchedules()
 })
-
-app.use(limiter)
-app.use(helmet())
 
 initFolder()
 
