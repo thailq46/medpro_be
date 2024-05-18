@@ -8,6 +8,19 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import cors from 'cors'
 
+const app = express()
+const port = envConfig.port
+
+const corsOptions: cors.CorsOptions = {
+  origin: '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+  // allowedHeaders: ['Content-Type', 'Authorization']
+}
+
+app.options('', cors(corsOptions))
+app.use(cors(corsOptions))
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
@@ -27,18 +40,8 @@ databaseService.connect().then(() => {
   databaseService.indexSchedules()
 })
 
-const app = express()
-const port = envConfig.port
-
 app.use(limiter)
 app.use(helmet())
-const corsOptions: cors.CorsOptions = {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}
-app.options('', cors(corsOptions))
-app.use(cors(corsOptions))
 
 initFolder()
 
