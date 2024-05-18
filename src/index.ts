@@ -38,6 +38,7 @@ const corsOptions: cors.CorsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
+app.options('', cors(corsOptions))
 app.use(cors(corsOptions))
 
 initFolder()
