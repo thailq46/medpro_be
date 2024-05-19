@@ -9,15 +9,11 @@ import Schedule from '~/models/schemas/Schedule.schema'
 import Service from '~/models/schemas/Service.schema'
 import Specialty from '~/models/schemas/Specialty.schema'
 import User from '~/models/schemas/User.schema'
-import {config} from 'dotenv'
-config()
 
 // const dbUsername = encodeURIComponent(envConfig.dbUsername)
 // const dbPassword = encodeURIComponent(envConfig.dbPassword)
-const dbUsername = encodeURIComponent(process.env.DB_USERNAME as string)
-const dbPassword = encodeURIComponent(process.env.DB_PASSWORD as string)
 
-const uri = `mongodb+srv://${dbUsername}:${dbPassword}@medprobe.kctpk6e.mongodb.net/?retryWrites=true&w=majority&appName=MedproBE`
+const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@medprobe.kctpk6e.mongodb.net/?retryWrites=true&w=majority&appName=MedproBE`
 
 class DatabaseService {
   private client: MongoClient
@@ -38,33 +34,6 @@ class DatabaseService {
   async closeConnection() {
     await this.client.close()
     console.log('Closed MongoDB connection!')
-  }
-  get users(): Collection<User> {
-    return this.db.collection(envConfig.dbUsersCollection)
-  }
-  get refreshTokens(): Collection<RefreshToken> {
-    return this.db.collection(envConfig.dbRefreshTokensCollection)
-  }
-  get categories(): Collection<Category> {
-    return this.db.collection(envConfig.dbCategoriesCollection)
-  }
-  get medicalBookingForms(): Collection<MedicalBookingForms> {
-    return this.db.collection(envConfig.dbMedicalBookingFormsCollection)
-  }
-  get hospitals(): Collection<Hospital> {
-    return this.db.collection(envConfig.dbHospitalsCollection)
-  }
-  get services(): Collection<Service> {
-    return this.db.collection(envConfig.dbServicesCollection)
-  }
-  get specialties(): Collection<Specialty> {
-    return this.db.collection(envConfig.dbSpecialtiesCollection)
-  }
-  get doctors(): Collection<Doctor> {
-    return this.db.collection(envConfig.dbDoctorsCollection)
-  }
-  get schedules(): Collection<Schedule> {
-    return this.db.collection(envConfig.dbSchedulesCollection)
   }
 
   async indexUsers() {
@@ -103,17 +72,44 @@ class DatabaseService {
       this.hospitals.createIndex({name: 1}, {unique: true})
     }
   }
-  async indexServices() {}
+  // async indexServices() {}
 
-  async indexSpecialties() {}
+  // async indexSpecialties() {}
 
-  async indexSchedules() {}
+  // async indexSchedules() {}
 
   async indexDoctors() {
     const isExist = await this.doctors.indexExists(['doctor_id_1'])
     if (!isExist) {
       this.doctors.createIndex({doctor_id: 1}, {unique: true})
     }
+  }
+  get users(): Collection<User> {
+    return this.db.collection(envConfig.dbUsersCollection)
+  }
+  get refreshTokens(): Collection<RefreshToken> {
+    return this.db.collection(envConfig.dbRefreshTokensCollection)
+  }
+  get categories(): Collection<Category> {
+    return this.db.collection(envConfig.dbCategoriesCollection)
+  }
+  get medicalBookingForms(): Collection<MedicalBookingForms> {
+    return this.db.collection(envConfig.dbMedicalBookingFormsCollection)
+  }
+  get hospitals(): Collection<Hospital> {
+    return this.db.collection(envConfig.dbHospitalsCollection)
+  }
+  get services(): Collection<Service> {
+    return this.db.collection(envConfig.dbServicesCollection)
+  }
+  get specialties(): Collection<Specialty> {
+    return this.db.collection(envConfig.dbSpecialtiesCollection)
+  }
+  get doctors(): Collection<Doctor> {
+    return this.db.collection(envConfig.dbDoctorsCollection)
+  }
+  get schedules(): Collection<Schedule> {
+    return this.db.collection(envConfig.dbSchedulesCollection)
   }
 }
 
