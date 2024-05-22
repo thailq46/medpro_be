@@ -7,7 +7,7 @@ import {
   updateMedicalBookingFormsController
 } from '~/controllers/medical-booking-forms.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {filterMiddleware, isUserLoggedInValidator} from '~/middlewares/common.middlewares'
+import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
   createMedicalBookingFormsValidator,
   deleteMedicalBookingFormsValidator,
@@ -24,7 +24,7 @@ const medicalBookingFormsRouter = Router()
  * Path: /medical-booking-forms/create
  * Method: POST
  * Headers: { Authorization: Bearer <access_token> }
- * Body: { name: string, image: string }
+ * Body: { name: string,slug: string, image: string }
  */
 medicalBookingFormsRouter.post(
   '/create',
@@ -78,6 +78,6 @@ medicalBookingFormsRouter.get('/:id', wrapRequestHandler(getMedicalBookingFormsB
  * Path: /medical-booking-forms
  * Method: GET
  */
-medicalBookingFormsRouter.get('/', wrapRequestHandler(getFullMedicalBookingFormsController))
+medicalBookingFormsRouter.get('/', paginationValidator, wrapRequestHandler(getFullMedicalBookingFormsController))
 
 export default medicalBookingFormsRouter

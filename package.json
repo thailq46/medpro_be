@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --max_old_space_size=5120 && npx nodemon",
+    "dev": "npx nodemon",
     "dev:prod": "npx nodemon --env=production",
     "build": "rimraf ./dist && tsc && tsc-alias",
     "start:dev": "node dist/index.js --env=development",

@@ -64,8 +64,12 @@ class CategoriesService {
     })
   }
 
-  async getFullCategories() {
-    return await databaseService.categories.find().toArray()
+  async getFullCategories({limit, page}: {limit: number; page: number}) {
+    const [categories, totalItems] = await Promise.all([
+      databaseService.categories.aggregate([{$skip: limit * (page - 1)}, {$limit: limit}]).toArray(),
+      databaseService.categories.countDocuments()
+    ])
+    return {categories, totalItems}
   }
 
   async getCategoryById(id: string) {

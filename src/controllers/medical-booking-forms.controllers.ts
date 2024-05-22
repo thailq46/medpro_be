@@ -3,6 +3,7 @@ import {ParamsDictionary} from 'express-serve-static-core'
 import {ObjectId} from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
 import {MEDICAL_BOOKING_FORMS_MESSAGE} from '~/constants/messages'
+import {Pagination} from '~/models/request/Common.request'
 import {
   CreateMedicalBookingFormsReqBody,
   GetMedicalBookingFormsParams,
@@ -10,6 +11,7 @@ import {
 } from '~/models/request/MedicalBookingForms.request'
 import databaseService from '~/services/database.service'
 import medicalBookingFormsService from '~/services/medical-booking-forms.service'
+import {responseMessage} from '~/utils/common'
 
 export const createMedicalBookingFormsController = async (
   req: Request<ParamsDictionary, any, CreateMedicalBookingFormsReqBody>,
@@ -17,8 +19,7 @@ export const createMedicalBookingFormsController = async (
 ) => {
   const result = await medicalBookingFormsService.createMedicalBookingForms(req.body)
   return res.json({
-    message: MEDICAL_BOOKING_FORMS_MESSAGE.CREATE_SUCCESS,
-    data: result
+    message: MEDICAL_BOOKING_FORMS_MESSAGE.CREATE_SUCCESS
   })
 }
 
@@ -71,10 +72,23 @@ export const getMedicalBookingFormsByIdController = async (
   })
 }
 
-export const getFullMedicalBookingFormsController = async (req: Request, res: Response) => {
-  const result = await medicalBookingFormsService.getFullMedicalBookingForms()
-  return res.json({
-    message: MEDICAL_BOOKING_FORMS_MESSAGE.GET_SUCCESS,
-    data: result
-  })
+export const getFullMedicalBookingFormsController = async (
+  req: Request<ParamsDictionary, any, any, Pagination>,
+  res: Response
+) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const {medicalBookingForms, totalItems} = await medicalBookingFormsService.getFullMedicalBookingForms({limit, page})
+  return res.json(
+    responseMessage({
+      message: MEDICAL_BOOKING_FORMS_MESSAGE.GET_SUCCESS,
+      data: medicalBookingForms,
+      meta: {
+        total_page: Math.ceil(totalItems / limit),
+        limit,
+        current_page: page,
+        total_items: totalItems
+      }
+    })
+  )
 }

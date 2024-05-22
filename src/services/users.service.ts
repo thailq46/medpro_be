@@ -42,18 +42,24 @@ class UsersService {
     return user
   }
 
-  async getListUsers() {
-    const users = await databaseService.users.find(
-      {},
-      {
-        projection: {
-          password: 0,
-          email_verify_token: 0,
-          forgot_password_token: 0
-        }
-      }
-    )
-    return users.toArray()
+  async getListUsers({limit, page}: {limit: number; page: number}) {
+    const [users, totalItems] = await Promise.all([
+      databaseService.users
+        .aggregate([
+          {
+            $project: {
+              password: 0,
+              email_verify_token: 0,
+              forgot_password_token: 0
+            }
+          },
+          {$skip: limit * (page - 1)},
+          {$limit: limit}
+        ])
+        .toArray(),
+      databaseService.users.countDocuments()
+    ])
+    return {users, totalItems}
   }
 
   async getUserByUsername(username: string) {

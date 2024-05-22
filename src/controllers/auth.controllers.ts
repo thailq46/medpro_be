@@ -95,7 +95,7 @@ export const refreshTokenController = async (
   const result = await authService.refreshToken({user_id, verify, refresh_token, exp})
   return res.json({
     message: USERS_MESSAGE.REFRESH_TOKEN_SUCCESS,
-    result
+    data: result
   })
 }
 

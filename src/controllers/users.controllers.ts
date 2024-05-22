@@ -5,6 +5,8 @@ import {TokenPayload} from '~/utils/jwt'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {GetUserByUsernameReqParams, UpdateMeBody, UpdateUserByUsernameBody} from '~/models/request/User.request'
 import HTTP_STATUS from '~/constants/httpStatus'
+import {Pagination} from '~/models/request/Common.request'
+import {responseMessage} from '~/utils/common'
 
 export const getMeController = async (req: Request, res: Response) => {
   const {user_id} = req.decode_authorization as TokenPayload
@@ -24,12 +26,22 @@ export const updateMeController = async (req: Request<ParamsDictionary, any, Upd
   })
 }
 
-export const getListUsersController = async (req: Request, res: Response) => {
-  const result = await usersService.getListUsers()
-  return res.json({
-    message: USERS_MESSAGE.GET_LIST_USERS_SUCCESS,
-    data: result
-  })
+export const getListUsersController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const {users, totalItems} = await usersService.getListUsers({limit, page})
+  return res.json(
+    responseMessage({
+      message: USERS_MESSAGE.GET_LIST_USERS_SUCCESS,
+      data: users,
+      meta: {
+        total_page: Math.ceil(totalItems / limit),
+        limit,
+        current_page: page,
+        total_items: totalItems
+      }
+    })
+  )
 }
 
 export const getUserByUsernameController = async (req: Request<GetUserByUsernameReqParams>, res: Response) => {

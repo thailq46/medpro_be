@@ -36,8 +36,12 @@ class MedicalBookingFormsService {
     return databaseService.medicalBookingForms.findOne({_id: new ObjectId(id)})
   }
 
-  async getFullMedicalBookingForms() {
-    return databaseService.medicalBookingForms.find({}).toArray()
+  async getFullMedicalBookingForms({limit, page}: {limit: number; page: number}) {
+    const [medicalBookingForms, totalItems] = await Promise.all([
+      databaseService.medicalBookingForms.aggregate([{$skip: limit * (page - 1)}, {$limit: limit}]).toArray(),
+      databaseService.medicalBookingForms.countDocuments()
+    ])
+    return {medicalBookingForms, totalItems}
   }
 }
 

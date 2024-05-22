@@ -8,7 +8,7 @@ import {
   updateUserByUsernameController
 } from '~/controllers/users.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {filterMiddleware} from '~/middlewares/common.middlewares'
+import {filterMiddleware, paginationValidator} from '~/middlewares/common.middlewares'
 import {updateMeValidator, updateUserByUsernameValidator, verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {UpdateMeBody, UpdateUserByUsernameBody} from '~/models/request/User.request'
 import {wrapRequestHandler} from '~/utils/handlers'
@@ -94,8 +94,8 @@ usersRouter.delete(
  * Desscription: Get list users
  * Path: /
  * Method: GET
- * Headers: { Authorization: Bearer <access_token> }
+ * Query: { limit: number, page: number }
  */
-usersRouter.get('/', wrapRequestHandler(getListUsersController))
+usersRouter.get('/', paginationValidator, wrapRequestHandler(getListUsersController))
 
 export default usersRouter

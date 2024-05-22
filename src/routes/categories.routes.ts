@@ -8,7 +8,7 @@ import {
 } from '~/controllers/categories.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {createCategoriesValidator, updateCategoriesValidator} from '~/middlewares/categories.middlewares'
-import {isUserLoggedInValidator} from '~/middlewares/common.middlewares'
+import {isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {wrapRequestHandler} from '~/utils/handlers'
 
@@ -72,6 +72,6 @@ categoriesRouter.get('/:id', wrapRequestHandler(getCategoryByIdController))
  * Path: /categories
  * Method: GET
  */
-categoriesRouter.get('/', wrapRequestHandler(getFullCategoriesController))
+categoriesRouter.get('/', paginationValidator, wrapRequestHandler(getFullCategoriesController))
 
 export default categoriesRouter

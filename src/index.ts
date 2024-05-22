@@ -13,19 +13,24 @@ const port = envConfig.port
 
 const corsOptions: cors.CorsOptions = {
   origin: '*',
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
 app.use(cors(corsOptions))
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  standardHeaders: true,
-  legacyHeaders: false
+  // windowMs: 15 * 60 * 1000, // 15 minutes
+  // max: 100, // limit each IP to 100 requests per windowMs
+  // standardHeaders: true,
+  // legacyHeaders: false
 })
-app.use(limiter)
-app.use(helmet())
+// app.use(limiter)
+app.use(
+  helmet({
+    crossOriginResourcePolicy: {policy: 'cross-origin'}
+  })
+)
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.indexRefreshTokens()
