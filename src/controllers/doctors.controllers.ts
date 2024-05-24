@@ -10,10 +10,9 @@ export const createDoctorsController = async (
   req: Request<ParamsDictionary, any, CreateDoctorsReqBody>,
   res: Response
 ) => {
-  const result = await doctorsService.createDoctors(req.body)
+  await doctorsService.createDoctors(req.body)
   return res.json({
-    message: DOCTORS_MESSAGE.CREATE_DOCTORS_SUCCESS,
-    data: result
+    message: DOCTORS_MESSAGE.CREATE_DOCTORS_SUCCESS
   })
 }
 

@@ -14,10 +14,9 @@ export const createSpecialtiesController = async (
   req: Request<ParamsDictionary, any, CreateSpecialtiesReqBody>,
   res: Response
 ) => {
-  const result = await specialtiesService.createSpecialty(req.body)
+  await specialtiesService.createSpecialty(req.body)
   return res.json({
-    message: SPECIALTIES_MESSAGE.CREATE_SPECIALTY_SUCCESS,
-    data: result
+    message: SPECIALTIES_MESSAGE.CREATE_SPECIALTY_SUCCESS
   })
 }
 

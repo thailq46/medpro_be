@@ -1,4 +1,4 @@
-import {Request, Response, response} from 'express'
+import {Request, Response} from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {SERVICES_MESSAGE} from '~/constants/messages'
 import {Pagination} from '~/models/request/Common.request'
@@ -10,10 +10,9 @@ export const createServicesController = async (
   req: Request<ParamsDictionary, any, CreateServicesReqBody>,
   res: Response
 ) => {
-  const result = await servicesService.createServices(req.body)
+  await servicesService.createServices(req.body)
   return res.json({
-    message: SERVICES_MESSAGE.CREATE_SERVICES_SUCCESS,
-    data: result
+    message: SERVICES_MESSAGE.CREATE_SERVICES_SUCCESS
   })
 }
 

@@ -4,9 +4,10 @@ interface DoctorsType {
   _id?: ObjectId
   doctor_id: ObjectId
   specialty_id: ObjectId
+  hospital_id: ObjectId
   description: string
   therapy: string // Chuyên trị
-  price: string
+  price: number
   session: string // Lịch làm việc
   created_at?: Date
   updated_at?: Date
@@ -16,9 +17,10 @@ export default class Doctor {
   _id?: ObjectId
   doctor_id: ObjectId
   specialty_id: ObjectId
+  hospital_id: ObjectId
   description: string
   therapy: string
-  price: string
+  price: number
   session: string
   created_at: Date
   updated_at: Date
@@ -27,6 +29,7 @@ export default class Doctor {
     this._id = doctor._id || new ObjectId()
     this.doctor_id = doctor.doctor_id
     this.specialty_id = doctor.specialty_id
+    this.hospital_id = doctor.hospital_id
     this.description = doctor.description
     this.therapy = doctor.therapy
     this.price = doctor.price

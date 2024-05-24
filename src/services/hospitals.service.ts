@@ -44,6 +44,7 @@ class HospitalsService {
                   input: '$booking_forms',
                   as: 'item',
                   in: {
+                    _id: '$$item._id',
                     name: '$$item.name',
                     image: '$$item.image'
                   }
@@ -119,6 +120,7 @@ class HospitalsService {
                 input: '$booking_forms',
                 as: 'item',
                 in: {
+                  id: '$$item._id',
                   name: '$$item.name',
                   image: '$$item.image'
                 }

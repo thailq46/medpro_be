@@ -42,6 +42,22 @@ export const createDoctorsValidator = validate(
           }
         }
       },
+      hospital_id: {
+        notEmpty: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
+        isString: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_MUST_BE_STRING},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(DOCTORS_MESSAGE.INVALID_HOSPITAL_ID)
+            }
+            const isExist = await databaseService.hospitals.findOne({_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(DOCTORS_MESSAGE.HOSPITAL_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      },
       description: descriptionCheckSchema,
       therapy: {
         notEmpty: {errorMessage: DOCTORS_MESSAGE.THERAPY_IS_REQUIRED},
@@ -80,6 +96,23 @@ export const updateDoctorsValidator = validate(
             const specialty = await databaseService.specialties.findOne({_id: new ObjectId(value)})
             if (!specialty) {
               throw new Error(DOCTORS_MESSAGE.SPECIALTY_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      },
+      hospital_id: {
+        optional: true,
+        notEmpty: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
+        isString: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_MUST_BE_STRING},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(DOCTORS_MESSAGE.INVALID_HOSPITAL_ID)
+            }
+            const isExist = await databaseService.hospitals.findOne({_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(DOCTORS_MESSAGE.HOSPITAL_NOT_FOUND)
             }
             return true
           }

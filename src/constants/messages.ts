@@ -200,6 +200,10 @@ export const SPECIALTIES_MESSAGE = {
 }
 
 export const DOCTORS_MESSAGE = {
+  HOSPITAL_ID_MUST_BE_STRING: 'HospitalId must be a string',
+  INVALID_HOSPITAL_ID: 'Invalid hospitalId',
+  HOSPITAL_ID_IS_REQUIRED: 'HospitalId is required',
+  HOSPITAL_NOT_FOUND: 'Hospital not found',
   ID_IS_REQUIRED: 'Id is required',
   DOCTOR_ID_IS_REQUIRED: 'DoctorId is required',
   INVALID_OBJECT_ID: 'Invalid ObjectId',

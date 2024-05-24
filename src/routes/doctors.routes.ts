@@ -44,7 +44,7 @@ doctorsRouter.patch(
   verifiedUserValidator,
   checkParamsDoctorsID,
   updateDoctorsValidator,
-  filterMiddleware<UpdateDoctorsReqBody>(['description', 'session', 'price', 'therapy', 'specialty_id']),
+  filterMiddleware<UpdateDoctorsReqBody>(['description', 'session', 'price', 'therapy', 'specialty_id', 'hospital_id']),
   wrapRequestHandler(updateDoctorsController)
 )
 

@@ -5,9 +5,11 @@ import databaseService from '~/services/database.service'
 
 class DoctorsService {
   async createDoctors(payload: CreateDoctorsReqBody) {
+    console.log('DoctorsService ~ createDoctors ~ payload', payload)
     return await databaseService.doctors.insertOne(
       new Doctor({
         ...payload,
+        hospital_id: new ObjectId(payload.hospital_id),
         doctor_id: new ObjectId(payload.doctor_id),
         specialty_id: new ObjectId(payload.specialty_id)
       })
@@ -15,12 +17,14 @@ class DoctorsService {
   }
 
   async updateDoctors(id: string, payload: UpdateDoctorsReqBody) {
+    console.log('DoctorsService ~ updateDoctors ~ payload', payload)
     return await databaseService.doctors.findOneAndUpdate(
       {doctor_id: new ObjectId(id)},
       [
         {
           $set: {
             ...payload,
+            hospital_id: new ObjectId(payload.hospital_id),
             specialty_id: new ObjectId(payload.specialty_id),
             updated_at: '$$NOW'
           }
@@ -100,7 +104,8 @@ class DoctorsService {
         {$unset: 'doctor'}
       ])
       .toArray()
-    return doctor
+    // eslint-disable-next-line no-extra-boolean-cast
+    return !!doctor.length ? doctor[0] : null
   }
 
   async getFullDoctors({limit, page}: {limit: number; page: number}) {
