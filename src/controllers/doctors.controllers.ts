@@ -1,7 +1,12 @@
 import {Request, Response} from 'express'
 import {DOCTORS_MESSAGE} from '~/constants/messages'
 import {ParamsDictionary} from 'express-serve-static-core'
-import {CreateDoctorsReqBody, GetDoctorsParamsReq, UpdateDoctorsReqBody} from '~/models/request/Doctor.request'
+import {
+  CreateDoctorsReqBody,
+  GetDoctorsParamsReq,
+  QueryDoctors,
+  UpdateDoctorsReqBody
+} from '~/models/request/Doctor.request'
 import doctorsService from '~/services/doctors.service'
 import {Pagination} from '~/models/request/Common.request'
 import {responseMessage} from '~/utils/common'
@@ -47,10 +52,16 @@ export const getDoctorsByIdController = async (req: Request<GetDoctorsParamsReq>
   )
 }
 
-export const getFullDoctorsController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+export const getFullDoctorsController = async (
+  req: Request<ParamsDictionary, any, any, QueryDoctors>,
+  res: Response
+) => {
+  console.log(req.query)
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const {doctors, total} = await doctorsService.getFullDoctors({limit, page})
+  const position = Number(req.query.position)
+  const {search, hospital, specialty} = req.query
+  const {doctors, total} = await doctorsService.getFullDoctors({limit, page, search, hospital, specialty, position})
   return res.json(
     responseMessage({
       message: DOCTORS_MESSAGE.GET_DOCTORS_SUCCESS,

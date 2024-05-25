@@ -4,6 +4,7 @@ import {ParamsDictionary} from 'express-serve-static-core'
 import {
   CreateSpecialtiesReqBody,
   GetSpecialtiesParamsReq,
+  QuerySpecialties,
   UpdateSpecialtiesReqBody
 } from '~/models/request/Specialty.request'
 import specialtiesService from '~/services/specialties.service'
@@ -53,12 +54,13 @@ export const getSpecialtiesByIdController = async (req: Request<GetSpecialtiesPa
 }
 
 export const getFullSpecialtiesController = async (
-  req: Request<ParamsDictionary, any, any, Pagination>,
+  req: Request<ParamsDictionary, any, any, QuerySpecialties>,
   res: Response
 ) => {
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const {specialties, totalItems} = await specialtiesService.getFullSpecialties({limit, page})
+  const {search, hospital} = req.query
+  const {specialties, totalItems} = await specialtiesService.getFullSpecialties({limit, page, search, hospital})
   return res.json(
     responseMessage({
       message: SPECIALTIES_MESSAGE.GET_SPECIALTIES_SUCCESS,

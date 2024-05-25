@@ -2,7 +2,12 @@ import {Request, Response} from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {HOSPITALS_MESSAGE} from '~/constants/messages'
 import {Pagination} from '~/models/request/Common.request'
-import {CreateHospitalsReqBody, GetHospitalsParamsReq, UpdateHospitalsReqBody} from '~/models/request/Hospital.request'
+import {
+  CreateHospitalsReqBody,
+  GetHospitalsParamsReq,
+  QueryHospitals,
+  UpdateHospitalsReqBody
+} from '~/models/request/Hospital.request'
 import hospitalsService from '~/services/hospitals.service'
 import {responseMessage} from '~/utils/common'
 
@@ -49,12 +54,13 @@ export const getHospitalsByIdController = async (req: Request<GetHospitalsParams
 }
 
 export const getFullHospitalsController = async (
-  req: Request<ParamsDictionary, any, any, Pagination>,
+  req: Request<ParamsDictionary, any, any, QueryHospitals>,
   res: Response
 ) => {
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const {hospitals, totalItems} = await hospitalsService.getFullHospitals({limit, page})
+  const {search} = req.query
+  const {hospitals, totalItems} = await hospitalsService.getFullHospitals({limit, page, search})
   return res.json(
     responseMessage({
       message: HOSPITALS_MESSAGE.GET_HOSPITALS_SUCCESS,

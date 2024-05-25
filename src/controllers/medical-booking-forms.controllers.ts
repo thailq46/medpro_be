@@ -7,6 +7,7 @@ import {Pagination} from '~/models/request/Common.request'
 import {
   CreateMedicalBookingFormsReqBody,
   GetMedicalBookingFormsParams,
+  QueryMedicalBookingForms,
   UpdateMedicalBookingFormsReqBody
 } from '~/models/request/MedicalBookingForms.request'
 import databaseService from '~/services/database.service'
@@ -73,12 +74,17 @@ export const getMedicalBookingFormsByIdController = async (
 }
 
 export const getFullMedicalBookingFormsController = async (
-  req: Request<ParamsDictionary, any, any, Pagination>,
+  req: Request<ParamsDictionary, any, any, QueryMedicalBookingForms>,
   res: Response
 ) => {
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const {medicalBookingForms, totalItems} = await medicalBookingFormsService.getFullMedicalBookingForms({limit, page})
+  const {search} = req.query
+  const {medicalBookingForms, totalItems} = await medicalBookingFormsService.getFullMedicalBookingForms({
+    limit,
+    page,
+    search
+  })
   return res.json(
     responseMessage({
       message: MEDICAL_BOOKING_FORMS_MESSAGE.GET_SUCCESS,

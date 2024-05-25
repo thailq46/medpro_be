@@ -37,6 +37,8 @@ databaseService.connect().then(() => {
   databaseService.indexCategories()
   databaseService.indexMedicalBookingForms()
   databaseService.indexHospitals()
+  databaseService.indexServices()
+  databaseService.indexSpecialties()
   databaseService.indexDoctors()
 })
 

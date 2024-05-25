@@ -1,7 +1,9 @@
 import {ObjectId} from 'mongodb'
+import {PositionType} from '~/constants/enum'
 import {CreateDoctorsReqBody, UpdateDoctorsReqBody} from '~/models/request/Doctor.request'
 import Doctor from '~/models/schemas/Doctor.schema'
 import databaseService from '~/services/database.service'
+import {numberEnumToArray} from '~/utils/common'
 
 class DoctorsService {
   async createDoctors(payload: CreateDoctorsReqBody) {
@@ -108,7 +110,35 @@ class DoctorsService {
     return !!doctor.length ? doctor[0] : null
   }
 
-  async getFullDoctors({limit, page}: {limit: number; page: number}) {
+  async getFullDoctors({
+    limit,
+    page,
+    search,
+    hospital,
+    specialty,
+    position
+  }: {
+    limit: number
+    page: number
+    search?: string
+    hospital?: string
+    specialty?: string
+    position?: number
+  }) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      $or: [{name: {$regex: searchString, $options: 'i'}}]
+    }
+    if (position !== undefined && numberEnumToArray(PositionType).includes(position)) {
+      $match['position'] = position
+    }
+    if (hospital && ObjectId.isValid(hospital)) {
+      $match['hospital_id'] = new ObjectId(hospital)
+    }
+    if (specialty && ObjectId.isValid(specialty)) {
+      $match['specialty._id'] = new ObjectId(specialty)
+    }
+
     const [doctors, total] = await Promise.all([
       databaseService.doctors
         .aggregate([
@@ -169,14 +199,14 @@ class DoctorsService {
             }
           },
           {$unset: 'doctor'},
+          {$match},
           {$skip: limit * (page - 1)},
           {$limit: limit}
         ])
         .toArray(),
-      databaseService.doctors.countDocuments()
+      databaseService.doctors.countDocuments($match)
     ])
     return {doctors, total}
-    // return await databaseService.doctors.find().toArray()
   }
 }
 

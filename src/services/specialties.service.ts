@@ -91,10 +91,30 @@ class SpecialtiesService {
     return !!specialty.length ? specialty[0] : null
   }
 
-  async getFullSpecialties({limit, page}: Pagination) {
+  async getFullSpecialties({
+    limit,
+    page,
+    search,
+    hospital
+  }: {
+    limit: number
+    page: number
+    search?: string
+    hospital?: string
+  }) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      $or: [{name: {$regex: searchString, $options: 'i'}}]
+    }
+    if (hospital && ObjectId.isValid(hospital)) {
+      $match['hospital_id'] = new ObjectId(hospital)
+    }
     const [specialties, totalItems] = await Promise.all([
       databaseService.specialties
         .aggregate([
+          {
+            $match
+          },
           {
             $lookup: {
               from: 'hospitals',
@@ -145,7 +165,7 @@ class SpecialtiesService {
           {$limit: limit}
         ])
         .toArray(),
-      databaseService.specialties.countDocuments()
+      databaseService.specialties.countDocuments($match)
     ])
     return {specialties, totalItems}
   }

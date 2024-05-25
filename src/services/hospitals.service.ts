@@ -16,11 +16,19 @@ class HospitalsService {
     )
   }
 
-  async getFullHospitals({limit, page}: {limit: number; page: number}) {
+  async getFullHospitals({limit, page, search}: {limit: number; page: number; search?: string}) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      types: {$in: numberEnumToArray(HospitalsType)}
+    }
+
+    if (searchString) {
+      $match.$or = [{name: {$regex: searchString, $options: 'i'}}]
+    }
     const [hospitals, totalItems] = await Promise.all([
       databaseService.hospitals
         .aggregate([
-          {$match: {types: {$in: numberEnumToArray(HospitalsType)}}},
+          {$match},
           {
             $lookup: {
               from: 'categories',

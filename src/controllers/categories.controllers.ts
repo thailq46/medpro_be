@@ -6,10 +6,10 @@ import {
   CreateCateReqBody,
   DeleteCateReqParams,
   GetCateReqParams,
+  QueryCategories,
   UpdateCateReqBody,
   UpdateCateReqParams
 } from '~/models/request/Category.request'
-import {Pagination} from '~/models/request/Common.request'
 import categoriesService from '~/services/categories.service'
 import {responseMessage} from '~/utils/common'
 
@@ -37,12 +37,13 @@ export const deleteCategoriesController = async (req: Request<DeleteCateReqParam
 }
 
 export const getFullCategoriesController = async (
-  req: Request<ParamsDictionary, any, any, Pagination>,
+  req: Request<ParamsDictionary, any, any, QueryCategories>,
   res: Response
 ) => {
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const {categories, totalItems} = await categoriesService.getFullCategories({limit, page})
+  const {search} = req.query
+  const {categories, totalItems} = await categoriesService.getFullCategories({limit, page, search})
   return res.json(
     responseMessage({
       message: CATEGORIES_MESSAGE.GET_SUCCESS,

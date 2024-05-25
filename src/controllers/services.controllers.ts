@@ -2,7 +2,12 @@ import {Request, Response} from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {SERVICES_MESSAGE} from '~/constants/messages'
 import {Pagination} from '~/models/request/Common.request'
-import {CreateServicesReqBody, GetServicesParamsReq, UpdateServicesReqBody} from '~/models/request/Service.request'
+import {
+  CreateServicesReqBody,
+  GetServicesParamsReq,
+  QueryServices,
+  UpdateServicesReqBody
+} from '~/models/request/Service.request'
 import servicesService from '~/services/services.service'
 import {responseMessage} from '~/utils/common'
 
@@ -38,12 +43,13 @@ export const deleteServicesController = async (req: Request<GetServicesParamsReq
 }
 
 export const getFullServicesController = async (
-  req: Request<ParamsDictionary, any, any, Pagination>,
+  req: Request<ParamsDictionary, any, any, QueryServices>,
   res: Response
 ) => {
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const {services, totalItems} = await servicesService.getFullServices({limit, page})
+  const {search, hospital, specialty} = req.query
+  const {services, totalItems} = await servicesService.getFullServices({limit, page, search, hospital, specialty})
   return res.json(
     responseMessage({
       message: SERVICES_MESSAGE.GET_SERVICES_SUCCESS,

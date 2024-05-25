@@ -3,7 +3,12 @@ import {USERS_MESSAGE} from '~/constants/messages'
 import usersService from '~/services/users.service'
 import {TokenPayload} from '~/utils/jwt'
 import {ParamsDictionary} from 'express-serve-static-core'
-import {GetUserByUsernameReqParams, UpdateMeBody, UpdateUserByUsernameBody} from '~/models/request/User.request'
+import {
+  GetUserByUsernameReqParams,
+  QueryUsers,
+  UpdateMeBody,
+  UpdateUserByUsernameBody
+} from '~/models/request/User.request'
 import HTTP_STATUS from '~/constants/httpStatus'
 import {Pagination} from '~/models/request/Common.request'
 import {responseMessage} from '~/utils/common'
@@ -26,10 +31,12 @@ export const updateMeController = async (req: Request<ParamsDictionary, any, Upd
   })
 }
 
-export const getListUsersController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+export const getListUsersController = async (req: Request<ParamsDictionary, any, any, QueryUsers>, res: Response) => {
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const {users, totalItems} = await usersService.getListUsers({limit, page})
+  const role = Number(req.query.role)
+  const {search} = req.query
+  const {users, totalItems} = await usersService.getListUsers({limit, page, search, role})
   return res.json(
     responseMessage({
       message: USERS_MESSAGE.GET_LIST_USERS_SUCCESS,

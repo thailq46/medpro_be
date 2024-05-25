@@ -35,10 +35,34 @@ class ServicesService {
     return await databaseService.services.findOneAndDelete({_id: new ObjectId(id)})
   }
 
-  async getFullServices({limit, page}: {limit: number; page: number}) {
+  async getFullServices({
+    limit,
+    page,
+    search,
+    hospital,
+    specialty
+  }: {
+    limit: number
+    page: number
+    search?: string
+    hospital?: string
+    specialty?: string
+  }) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      $or: [{name: {$regex: searchString, $options: 'i'}}]
+    }
+    if (hospital && ObjectId.isValid(hospital)) {
+      $match['hospital_id'] = new ObjectId(hospital)
+    }
+    if ((specialty && ObjectId.isValid(specialty)) || (specialty && specialty === 'null')) {
+      if (specialty === 'null') $match['specialty_id'] = null
+      else $match['specialty_id'] = new ObjectId(specialty)
+    }
     const [services, totalItems] = await Promise.all([
       databaseService.services
         .aggregate([
+          {$match},
           {
             $lookup: {
               from: 'hospitals',
@@ -68,7 +92,7 @@ class ServicesService {
           })
           return data
         }),
-      databaseService.services.countDocuments()
+      databaseService.services.countDocuments($match)
     ])
     return {services, totalItems}
   }

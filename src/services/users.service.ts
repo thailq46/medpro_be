@@ -1,4 +1,5 @@
 import {ObjectId} from 'mongodb'
+import {RoleType} from '~/constants/enum'
 import {UpdateMeBody, UpdateUserByUsernameBody} from '~/models/request/User.request'
 import databaseService from '~/services/database.service'
 
@@ -42,10 +43,22 @@ class UsersService {
     return user
   }
 
-  async getListUsers({limit, page}: {limit: number; page: number}) {
+  async getListUsers({limit, page, search, role}: {limit: number; page: number; search?: string; role?: number}) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      $or: [
+        {name: {$regex: searchString, $options: 'i'}},
+        {username: {$regex: searchString, $options: 'i'}},
+        {email: {$regex: searchString, $options: 'i'}}
+      ]
+    }
+    if (role !== undefined && [RoleType.Admin, RoleType.Doctor, RoleType.User].includes(role)) {
+      $match['role'] = role
+    }
     const [users, totalItems] = await Promise.all([
       databaseService.users
         .aggregate([
+          {$match},
           {
             $project: {
               password: 0,
@@ -57,7 +70,7 @@ class UsersService {
           {$limit: limit}
         ])
         .toArray(),
-      databaseService.users.countDocuments()
+      databaseService.users.countDocuments($match)
     ])
     return {users, totalItems}
   }

@@ -1,4 +1,5 @@
-import {ParamsDictionary} from 'express-serve-static-core'
+import {ParamsDictionary, Query} from 'express-serve-static-core'
+import {Pagination} from '~/models/request/Common.request'
 export interface CreateCateReqBody {
   name: string
   slug: string
@@ -17,4 +18,7 @@ export interface DeleteCateReqParams extends ParamsDictionary {
 }
 export interface GetCateReqParams extends ParamsDictionary {
   id: string
+}
+export interface QueryCategories extends Pagination, Query {
+  search?: string
 }

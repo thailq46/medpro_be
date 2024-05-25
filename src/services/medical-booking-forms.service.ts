@@ -36,10 +36,22 @@ class MedicalBookingFormsService {
     return databaseService.medicalBookingForms.findOne({_id: new ObjectId(id)})
   }
 
-  async getFullMedicalBookingForms({limit, page}: {limit: number; page: number}) {
+  async getFullMedicalBookingForms({limit, page, search}: {limit: number; page: number; search?: string}) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      $or: [{name: {$regex: searchString, $options: 'i'}}]
+    }
     const [medicalBookingForms, totalItems] = await Promise.all([
-      databaseService.medicalBookingForms.aggregate([{$skip: limit * (page - 1)}, {$limit: limit}]).toArray(),
-      databaseService.medicalBookingForms.countDocuments()
+      databaseService.medicalBookingForms
+        .aggregate([
+          {
+            $match
+          },
+          {$skip: limit * (page - 1)},
+          {$limit: limit}
+        ])
+        .toArray(),
+      databaseService.medicalBookingForms.countDocuments($match)
     ])
     return {medicalBookingForms, totalItems}
   }

@@ -1,4 +1,5 @@
-import {ParamsDictionary} from 'express-serve-static-core'
+import {ParamsDictionary, Query} from 'express-serve-static-core'
+import {Pagination} from '~/models/request/Common.request'
 export interface RegisterReqBody {
   name: string
   password: string
@@ -60,4 +61,9 @@ export interface ChangePasswordReqBody {
   old_password: string
   new_password: string
   confirm_password: string
+}
+
+export interface QueryUsers extends Pagination, Query {
+  search?: string
+  role?: string
 }

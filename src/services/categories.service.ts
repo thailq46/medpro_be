@@ -64,10 +64,22 @@ class CategoriesService {
     })
   }
 
-  async getFullCategories({limit, page}: {limit: number; page: number}) {
+  async getFullCategories({limit, page, search}: {limit: number; page: number; search?: string}) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      $or: [{name: {$regex: searchString, $options: 'i'}}]
+    }
     const [categories, totalItems] = await Promise.all([
-      databaseService.categories.aggregate([{$skip: limit * (page - 1)}, {$limit: limit}]).toArray(),
-      databaseService.categories.countDocuments()
+      databaseService.categories
+        .aggregate([
+          {
+            $match
+          },
+          {$skip: limit * (page - 1)},
+          {$limit: limit}
+        ])
+        .toArray(),
+      databaseService.categories.countDocuments($match)
     ])
     return {categories, totalItems}
   }

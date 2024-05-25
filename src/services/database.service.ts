@@ -10,10 +10,10 @@ import Service from '~/models/schemas/Service.schema'
 import Specialty from '~/models/schemas/Specialty.schema'
 import User from '~/models/schemas/User.schema'
 
-// const dbUsername = encodeURIComponent(envConfig.dbUsername)
-// const dbPassword = encodeURIComponent(envConfig.dbPassword)
+const dbUsername = encodeURIComponent(envConfig.dbUsername)
+const dbPassword = encodeURIComponent(envConfig.dbPassword)
 
-const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@medprobe.kctpk6e.mongodb.net/?retryWrites=true&w=majority&appName=MedproBE`
+const uri = `mongodb+srv://${dbUsername}:${dbPassword}@medprobe.kctpk6e.mongodb.net/?retryWrites=true&w=majority&appName=MedproBE`
 
 class DatabaseService {
   private client: MongoClient
@@ -37,11 +37,19 @@ class DatabaseService {
   }
 
   async indexUsers() {
-    const isExist = await this.users.indexExists(['email_1_password_1', 'email_1', 'username_1'])
+    const isExist = await this.users.indexExists([
+      'email_1_password_1',
+      'email_1',
+      'username_1',
+      'email_text_name_text_username_text',
+      'role_1'
+    ])
     if (!isExist) {
       this.users.createIndex({email: 1, password: 1})
       this.users.createIndex({email: 1}, {unique: true})
       this.users.createIndex({username: 1}, {unique: true})
+      this.users.createIndex({email: 'text', name: 'text', username: 'text'})
+      this.users.createIndex({role: 1})
     }
   }
   // Mongodb có 1 background task là một tác vụ chạy ngầm, nó sẽ chạy khoảng 60s 1 lần (sau 1 phút nó sẽ chạy 1 lần) để kiểm tra xem thử còn thời gian sống (TTL - time to live ) hay không, nếu hết thời gian sống thì nó sẽ xóa dữ liệu đó đi
@@ -53,35 +61,61 @@ class DatabaseService {
     }
   }
   async indexCategories() {
-    const isExist = await this.categories.indexExists(['slug_1', 'parent_id_1'])
+    const isExist = await this.categories.indexExists(['slug_1', 'parent_id_1', 'name_text'])
     if (!isExist) {
       this.categories.createIndex({slug: 1}, {unique: true})
       this.categories.createIndex({parent_id: 1})
+      this.categories.createIndex({name: 'text'})
     }
   }
   async indexMedicalBookingForms() {
-    const isExist = await this.medicalBookingForms.indexExists(['name_1'])
+    const isExist = await this.medicalBookingForms.indexExists(['name_1', 'name_text'])
     if (!isExist) {
       this.medicalBookingForms.createIndex({name: 1}, {unique: true})
+      this.medicalBookingForms.createIndex({name: 'text'})
     }
   }
   async indexHospitals() {
-    const isExist = await this.hospitals.indexExists(['slug_1', 'name_1'])
+    const isExist = await this.hospitals.indexExists(['slug_1', 'name_1', 'name_text'])
     if (!isExist) {
       this.hospitals.createIndex({slug: 1}, {unique: true})
       this.hospitals.createIndex({name: 1}, {unique: true})
+      this.hospitals.createIndex({name: 'text'})
     }
   }
-  // async indexServices() {}
+  async indexServices() {
+    const isExist = await this.services.indexExists(['name_text', 'hospital_id_1', 'specialty_id_1'])
+    if (!isExist) {
+      this.services.createIndex({name: 'text'})
+      this.services.createIndex({hospital_id: 1})
+      this.services.createIndex({specialty_id: 1})
+    }
+  }
 
-  // async indexSpecialties() {}
+  async indexSpecialties() {
+    const isExist = await this.specialties.indexExists(['name_text', 'hospital_id_1'])
+    if (!isExist) {
+      this.specialties.createIndex({name: 'text'})
+      this.specialties.createIndex({hospital_id: 1})
+    }
+  }
 
   // async indexSchedules() {}
 
   async indexDoctors() {
-    const isExist = await this.doctors.indexExists(['doctor_id_1'])
+    const isExist = await this.doctors.indexExists([
+      'doctor_id_1',
+      'hospital_id_1',
+      'specialty_id_1',
+      'hospital_id_1_specialty_id_1',
+      'name_text'
+    ])
     if (!isExist) {
       this.doctors.createIndex({doctor_id: 1}, {unique: true})
+      this.doctors.createIndex({hospital_id: 1})
+      this.doctors.createIndex({specialty_id: 1})
+      this.doctors.createIndex({hospital_id: 1, specialty_id: 1})
+      this.doctors.createIndex({name: 'text'})
     }
   }
   get users(): Collection<User> {

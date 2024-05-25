@@ -1,4 +1,6 @@
 import {ParamsDictionary} from 'express-serve-static-core'
+import {Query} from 'firebase-admin/database'
+import {Pagination} from '~/models/request/Common.request'
 
 export interface CreateServicesReqBody {
   hospital_id: string
@@ -20,4 +22,9 @@ export interface UpdateServicesReqBody {
 }
 export interface GetServicesParamsReq extends ParamsDictionary {
   id: string
+}
+export interface QueryServices extends Pagination, Query {
+  search?: string
+  hospital?: string
+  specialty?: string
 }
