@@ -100,7 +100,14 @@ class DatabaseService {
     }
   }
 
-  // async indexSchedules() {}
+  async indexSchedules() {
+    const isExist = await this.schedules.indexExists(['doctor_id_1', 'date_1', 'doctor_id_1_date_1'])
+    if (!isExist) {
+      this.schedules.createIndex({doctor_id: 1})
+      this.schedules.createIndex({date: 1})
+      this.schedules.createIndex({doctor_id: 1, date: 1})
+    }
+  }
 
   async indexDoctors() {
     const isExist = await this.doctors.indexExists([

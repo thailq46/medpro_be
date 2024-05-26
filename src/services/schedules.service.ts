@@ -2,6 +2,7 @@ import {ObjectId} from 'mongodb'
 import {CreateSchedulesReqBody, UpdateSchedulesReqBody} from '~/models/request/Schedule.request'
 import Schedule from '~/models/schemas/Schedule.schema'
 import databaseService from '~/services/database.service'
+import {isValidDateFormat} from '~/utils/common'
 
 class SchedulesService {
   async createSchedules(payload: CreateSchedulesReqBody) {
@@ -36,8 +37,19 @@ class SchedulesService {
   async getSchedulesById(id: string) {
     return await databaseService.schedules.findOne({_id: new ObjectId(id)})
   }
-  async getFullSchedules() {
-    return await databaseService.schedules.find().toArray()
+  async getFullSchedules({limit, page, doctor, date}: {limit: number; page: number; doctor?: string; date?: string}) {
+    const $match: any = {}
+    if (doctor && ObjectId.isValid(doctor)) {
+      $match['doctor_id'] = new ObjectId(doctor)
+    }
+    if (date && isValidDateFormat(date)) {
+      $match['date'] = date
+    }
+    const [schedules, totalItems] = await Promise.all([
+      databaseService.schedules.aggregate([{$match}, {$skip: limit * (page - 1)}, {$limit: limit}]).toArray(),
+      databaseService.schedules.countDocuments($match)
+    ])
+    return {schedules, totalItems}
   }
 }
 

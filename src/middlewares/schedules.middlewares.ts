@@ -16,7 +16,7 @@ export const createSchedulesValidator = validate(
             if (!ObjectId.isValid(value)) {
               throw new Error(SCHEDULES_MESSAGE.INVALID_OBJECT_ID)
             }
-            const doctor = await databaseService.doctors.findOne({_id: new ObjectId(value)})
+            const doctor = await databaseService.doctors.findOne({doctor_id: new ObjectId(value)})
             if (!doctor) {
               throw new Error(SCHEDULES_MESSAGE.DOCTOR_NOT_FOUND)
             }
@@ -101,7 +101,7 @@ export const updateSchedulesValidator = validate(
             if (!ObjectId.isValid(value)) {
               throw new Error(SCHEDULES_MESSAGE.INVALID_OBJECT_ID)
             }
-            const doctor = await databaseService.doctors.findOne({_id: new ObjectId(value)})
+            const doctor = await databaseService.doctors.findOne({doctor_id: new ObjectId(value)})
             if (!doctor) {
               throw new Error(SCHEDULES_MESSAGE.DOCTOR_NOT_FOUND)
             }

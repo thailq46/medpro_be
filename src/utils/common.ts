@@ -6,6 +6,7 @@ import {JsonWebTokenError} from 'jsonwebtoken'
 import {envConfig} from '~/constants/config'
 import {verifyToken} from '~/utils/jwt'
 import {capitalize, pick} from 'lodash'
+import {CHECK_DATE_REGEX} from '~/constants/regax'
 
 interface IMetaData {
   total_page?: number
@@ -26,6 +27,11 @@ export const numberEnumToArray = (numberEnum: {[key: string]: string | number}) 
   return Object.values(numberEnum).filter((value) => typeof value === 'number') as number[]
 }
 
+export function isValidDateFormat(date: string) {
+  // Biểu thức chính quy để kiểm tra định dạng ngày DD/MM/YYYY
+  const regex = CHECK_DATE_REGEX
+  return regex.test(date)
+}
 export async function verifyAccessToken(access_token: string, req?: Request) {
   if (!access_token) {
     throw new ErrorWithStatus({

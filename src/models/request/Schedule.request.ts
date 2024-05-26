@@ -1,4 +1,5 @@
-import {ParamsDictionary} from 'express-serve-static-core'
+import {ParamsDictionary, Query} from 'express-serve-static-core'
+import {Pagination} from '~/models/request/Common.request'
 export interface CreateSchedulesReqBody {
   doctor_id: string
   current_number?: number
@@ -15,4 +16,9 @@ export interface UpdateSchedulesReqBody {
 }
 export interface GetSchedulesReqQuery extends ParamsDictionary {
   id: string
+}
+
+export interface QuerySchedules extends Pagination, Query {
+  doctor?: string
+  date?: string
 }

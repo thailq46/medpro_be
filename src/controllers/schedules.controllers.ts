@@ -1,17 +1,22 @@
 import {Request, Response} from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {SCHEDULES_MESSAGE} from '~/constants/messages'
-import {CreateSchedulesReqBody, GetSchedulesReqQuery, UpdateSchedulesReqBody} from '~/models/request/Schedule.request'
+import {
+  CreateSchedulesReqBody,
+  GetSchedulesReqQuery,
+  QuerySchedules,
+  UpdateSchedulesReqBody
+} from '~/models/request/Schedule.request'
 import schedulesService from '~/services/schedules.service'
+import {responseMessage} from '~/utils/common'
 
 export const createSchedulesController = async (
   req: Request<ParamsDictionary, any, CreateSchedulesReqBody>,
   res: Response
 ) => {
-  const result = await schedulesService.createSchedules(req.body)
+  await schedulesService.createSchedules(req.body)
   return res.json({
-    message: SCHEDULES_MESSAGE.CREATE_SCHEDULES_SUCCESSFULLY,
-    data: result
+    message: SCHEDULES_MESSAGE.CREATE_SCHEDULES_SUCCESSFULLY
   })
 }
 
@@ -45,10 +50,25 @@ export const getSchedulesByIdController = async (req: Request<GetSchedulesReqQue
   })
 }
 
-export const getFullSchedulesController = async (req: Request, res: Response) => {
-  const result = await schedulesService.getFullSchedules()
-  return res.json({
-    message: SCHEDULES_MESSAGE.GET_SCHEDULES_SUCCESSFULLY,
-    data: result
-  })
+export const getFullSchedulesController = async (
+  req: Request<ParamsDictionary, any, any, QuerySchedules>,
+  res: Response
+) => {
+  console.log(req.query)
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const {doctor, date} = req.query
+  const {schedules, totalItems} = await schedulesService.getFullSchedules({limit, page, doctor, date})
+  return res.json(
+    responseMessage({
+      message: SCHEDULES_MESSAGE.GET_SCHEDULES_SUCCESSFULLY,
+      data: schedules,
+      meta: {
+        total_page: Math.ceil(totalItems / limit),
+        limit,
+        current_page: page,
+        total_items: totalItems
+      }
+    })
+  )
 }

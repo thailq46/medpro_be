@@ -7,7 +7,7 @@ import {
   updateSchedulesController
 } from '~/controllers/schedules.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
-import {filterMiddleware, isUserLoggedInValidator} from '~/middlewares/common.middlewares'
+import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
   checkParamsScheduleId,
   createSchedulesValidator,
@@ -80,5 +80,5 @@ schedulesRouter.get('/:id', checkParamsScheduleId, wrapRequestHandler(getSchedul
  * Path: /schedules
  * Method: GET
  */
-schedulesRouter.get('/', wrapRequestHandler(getFullSchedulesController))
+schedulesRouter.get('/', paginationValidator, wrapRequestHandler(getFullSchedulesController))
 export default schedulesRouter

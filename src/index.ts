@@ -40,6 +40,7 @@ databaseService.connect().then(() => {
   databaseService.indexServices()
   databaseService.indexSpecialties()
   databaseService.indexDoctors()
+  databaseService.indexSchedules()
 })
 
 initFolder()
