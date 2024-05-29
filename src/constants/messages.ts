@@ -243,8 +243,10 @@ export const SCHEDULES_MESSAGE = {
   SCHEDULE_ID_IS_REQUIRED: 'ScheduleId is required',
   SCHEDULE_ID_MUST_BE_A_STRING: 'ScheduleId must be a string',
   SCHEDULE_NOT_FOUND: 'Schedule not found',
+  SCHEDULE_ALREADY_EXISTS: 'Schedule already exists',
   CREATE_SCHEDULES_SUCCESSFULLY: 'Create schedules successfully',
   UPDATE_SCHEDULES_SUCCESSFULLY: 'Update schedules successfully',
   DELETE_SCHEDULES_SUCCESSFULLY: 'Delete schedules successfully',
-  GET_SCHEDULES_SUCCESSFULLY: 'Get schedules successfully'
+  GET_SCHEDULES_SUCCESSFULLY: 'Get schedules successfully',
+  DOCTOR_NOT_BELONG_TO_HOSPITAL: 'Doctor not belong to hospital'
 }
