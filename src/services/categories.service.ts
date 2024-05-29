@@ -51,6 +51,14 @@ class CategoriesService {
         data: null
       })
     }
+    const isDependOnHospital = await databaseService.hospitals.findOne({
+      categoryId: new ObjectId(id)
+    })
+    if (isDependOnHospital) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        message: CATEGORIES_MESSAGE.CATEGORY_DEPEND_ON_HOSPITAL
+      })
+    }
     const category = await databaseService.categories.findOneAndDelete({_id: new ObjectId(id)})
     if (!category) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({

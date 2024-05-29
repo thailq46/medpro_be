@@ -113,7 +113,8 @@ export const CATEGORIES_MESSAGE = {
   DELETE_SUCCESS: 'Delete category successfully',
   CATEGORY_NOT_FOUND: 'Category not found',
   CATEGORY_IS_PARENT: 'Category is parent',
-  GET_SUCCESS: 'Get categories successfully'
+  GET_SUCCESS: 'Get categories successfully',
+  CATEGORY_DEPEND_ON_HOSPITAL: 'Category depend on hospital'
 }
 
 export const MEDICAL_BOOKING_FORMS_MESSAGE = {
