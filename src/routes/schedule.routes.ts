@@ -48,7 +48,7 @@ schedulesRouter.patch(
   verifiedUserValidator,
   checkParamsScheduleId,
   updateSchedulesValidator,
-  filterMiddleware<UpdateSchedulesReqBody>(['current_number', 'max_number', 'date', 'time_type', 'doctor_id']),
+  filterMiddleware<UpdateSchedulesReqBody>(['date', 'time_type', 'doctor_id']),
   wrapRequestHandler(updateSchedulesController)
 )
 

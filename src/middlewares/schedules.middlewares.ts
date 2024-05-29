@@ -49,20 +49,6 @@ export const createSchedulesValidator = validate(
           }
         }
       },
-      max_number: {
-        notEmpty: {errorMessage: SCHEDULES_MESSAGE.MAX_NUMBER_IS_REQUIRED},
-        custom: {
-          options: (value: number) => {
-            if (typeof value !== 'number') {
-              throw new Error(SCHEDULES_MESSAGE.MAX_NUMBER_MUST_BE_A_NUMBER)
-            }
-            if (value > 100) {
-              throw new Error(SCHEDULES_MESSAGE.MAX_NUMBER_MUST_BE_LESS_THAN_100)
-            }
-            return true
-          }
-        }
-      },
       date: {
         notEmpty: {errorMessage: SCHEDULES_MESSAGE.DATE_IS_REQUIRED},
         isString: {errorMessage: SCHEDULES_MESSAGE.DATE_MUST_BE_A_STRING},
@@ -82,20 +68,6 @@ export const createSchedulesValidator = validate(
                 status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
                 message: SCHEDULES_MESSAGE.SCHEDULE_ALREADY_EXISTS
               })
-            }
-            return true
-          }
-        }
-      },
-      current_number: {
-        optional: true,
-        custom: {
-          options: (value: number) => {
-            if (typeof value !== 'number') {
-              throw new Error(SCHEDULES_MESSAGE.CURRENT_NUMBER_MUST_BE_A_NUMBER)
-            }
-            if (value > 100) {
-              throw new Error(SCHEDULES_MESSAGE.CURRENT_NUMBER_MUST_BE_LESS_THAN_100)
             }
             return true
           }
@@ -173,21 +145,6 @@ export const updateSchedulesValidator = validate(
           }
         }
       },
-      max_number: {
-        optional: true,
-        notEmpty: {errorMessage: SCHEDULES_MESSAGE.MAX_NUMBER_IS_REQUIRED},
-        custom: {
-          options: (value: number) => {
-            if (typeof value !== 'number') {
-              throw new Error(SCHEDULES_MESSAGE.MAX_NUMBER_MUST_BE_A_NUMBER)
-            }
-            if (value > 100) {
-              throw new Error(SCHEDULES_MESSAGE.MAX_NUMBER_MUST_BE_LESS_THAN_100)
-            }
-            return true
-          }
-        }
-      },
       date: {
         optional: true,
         notEmpty: {errorMessage: SCHEDULES_MESSAGE.DATE_IS_REQUIRED},
@@ -210,20 +167,6 @@ export const updateSchedulesValidator = validate(
                 status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
                 message: SCHEDULES_MESSAGE.SCHEDULE_ALREADY_EXISTS
               })
-            }
-            return true
-          }
-        }
-      },
-      current_number: {
-        optional: true,
-        custom: {
-          options: (value: number) => {
-            if (typeof value !== 'number') {
-              throw new Error(SCHEDULES_MESSAGE.CURRENT_NUMBER_MUST_BE_A_NUMBER)
-            }
-            if (value > 100) {
-              throw new Error(SCHEDULES_MESSAGE.CURRENT_NUMBER_MUST_BE_LESS_THAN_100)
             }
             return true
           }
