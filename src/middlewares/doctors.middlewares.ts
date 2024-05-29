@@ -2,7 +2,9 @@ import {checkSchema} from 'express-validator'
 import {ObjectId} from 'mongodb'
 import {descriptionCheckSchema, sessionCheckSchema} from '~/constants/checkSchema'
 import {RoleType} from '~/constants/enum'
-import {DOCTORS_MESSAGE} from '~/constants/messages'
+import HTTP_STATUS from '~/constants/httpStatus'
+import {DOCTORS_MESSAGE, SERVICES_MESSAGE} from '~/constants/messages'
+import {ErrorWithStatus} from '~/models/Errors'
 import databaseService from '~/services/database.service'
 import validate from '~/utils/validate'
 
@@ -46,13 +48,23 @@ export const createDoctorsValidator = validate(
         notEmpty: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
         isString: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_MUST_BE_STRING},
         custom: {
-          options: async (value: string) => {
+          options: async (value: string, {req}) => {
             if (!ObjectId.isValid(value)) {
               throw new Error(DOCTORS_MESSAGE.INVALID_HOSPITAL_ID)
             }
             const isExist = await databaseService.hospitals.findOne({_id: new ObjectId(value)})
             if (!isExist) {
               throw new Error(DOCTORS_MESSAGE.HOSPITAL_NOT_FOUND)
+            }
+            const isExistSpecialty = await databaseService.specialties.findOne({
+              _id: new ObjectId(req.body.specialty_id),
+              hospital_id: new ObjectId(value)
+            })
+            if (!isExistSpecialty) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                message: SERVICES_MESSAGE.SPECIALTY_NOT_BELONG_TO_HOSPITAL
+              })
             }
             return true
           }
@@ -106,13 +118,23 @@ export const updateDoctorsValidator = validate(
         notEmpty: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
         isString: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_MUST_BE_STRING},
         custom: {
-          options: async (value: string) => {
+          options: async (value: string, {req}) => {
             if (!ObjectId.isValid(value)) {
               throw new Error(DOCTORS_MESSAGE.INVALID_HOSPITAL_ID)
             }
             const isExist = await databaseService.hospitals.findOne({_id: new ObjectId(value)})
             if (!isExist) {
               throw new Error(DOCTORS_MESSAGE.HOSPITAL_NOT_FOUND)
+            }
+            const isExistSpecialty = await databaseService.specialties.findOne({
+              _id: new ObjectId(req.body.specialty_id),
+              hospital_id: new ObjectId(value)
+            })
+            if (!isExistSpecialty) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                message: SERVICES_MESSAGE.SPECIALTY_NOT_BELONG_TO_HOSPITAL
+              })
             }
             return true
           }

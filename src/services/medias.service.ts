@@ -3,10 +3,10 @@ import path from 'path'
 import sharp from 'sharp'
 import {UPLOAD_IMAGE_DIR} from '~/constants/dir'
 import {getNameFromFullname, handleUploadImage} from '~/utils/file'
-import fs from 'fs'
 import {envConfig} from '~/constants/config'
 import {Media, MediaType} from '~/constants/enum'
 import {google} from 'googleapis'
+import fs from 'fs-extra'
 
 const oauth2Client = new google.auth.OAuth2(
   envConfig.ggdriver_client_id,
@@ -30,7 +30,16 @@ class MediasService {
          */
         const newPath = path.resolve(UPLOAD_IMAGE_DIR, `${newName}.jpg`)
         await sharp(file.filepath).jpeg().toFile(newPath)
-        fs.unlinkSync(file.filepath)
+
+        fs.remove(file.filepath)
+          .then(() => {
+            console.log('success!')
+            return
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+
         return {
           url: `http://localhost:${envConfig.port}/static/image/${newName}.jpg`,
           type: MediaType.Image
@@ -67,6 +76,7 @@ class MediasService {
 
   async uploadImageGoogleDriver(req: Request) {
     const files = await handleUploadImage(req)
+    console.log('files', files)
     const result: Media[] = await Promise.all(
       files.map(async (file) => {
         const newName = getNameFromFullname(file.newFilename)
@@ -98,7 +108,7 @@ class MediasService {
           fileId,
           fields: 'webViewLink, webContentLink'
         })
-        fs.unlinkSync(file.filepath)
+        // fs.unlinkSync(file.filepath)
         return {
           url: getURL.data.webViewLink as string,
           type: MediaType.Image

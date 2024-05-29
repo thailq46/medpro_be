@@ -1,7 +1,9 @@
 import {checkSchema} from 'express-validator'
 import {ObjectId} from 'mongodb'
 import {descriptionCheckSchema, nameCheckSchema, sessionCheckSchema} from '~/constants/checkSchema'
+import HTTP_STATUS from '~/constants/httpStatus'
 import {SERVICES_MESSAGE} from '~/constants/messages'
+import {ErrorWithStatus} from '~/models/Errors'
 import databaseService from '~/services/database.service'
 import validate from '~/utils/validate'
 
@@ -12,7 +14,7 @@ export const createServicesValidator = validate(
         notEmpty: {errorMessage: SERVICES_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
         trim: true,
         custom: {
-          options: async (value: string) => {
+          options: async (value: string, {req}) => {
             if (!ObjectId.isValid(value)) {
               throw new Error(SERVICES_MESSAGE.INVALID_HOSPITAL_ID)
             }
@@ -20,6 +22,7 @@ export const createServicesValidator = validate(
             if (!isExist) {
               throw new Error(SERVICES_MESSAGE.HOSPITAL_NOT_FOUND)
             }
+            req.hospital_id = value
             return true
           }
         }
@@ -27,7 +30,7 @@ export const createServicesValidator = validate(
       specialty_id: {
         optional: {options: {nullable: true}},
         custom: {
-          options: async (value: string | null) => {
+          options: async (value: string | null, {req}) => {
             if (value === null) {
               return true
             }

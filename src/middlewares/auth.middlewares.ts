@@ -336,7 +336,7 @@ export const changePasswordValidator = validate(
             if (password !== hashPassword(value)) {
               throw new ErrorWithStatus({
                 message: USERS_MESSAGE.OLD_PASSWORD_INCORRECT,
-                status: HTTP_STATUS.UNAUTHORIZED
+                status: HTTP_STATUS.UNPROCESSABLE_ENTITY
               })
             }
             return true

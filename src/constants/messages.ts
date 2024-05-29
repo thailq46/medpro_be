@@ -180,7 +180,8 @@ export const SERVICES_MESSAGE = {
   CREATE_SERVICES_SUCCESS: 'Create services successfully',
   UPDATE_SERVICES_SUCCESS: 'Update services successfully',
   DELETE_SERVICES_SUCCESS: 'Delete services successfully',
-  GET_SERVICES_SUCCESS: 'Get services successfully'
+  GET_SERVICES_SUCCESS: 'Get services successfully',
+  SPECIALTY_NOT_BELONG_TO_HOSPITAL: 'Specialty not belong to hospital'
 }
 
 export const SPECIALTIES_MESSAGE = {
