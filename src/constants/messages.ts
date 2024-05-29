@@ -122,7 +122,7 @@ export const MEDICAL_BOOKING_FORMS_MESSAGE = {
   NAME_MUST_BE_STRING: 'Name must be a string',
   NAME_NOT_EXCEED_255: 'Name must not exceed 255 characters',
   IMAGE_MUST_BE_STRING: 'Image must be a string',
-  IMAGE_URL_LENGTH: 'Image length must be from 1 to 500 characters',
+  IMAGE_URL_LENGTH: 'Image length must must not exceed 500 characters',
   CREATE_SUCCESS: 'Create medical booking form successfully',
   UPDATE_SUCCESS: 'Update medical booking form successfully',
   DELETE_SUCCESS: 'Delete medical booking form successfully',

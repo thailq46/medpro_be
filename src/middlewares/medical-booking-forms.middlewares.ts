@@ -15,7 +15,7 @@ const nameCheckSchema: ParamSchema = {
 const imageCheckSchema: ParamSchema = {
   optional: {options: {nullable: true}},
   isString: {errorMessage: MEDICAL_BOOKING_FORMS_MESSAGE.IMAGE_MUST_BE_STRING},
-  isLength: {options: {min: 1, max: 500}, errorMessage: MEDICAL_BOOKING_FORMS_MESSAGE.IMAGE_URL_LENGTH},
+  isLength: {options: {max: 500}, errorMessage: MEDICAL_BOOKING_FORMS_MESSAGE.IMAGE_URL_LENGTH},
   trim: true
 }
 export const createMedicalBookingFormsValidator = validate(
