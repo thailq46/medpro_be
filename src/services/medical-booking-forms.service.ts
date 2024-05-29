@@ -1,4 +1,7 @@
 import {ObjectId} from 'mongodb'
+import HTTP_STATUS from '~/constants/httpStatus'
+import {MEDICAL_BOOKING_FORMS_MESSAGE} from '~/constants/messages'
+import {ErrorWithStatus} from '~/models/Errors'
 import {
   CreateMedicalBookingFormsReqBody,
   UpdateMedicalBookingFormsReqBody
@@ -29,6 +32,15 @@ class MedicalBookingFormsService {
   }
 
   async deleteMedicalBookingForms(id: string) {
+    const isDependOnHospital = await databaseService.hospitals.findOne({
+      booking_forms: new ObjectId(id)
+    })
+    if (isDependOnHospital) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.BAD_REQUEST,
+        message: MEDICAL_BOOKING_FORMS_MESSAGE.MEDICAL_BOOKING_FORMS_DEPEND_ON_HOSPITAL
+      })
+    }
     return databaseService.medicalBookingForms.findOneAndDelete({_id: new ObjectId(id)})
   }
 
