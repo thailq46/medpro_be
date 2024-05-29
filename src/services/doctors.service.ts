@@ -7,7 +7,6 @@ import {numberEnumToArray} from '~/utils/common'
 
 class DoctorsService {
   async createDoctors(payload: CreateDoctorsReqBody) {
-    console.log('DoctorsService ~ createDoctors ~ payload', payload)
     return await databaseService.doctors.insertOne(
       new Doctor({
         ...payload,
@@ -19,7 +18,6 @@ class DoctorsService {
   }
 
   async updateDoctors(id: string, payload: UpdateDoctorsReqBody) {
-    console.log('DoctorsService ~ updateDoctors ~ payload', payload)
     return await databaseService.doctors.findOneAndUpdate(
       {doctor_id: new ObjectId(id)},
       [

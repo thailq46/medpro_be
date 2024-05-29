@@ -41,6 +41,16 @@ export const createServicesValidator = validate(
             if (!isExist) {
               throw new Error(SERVICES_MESSAGE.SPECIALTY_NOT_FOUND)
             }
+            const isExistSpecialty = await databaseService.specialties.findOne({
+              _id: new ObjectId(value),
+              hospital_id: new ObjectId(req.body.hospital_id)
+            })
+            if (!isExistSpecialty) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                message: SERVICES_MESSAGE.SPECIALTY_NOT_BELONG_TO_HOSPITAL
+              })
+            }
             return true
           }
         }
@@ -94,7 +104,7 @@ export const updateServicesValidator = validate(
       specialty_id: {
         optional: {options: {nullable: true}},
         custom: {
-          options: async (value: string | null) => {
+          options: async (value: string | null, {req}) => {
             if (value === null) {
               return true
             }
@@ -104,6 +114,16 @@ export const updateServicesValidator = validate(
             const isExist = await databaseService.specialties.findOne({_id: new ObjectId(value)})
             if (!isExist) {
               throw new Error(SERVICES_MESSAGE.SPECIALTY_NOT_FOUND)
+            }
+            const isExistSpecialty = await databaseService.specialties.findOne({
+              _id: new ObjectId(value),
+              hospital_id: new ObjectId(req.body.hospital_id)
+            })
+            if (!isExistSpecialty) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.UNPROCESSABLE_ENTITY,
+                message: SERVICES_MESSAGE.SPECIALTY_NOT_BELONG_TO_HOSPITAL
+              })
             }
             return true
           }
