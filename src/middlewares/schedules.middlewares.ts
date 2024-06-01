@@ -227,3 +227,26 @@ export const checkParamsScheduleId = validate(
     ['params']
   )
 )
+export const checkParamsScheduleDoctorId = validate(
+  checkSchema(
+    {
+      doctor_id: {
+        notEmpty: {errorMessage: SCHEDULES_MESSAGE.DOCTOR_ID_IS_REQUIRED},
+        isString: {errorMessage: SCHEDULES_MESSAGE.DOCTOR_ID_MUST_BE_A_STRING},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(SCHEDULES_MESSAGE.INVALID_OBJECT_ID)
+            }
+            const schedule = await databaseService.schedules.findOne({doctor_id: new ObjectId(value)})
+            if (!schedule) {
+              throw new Error(SCHEDULES_MESSAGE.SCHEDULE_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
+  )
+)

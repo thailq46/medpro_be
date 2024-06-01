@@ -28,9 +28,9 @@ export const registerController = async (req: Request<ParamsDictionary, any, Reg
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   const {user} = req as {user: User}
   const user_id = user._id as ObjectId
-  const {verify} = user
+  const {verify, role} = user
   console.log('loginController ~ user', user)
-  const results = await authService.login({user_id: user_id.toString(), verify})
+  const results = await authService.login({user_id: user_id.toString(), verify, role})
   return res.json({
     message: USERS_MESSAGE.LOGIN_SUCCESS,
     data: {...results, role: user.role}
@@ -90,8 +90,8 @@ export const refreshTokenController = async (
   res: Response
 ) => {
   const {refresh_token} = req.body
-  const {user_id, verify, exp} = req.decode_refresh_token as TokenPayload
-  const result = await authService.refreshToken({user_id, verify, refresh_token, exp})
+  const {user_id, verify, exp, role} = req.decode_refresh_token as TokenPayload
+  const result = await authService.refreshToken({user_id, verify, refresh_token, exp, role})
   return res.json({
     message: USERS_MESSAGE.REFRESH_TOKEN_SUCCESS,
     data: result

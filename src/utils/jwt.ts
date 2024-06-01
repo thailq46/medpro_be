@@ -5,6 +5,7 @@ export interface TokenPayload extends jwt.JwtPayload {
   user_id: string
   token_type: string
   verify: number
+  role: number
   exp: number
   iat: number
 }

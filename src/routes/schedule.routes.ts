@@ -2,6 +2,7 @@ import {Router} from 'express'
 import {
   createSchedulesController,
   deleteSchedulesController,
+  getFullSchedulesByDoctorIdController,
   getFullSchedulesController,
   getSchedulesByIdController,
   updateSchedulesController
@@ -9,6 +10,7 @@ import {
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
+  checkParamsScheduleDoctorId,
   checkParamsScheduleId,
   createSchedulesValidator,
   updateSchedulesValidator
@@ -20,7 +22,7 @@ import {wrapRequestHandler} from '~/utils/handlers'
 const schedulesRouter = Router()
 
 /**
- * Desscription: Create new schedules
+ * Description: Create new schedules
  * Path: /schedules/create
  * Method: POST
  * Headers: { Authorization: Bearer <access_token> }
@@ -35,7 +37,7 @@ schedulesRouter.post(
 )
 
 /**
- * Desscription: Update schedules
+ * Description: Update schedules
  * Path: /schedules/update/:id
  * Method: PATCH
  * Headers: { Authorization: Bearer <access_token> }
@@ -53,7 +55,7 @@ schedulesRouter.patch(
 )
 
 /**
- * Desscription: Delete schedules
+ * Description: Delete schedules
  * Path: /schedules/delete/:id
  * Method: DELETE
  * Headers: { Authorization: Bearer <access_token> }
@@ -68,7 +70,21 @@ schedulesRouter.delete(
 )
 
 /**
- * Desscription: Get schedules by id
+ * Description: Get full schedules by doctor_id
+ * Path: /schedules/doctor/:doctor_id
+ * Method: GET
+ * Params: { id: string }
+ * Query: { limit: number, page: number }
+ */
+schedulesRouter.get(
+  '/doctor/:doctor_id',
+  checkParamsScheduleDoctorId,
+  paginationValidator,
+  wrapRequestHandler(getFullSchedulesByDoctorIdController)
+)
+
+/**
+ * Description: Get schedules by id
  * Path: /schedules/:id
  * Method: GET
  * Params: { id: string }
@@ -76,9 +92,10 @@ schedulesRouter.delete(
 schedulesRouter.get('/:id', checkParamsScheduleId, wrapRequestHandler(getSchedulesByIdController))
 
 /**
- * Desscription: Get schedules
+ * Description: Get schedules
  * Path: /schedules
  * Method: GET
+ * Query: { limit: number, page: number, doctor: string, date: string }
  */
 schedulesRouter.get('/', paginationValidator, wrapRequestHandler(getFullSchedulesController))
 export default schedulesRouter

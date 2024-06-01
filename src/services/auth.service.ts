@@ -1,7 +1,7 @@
 import {Response} from 'express'
 import {ObjectId} from 'mongodb'
 import {envConfig} from '~/constants/config'
-import {TokenType, UserVerifyStatus} from '~/constants/enum'
+import {RoleType, TokenType, UserVerifyStatus} from '~/constants/enum'
 import {USERS_MESSAGE} from '~/constants/messages'
 import {RegisterReqBody} from '~/models/request/User.request'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
@@ -12,11 +12,12 @@ import {sendMail} from '~/utils/email'
 import {signToken, verifyToken} from '~/utils/jwt'
 
 class UsersService {
-  private async signAccessToken({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
+  private async signAccessToken({user_id, verify, role}: {user_id: string; verify: UserVerifyStatus; role: RoleType}) {
     return await signToken({
       payload: {
         user_id,
         token_type: TokenType.AccessToken,
+        role,
         verify
       },
       secretOrPrivateKey: envConfig.jwtSecretAccessToken,
@@ -46,8 +47,16 @@ class UsersService {
       options: {expiresIn: envConfig.jwtRefreshTokenExpiresIn}
     })
   }
-  private signAccessTokenAndRefreshToken({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
-    return Promise.all([this.signAccessToken({user_id, verify}), this.signRefreshToken({user_id, verify})])
+  private signAccessTokenAndRefreshToken({
+    user_id,
+    verify,
+    role
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    role: RoleType
+  }) {
+    return Promise.all([this.signAccessToken({user_id, verify, role}), this.signRefreshToken({user_id, verify})])
   }
 
   private decodeRefreshToken(refresh_token: string) {
@@ -99,7 +108,8 @@ class UsersService {
     )
     const [access_token, refresh_token] = await this.signAccessTokenAndRefreshToken({
       user_id: user_id.toString(),
-      verify: UserVerifyStatus.Unverified
+      verify: UserVerifyStatus.Unverified,
+      role: RoleType.User
     })
     const {iat, exp} = await this.decodeRefreshToken(refresh_token)
     await databaseService.refreshTokens.insertOne(
@@ -122,10 +132,11 @@ class UsersService {
     }
   }
 
-  async login({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
+  async login({user_id, verify, role}: {user_id: string; verify: UserVerifyStatus; role: RoleType}) {
     const [access_token, refresh_token] = await this.signAccessTokenAndRefreshToken({
       user_id,
-      verify
+      verify,
+      role
     })
     const {iat, exp} = await this.decodeRefreshToken(refresh_token)
     await databaseService.refreshTokens.insertOne(
@@ -232,15 +243,17 @@ class UsersService {
     user_id,
     verify,
     refresh_token,
-    exp
+    exp,
+    role
   }: {
     user_id: string
     verify: UserVerifyStatus
     refresh_token: string
     exp: number
+    role: RoleType
   }) {
     const [new_access_token, new_refresh_token] = await Promise.all([
-      this.signAccessToken({user_id, verify}),
+      this.signAccessToken({user_id, verify, role}),
       this.signRefreshToken({user_id, verify, exp}),
       databaseService.refreshTokens.deleteOne({token: refresh_token})
     ])

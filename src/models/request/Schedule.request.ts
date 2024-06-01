@@ -13,6 +13,9 @@ export interface UpdateSchedulesReqBody {
 export interface GetSchedulesReqQuery extends ParamsDictionary {
   id: string
 }
+export interface GetSchedulesByDoctorID extends ParamsDictionary {
+  doctor_id: string
+}
 
 export interface QuerySchedules extends Pagination, Query {
   doctor?: string
