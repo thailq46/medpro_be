@@ -1,14 +1,14 @@
 import {Request, Response} from 'express'
-import {DOCTORS_MESSAGE} from '~/constants/messages'
 import {ParamsDictionary} from 'express-serve-static-core'
+import {DOCTORS_MESSAGE} from '~/constants/messages'
 import {
   CreateDoctorsReqBody,
   GetDoctorsParamsReq,
   QueryDoctors,
+  QueryDoctorsBySpecialty,
   UpdateDoctorsReqBody
 } from '~/models/request/Doctor.request'
 import doctorsService from '~/services/doctors.service'
-import {Pagination} from '~/models/request/Common.request'
 import {responseMessage} from '~/utils/common'
 
 export const createDoctorsController = async (
@@ -72,6 +72,20 @@ export const getFullDoctorsController = async (
         total_page: Math.ceil(total / limit),
         limit
       }
+    })
+  )
+}
+
+export const getFullDoctorsBySpecialtyIdController = async (
+  req: Request<ParamsDictionary, any, any, QueryDoctorsBySpecialty>,
+  res: Response
+) => {
+  const {hospital_id, specialty_id} = req.query
+  const doctors = await doctorsService.getFullDoctorsBySpecialtyId({hospital_id, specialty_id})
+  return res.json(
+    responseMessage({
+      message: DOCTORS_MESSAGE.GET_DOCTORS_SUCCESS,
+      data: doctors
     })
   )
 }

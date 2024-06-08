@@ -124,8 +124,9 @@ class DoctorsService {
     position?: number
   }) {
     const searchString = typeof search === 'string' ? search : ''
-    const $match: any = {
-      $or: [{name: {$regex: searchString, $options: 'i'}}]
+    const $match: any = {}
+    if (searchString) {
+      $match.or = [{name: {$regex: searchString, $options: 'i'}}]
     }
     if (position !== undefined && numberEnumToArray(PositionType).includes(position)) {
       $match['position'] = position
@@ -205,6 +206,78 @@ class DoctorsService {
       databaseService.doctors.countDocuments($match)
     ])
     return {doctors, total}
+  }
+
+  async getFullDoctorsBySpecialtyId({hospital_id, specialty_id}: {hospital_id: string; specialty_id: string}) {
+    const result = await databaseService.doctors
+      .aggregate([
+        {
+          $match: {
+            hospital_id: new ObjectId(hospital_id),
+            specialty_id: new ObjectId(specialty_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'doctor_id',
+            foreignField: '_id',
+            as: 'doctor'
+          }
+        },
+        {
+          $lookup: {
+            from: 'specialties',
+            localField: 'specialty_id',
+            foreignField: '_id',
+            as: 'specialty'
+          }
+        },
+        {$unwind: {path: '$specialty'}},
+        {
+          $lookup: {
+            from: 'hospitals',
+            localField: 'specialty.hospital_id',
+            foreignField: '_id',
+            as: 'specialty.hospital'
+          }
+        },
+        {$unwind: {path: '$doctor'}},
+        {$unwind: {path: '$specialty.hospital'}},
+        {
+          $project: {
+            specialty_id: 0,
+            doctor: {
+              _id: 0,
+              password: 0,
+              forgot_password_token: 0,
+              email_verify_token: 0,
+              created_at: 0,
+              updated_at: 0,
+              verify: 0
+            },
+            specialty: {hospital_id: 0}
+          }
+        },
+        {
+          $set: {
+            name: '$doctor.name',
+            email: '$doctor.email',
+            date_of_birth: '$doctor.date_of_birth',
+            gender: '$doctor.gender',
+            address: '$doctor.address',
+            username: '$doctor.username',
+            avatar: '$doctor.avatar',
+            role: '$doctor.role',
+            phone_number: '$doctor.phone_number',
+            position: '$doctor.position'
+          }
+        },
+        {$unset: 'doctor'}
+      ])
+      .toArray()
+
+    return result
   }
 }
 

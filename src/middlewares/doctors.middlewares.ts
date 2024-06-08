@@ -188,3 +188,41 @@ export const checkParamsDoctorsID = validate(
     ['params']
   )
 )
+
+export const queryValidator = validate(
+  checkSchema(
+    {
+      hospital_id: {
+        notEmpty: {errorMessage: DOCTORS_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(DOCTORS_MESSAGE.INVALID_OBJECT_ID)
+            }
+            const isExist = await databaseService.doctors.findOne({hospital_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(DOCTORS_MESSAGE.HOSPITAL_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      },
+      specialty_id: {
+        notEmpty: {errorMessage: DOCTORS_MESSAGE.SPECIALTY_ID_IS_REQUIRED},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(DOCTORS_MESSAGE.INVALID_OBJECT_ID)
+            }
+            const isExist = await databaseService.doctors.findOne({specialty_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(DOCTORS_MESSAGE.SPECIALTY_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['query']
+  )
+)

@@ -3,12 +3,18 @@ import {
   createDoctorsController,
   deleteDoctorsController,
   getDoctorsByIdController,
+  getFullDoctorsBySpecialtyIdController,
   getFullDoctorsController,
   updateDoctorsController
 } from '~/controllers/doctors.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
-import {checkParamsDoctorsID, createDoctorsValidator, updateDoctorsValidator} from '~/middlewares/doctors.middlewares'
+import {
+  checkParamsDoctorsID,
+  createDoctorsValidator,
+  queryValidator,
+  updateDoctorsValidator
+} from '~/middlewares/doctors.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {UpdateDoctorsReqBody} from '~/models/request/Doctor.request'
 import {wrapRequestHandler} from '~/utils/handlers'
@@ -16,7 +22,7 @@ import {wrapRequestHandler} from '~/utils/handlers'
 const doctorsRouter = Router()
 
 /**
- * Desscription: Create information doctors
+ * Description: Create information doctors
  * Path: /doctors/create
  * Method: POST
  * Headers: { Authorization: Bearer <access_token> }
@@ -31,7 +37,7 @@ doctorsRouter.post(
 )
 
 /**
- * Desscription: Update information doctors
+ * Description: Update information doctors
  * Path: /doctors/update/:doctor_id
  * Method: PATCH
  * Headers: { Authorization: Bearer <access_token> }
@@ -49,7 +55,7 @@ doctorsRouter.patch(
 )
 
 /**
- * Desscription: Delete doctors
+ * Description: Delete doctors
  * Path: /doctors/delete/:doctor_id
  * Method: DELETE
  * Headers: { Authorization: Bearer <access_token> }
@@ -64,20 +70,27 @@ doctorsRouter.delete(
 )
 
 /**
- * Desscription: Get doctors by id
+ * Description: Get full doctors by specialty_id and hospital_id
+ * Path: /doctors/specialty
+ * Method: GET
+ * Query: { hospital_id: string, specialty_id: string }
+ */
+doctorsRouter.get('/specialty', queryValidator, wrapRequestHandler(getFullDoctorsBySpecialtyIdController))
+
+/**
+ * Description: Get doctors by id
  * Path: /doctors/:doctor_id
  * Method: GET
- * Headers: { Authorization: Bearer <access_token> }
  * Params: { doctor_id: string }
  */
 doctorsRouter.get('/:doctor_id', checkParamsDoctorsID, wrapRequestHandler(getDoctorsByIdController))
 
 /**
- * Desscription: Get doctors
+ * Description: Get doctors
  * Path: /doctors
  * Method: GET
- * Headers: { Authorization: Bearer <access_token> }
  * Query: { limit: number, page: number }
  */
 doctorsRouter.get('/', paginationValidator, wrapRequestHandler(getFullDoctorsController))
+
 export default doctorsRouter
