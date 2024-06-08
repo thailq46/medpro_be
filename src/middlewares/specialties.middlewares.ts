@@ -82,3 +82,26 @@ export const checkParamsSpecialtyID = validate(
     ['params']
   )
 )
+
+export const checkParamsHospitalId = validate(
+  checkSchema(
+    {
+      hospital_id: {
+        notEmpty: {errorMessage: SPECIALTIES_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(SPECIALTIES_MESSAGE.INVALID_OBJECT_ID)
+            }
+            const isExist = await databaseService.specialties.findOne({hospital_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(SPECIALTIES_MESSAGE.HOSPITAL_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
+  )
+)

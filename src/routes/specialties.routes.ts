@@ -2,6 +2,7 @@ import {Router} from 'express'
 import {
   createSpecialtiesController,
   deleteSpecialtiesController,
+  getFullSpecialtiesByHospitalIdController,
   getFullSpecialtiesController,
   getSpecialtiesByIdController,
   updateSpecialtiesController
@@ -9,6 +10,7 @@ import {
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
+  checkParamsHospitalId,
   checkParamsSpecialtyID,
   createSpecialtiesValidator,
   updateSpecialtiesValidator
@@ -75,4 +77,15 @@ specialtiesRouter.get('/:id', checkParamsSpecialtyID, wrapRequestHandler(getSpec
  * Query: { limit: number, page: number }
  */
 specialtiesRouter.get('/', paginationValidator, wrapRequestHandler(getFullSpecialtiesController))
+
+/**
+ * Desscription: Get full specialties by hospital_id
+ * Path: /specialties/hospital/:hospital_id
+ * Method: GET
+ */
+specialtiesRouter.get(
+  '/hospital/:hospital_id',
+  checkParamsHospitalId,
+  wrapRequestHandler(getFullSpecialtiesByHospitalIdController)
+)
 export default specialtiesRouter

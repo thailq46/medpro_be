@@ -1,14 +1,14 @@
 import {Request, Response} from 'express'
-import {SPECIALTIES_MESSAGE} from '~/constants/messages'
 import {ParamsDictionary} from 'express-serve-static-core'
+import {SPECIALTIES_MESSAGE} from '~/constants/messages'
 import {
   CreateSpecialtiesReqBody,
+  GetHospitalIdParamsReq,
   GetSpecialtiesParamsReq,
   QuerySpecialties,
   UpdateSpecialtiesReqBody
 } from '~/models/request/Specialty.request'
 import specialtiesService from '~/services/specialties.service'
-import {Pagination} from '~/models/request/Common.request'
 import {responseMessage} from '~/utils/common'
 
 export const createSpecialtiesController = async (
@@ -71,6 +71,17 @@ export const getFullSpecialtiesController = async (
         total_items: totalItems,
         total_page: Math.ceil(totalItems / limit)
       }
+    })
+  )
+}
+
+export const getFullSpecialtiesByHospitalIdController = async (req: Request<GetHospitalIdParamsReq>, res: Response) => {
+  const {hospital_id} = req.params
+  const specialties = await specialtiesService.getFullSpecialtiesByHospitalId(hospital_id)
+  return res.json(
+    responseMessage({
+      message: SPECIALTIES_MESSAGE.GET_SPECIALTIES_SUCCESS,
+      data: specialties
     })
   )
 }

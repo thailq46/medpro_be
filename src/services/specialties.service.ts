@@ -1,5 +1,4 @@
 import {ObjectId} from 'mongodb'
-import {Pagination} from '~/models/request/Common.request'
 import {CreateSpecialtiesReqBody, UpdateSpecialtiesReqBody} from '~/models/request/Specialty.request'
 import Specialty from '~/models/schemas/Specialty.schema'
 import databaseService from '~/services/database.service'
@@ -168,6 +167,60 @@ class SpecialtiesService {
       databaseService.specialties.countDocuments($match)
     ])
     return {specialties, totalItems}
+  }
+  async getFullSpecialtiesByHospitalId(hospital_id: string) {
+    const specialty = await databaseService.specialties
+      .aggregate([
+        {$match: {hospital_id: new ObjectId(hospital_id)}},
+        {
+          $lookup: {
+            from: 'hospitals',
+            localField: 'hospital_id',
+            foreignField: '_id',
+            as: 'hospital'
+          }
+        },
+        {$unwind: {path: '$hospital'}},
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'hospital.categoryId',
+            foreignField: '_id',
+            as: 'hospital.category'
+          }
+        },
+        {
+          $lookup: {
+            from: 'medical_booking_forms',
+            localField: 'hospital.booking_forms',
+            foreignField: '_id',
+            as: 'hospital.booking_forms'
+          }
+        },
+        {
+          $addFields: {
+            'hospital.booking_forms': {
+              $map: {
+                input: '$hospital.booking_forms',
+                as: 'item',
+                in: {
+                  name: '$$item.name',
+                  image: '$$item.image'
+                }
+              }
+            }
+          }
+        },
+        {
+          $project: {
+            hospital_id: 0,
+            hospital: {categoryId: 0}
+          }
+        },
+        {$unwind: {path: '$hospital.category'}}
+      ])
+      .toArray()
+    return specialty
   }
 }
 

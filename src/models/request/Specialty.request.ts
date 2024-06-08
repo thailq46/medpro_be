@@ -16,6 +16,9 @@ export interface UpdateSpecialtiesReqBody {
 export interface GetSpecialtiesParamsReq extends ParamsDictionary {
   id: string
 }
+export interface GetHospitalIdParamsReq extends ParamsDictionary {
+  hospital_id: string
+}
 export interface QuerySpecialties extends Pagination, Query {
   hospital?: string
   search?: string
