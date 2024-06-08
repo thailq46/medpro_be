@@ -11,7 +11,7 @@ export const COMMON_MESSAGE = {
   SLUG_NOT_EXCEED_255: 'Slug must not exceed 255 characters',
   DESC_IS_REQUIRED: 'Description is required',
   DESC_MUST_BE_STRING: 'Description must be a string',
-  DESC_NOT_EXCEED_400: 'Description must not exceed 400 characters',
+  DESC_NOT_EXCEED_500: 'Description must not exceed 500 characters',
   SESSION_IS_REQUIRED: 'Session is required',
   SESSION_MUST_BE_STRING: 'Session must be a string',
   SESSION_NOT_EXCEED_255: 'Session must not exceed 255 characters'
@@ -141,6 +141,7 @@ export const MEDIAS_MESSAGE = {
 
 export const HOSPITALS_MESSAGE = {
   CATEGORY_ID_IS_REQUIRED: 'CategoryId is required',
+  SLUG_IS_REQUIRED: 'Slug is required',
   INVALID_CATEGORY_ID: 'Invalid categoryId',
   CATEGORY_NOT_FOUND: 'Category not found',
   NAME_ALREADY_EXIST: 'Name already exist',

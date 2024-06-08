@@ -132,8 +132,8 @@ export const descriptionCheckSchema: ParamSchema = {
   isString: {errorMessage: COMMON_MESSAGE.DESC_MUST_BE_STRING},
   trim: true,
   isLength: {
-    options: {max: 400},
-    errorMessage: COMMON_MESSAGE.DESC_NOT_EXCEED_400
+    options: {max: 500},
+    errorMessage: COMMON_MESSAGE.DESC_NOT_EXCEED_500
   }
 }
 

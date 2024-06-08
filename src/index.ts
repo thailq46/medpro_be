@@ -1,13 +1,13 @@
+import cors from 'cors'
 import express from 'express'
-import {envConfig} from './constants/config'
-import databaseService from './services/database.service'
-import router from './routes/app.routes'
-import {defaultErrorHandler} from './middlewares/error.middlewares'
-import {initFolder} from './utils/file'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
-import cors from 'cors'
-
+import {envConfig} from './constants/config'
+import {defaultErrorHandler} from './middlewares/error.middlewares'
+import router from './routes/app.routes'
+import databaseService from './services/database.service'
+// import './utils/fake'
+import {initFolder} from './utils/file'
 const app = express()
 const port = envConfig.port
 
