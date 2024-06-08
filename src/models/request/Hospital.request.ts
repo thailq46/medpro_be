@@ -35,6 +35,10 @@ export interface UpdateHospitalsReqBody {
 export interface GetHospitalsParamsReq extends ParamsDictionary {
   id: string
 }
+export interface GetHospitalsBySlugParamsReq extends ParamsDictionary {
+  slug: string
+}
 export interface QueryHospitals extends Pagination, Query {
   search?: string
+  types?: string
 }

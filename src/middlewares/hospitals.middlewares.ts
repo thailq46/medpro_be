@@ -308,3 +308,23 @@ export const checkParamsHospitalValidator = validate(
     ['params']
   )
 )
+
+export const checkSlugHospitalValidator = validate(
+  checkSchema(
+    {
+      slug: {
+        notEmpty: {errorMessage: HOSPITALS_MESSAGE.SLUG_IS_REQUIRED},
+        custom: {
+          options: async (value: string) => {
+            const isExist = await databaseService.hospitals.findOne({slug: value})
+            if (!isExist) {
+              throw new Error(HOSPITALS_MESSAGE.HOSPITAL_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
+  )
+)

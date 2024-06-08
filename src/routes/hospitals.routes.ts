@@ -4,13 +4,15 @@ import {
   deleteHospitalController,
   getFullHospitalsController,
   getHospitalsByIdController,
+  getHospitalsBySlugController,
   updateHospitalController
 } from '~/controllers/hospitals.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
-  createHospitalValidator,
   checkParamsHospitalValidator,
+  checkSlugHospitalValidator,
+  createHospitalValidator,
   updateHospitalValidator
 } from '~/middlewares/hospitals.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
@@ -89,6 +91,14 @@ hospitalsRoutes.delete(
  * Params: { id: string }
  */
 hospitalsRoutes.get('/:id', checkParamsHospitalValidator, wrapRequestHandler(getHospitalsByIdController))
+
+/**
+ * Desscription: Get hospitals by slug
+ * Path: /hospitals/slug/:slug
+ * Method: GET
+ * Params: { slug: string }
+ */
+hospitalsRoutes.get('/slug/:slug', checkSlugHospitalValidator, wrapRequestHandler(getHospitalsBySlugController))
 
 /**
  * Desscription: Get full list hospitals
