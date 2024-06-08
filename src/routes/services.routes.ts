@@ -2,6 +2,7 @@ import {Router} from 'express'
 import {
   createServicesController,
   deleteServicesController,
+  getFullServicesByHospitalIdController,
   getFullServicesController,
   getServicesByIdController,
   updateServicesController
@@ -9,6 +10,7 @@ import {
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
+  checkParamsServiceByHospitalID,
   checkParamsServiceID,
   createServicesValidator,
   updateServicesValidator
@@ -73,6 +75,18 @@ servicesRoutes.delete(
   verifiedUserValidator,
   checkParamsServiceID,
   wrapRequestHandler(deleteServicesController)
+)
+
+/**
+ * Desscription: Get full services by hospital_id
+ * Path: /services/hospital/:hospital_id
+ * Method: GET
+ * Params: { hospital_id: string }
+ */
+servicesRoutes.get(
+  '/hospital/:hospital_id',
+  checkParamsServiceByHospitalID,
+  wrapRequestHandler(getFullServicesByHospitalIdController)
 )
 
 /**

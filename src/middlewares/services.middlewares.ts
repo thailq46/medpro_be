@@ -180,3 +180,26 @@ export const checkParamsServiceID = validate(
     ['params']
   )
 )
+
+export const checkParamsServiceByHospitalID = validate(
+  checkSchema(
+    {
+      hospital_id: {
+        notEmpty: {errorMessage: SERVICES_MESSAGE.HOSPITAL_ID_IS_REQUIRED},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(SERVICES_MESSAGE.INVALID_OBJECT_ID)
+            }
+            const isExist = await databaseService.services.findOne({hospital_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(SERVICES_MESSAGE.HOSPITAL_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
+  )
+)

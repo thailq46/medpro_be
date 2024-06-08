@@ -131,6 +131,39 @@ class ServicesService {
     // eslint-disable-next-line no-extra-boolean-cast
     return !!service?.length ? service[0] : null
   }
+  async getFullServicesByHospitalId(hospital_id: string) {
+    const service = await databaseService.services
+      .aggregate([
+        {$match: {hospital_id: new ObjectId(hospital_id)}},
+        {
+          $lookup: {
+            from: 'hospitals',
+            localField: 'hospital_id',
+            foreignField: '_id',
+            as: 'hospital'
+          }
+        },
+        {
+          $lookup: {
+            from: 'specialties',
+            localField: 'specialty_id',
+            foreignField: '_id',
+            as: 'specialty'
+          }
+        },
+        {$unwind: {path: '$hospital'}},
+        {$project: {hospital_id: 0, specialty_id: 0}}
+      ])
+      .toArray()
+      .then((data) => {
+        if (!data) return null
+        data.forEach((service) => {
+          service.specialty.length > 0 ? (service.specialty = service.specialty[0]) : (service.specialty = null)
+        })
+        return data
+      })
+    return service
+  }
 }
 
 const servicesService = new ServicesService()

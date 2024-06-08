@@ -1,9 +1,9 @@
 import {Request, Response} from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {SERVICES_MESSAGE} from '~/constants/messages'
-import {Pagination} from '~/models/request/Common.request'
 import {
   CreateServicesReqBody,
+  GetServicesByHospitalIdParamsReq,
   GetServicesParamsReq,
   QueryServices,
   UpdateServicesReqBody
@@ -73,4 +73,16 @@ export const getServicesByIdController = async (req: Request<GetServicesParamsRe
       data: result
     })
   )
+}
+
+export const getFullServicesByHospitalIdController = async (
+  req: Request<GetServicesByHospitalIdParamsReq>,
+  res: Response
+) => {
+  const {hospital_id} = req.params
+  const services = await servicesService.getFullServicesByHospitalId(hospital_id)
+  return res.json({
+    message: SERVICES_MESSAGE.GET_SERVICES_SUCCESS,
+    data: services
+  })
 }
