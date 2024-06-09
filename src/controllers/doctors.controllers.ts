@@ -80,12 +80,11 @@ export const getFullDoctorsBySpecialtyIdController = async (
   req: Request<ParamsDictionary, any, any, QueryDoctorsBySpecialty>,
   res: Response
 ) => {
-  const {hospital_id, specialty_id} = req.query
-  const doctors = await doctorsService.getFullDoctorsBySpecialtyId({hospital_id, specialty_id})
-  return res.json(
-    responseMessage({
-      message: DOCTORS_MESSAGE.GET_DOCTORS_SUCCESS,
-      data: doctors
-    })
-  )
+  console.log(req.query)
+  const {hospital_id, specialty_id, search} = req.query
+  const doctors = await doctorsService.getFullDoctorsBySpecialtyId({hospital_id, specialty_id, search})
+  return res.json({
+    message: DOCTORS_MESSAGE.GET_DOCTORS_SUCCESS,
+    data: doctors
+  })
 }

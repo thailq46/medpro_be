@@ -29,4 +29,5 @@ export interface QueryDoctors extends Pagination, Query {
 export interface QueryDoctorsBySpecialty extends Query {
   hospital_id: string
   specialty_id: string
+  search?: string
 }
