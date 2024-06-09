@@ -168,10 +168,15 @@ class SpecialtiesService {
     ])
     return {specialties, totalItems}
   }
-  async getFullSpecialtiesByHospitalId(hospital_id: string) {
+  async getFullSpecialtiesByHospitalId({hospital_id, search}: {hospital_id: string; search?: string}) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      hospital_id: new ObjectId(hospital_id),
+      $or: [{name: {$regex: searchString, $options: 'i'}}]
+    }
     const specialty = await databaseService.specialties
       .aggregate([
-        {$match: {hospital_id: new ObjectId(hospital_id)}},
+        {$match},
         {
           $lookup: {
             from: 'hospitals',

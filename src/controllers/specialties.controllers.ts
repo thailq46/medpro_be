@@ -6,6 +6,7 @@ import {
   GetHospitalIdParamsReq,
   GetSpecialtiesParamsReq,
   QuerySpecialties,
+  QuerySpecialtiesByHospitalId,
   UpdateSpecialtiesReqBody
 } from '~/models/request/Specialty.request'
 import specialtiesService from '~/services/specialties.service'
@@ -75,13 +76,15 @@ export const getFullSpecialtiesController = async (
   )
 }
 
-export const getFullSpecialtiesByHospitalIdController = async (req: Request<GetHospitalIdParamsReq>, res: Response) => {
+export const getFullSpecialtiesByHospitalIdController = async (
+  req: Request<GetHospitalIdParamsReq, any, any, QuerySpecialtiesByHospitalId>,
+  res: Response
+) => {
+  const {search} = req.query
   const {hospital_id} = req.params
-  const specialties = await specialtiesService.getFullSpecialtiesByHospitalId(hospital_id)
-  return res.json(
-    responseMessage({
-      message: SPECIALTIES_MESSAGE.GET_SPECIALTIES_SUCCESS,
-      data: specialties
-    })
-  )
+  const specialties = await specialtiesService.getFullSpecialtiesByHospitalId({hospital_id, search})
+  return res.json({
+    message: SPECIALTIES_MESSAGE.GET_SPECIALTIES_SUCCESS,
+    data: specialties
+  })
 }

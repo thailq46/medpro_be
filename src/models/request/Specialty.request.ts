@@ -23,3 +23,6 @@ export interface QuerySpecialties extends Pagination, Query {
   hospital?: string
   search?: string
 }
+export interface QuerySpecialtiesByHospitalId extends Query {
+  search?: string
+}
