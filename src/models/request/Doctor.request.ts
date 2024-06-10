@@ -33,3 +33,9 @@ export interface QueryDoctorsBySpecialty extends Query {
   gender?: string
   position?: string
 }
+export interface QueryDoctorsByHospital extends Query {
+  search?: string
+  gender?: string
+  position?: string
+  specialty_id?: string
+}

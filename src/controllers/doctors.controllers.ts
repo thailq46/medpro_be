@@ -5,6 +5,7 @@ import {
   CreateDoctorsReqBody,
   GetDoctorsParamsReq,
   QueryDoctors,
+  QueryDoctorsByHospital,
   QueryDoctorsBySpecialty,
   UpdateDoctorsReqBody
 } from '~/models/request/Doctor.request'
@@ -95,9 +96,16 @@ export const getFullDoctorsBySpecialtyIdController = async (
   })
 }
 
-export const getFullDoctorsByHospitalIdController = async (req: Request<GetDoctorsParamsReq>, res: Response) => {
+export const getFullDoctorsByHospitalIdController = async (
+  req: Request<GetDoctorsParamsReq, any, any, QueryDoctorsByHospital>,
+  res: Response
+) => {
   const {hospital_id} = req.params
-  const doctors = await doctorsService.getFullDoctorsByHospitalId({hospital_id})
+  const {gender: genderQuery, position: positionQuery, search, specialty_id} = req.query
+  const gender = genderQuery === 'null' || genderQuery === '' ? undefined : Number(genderQuery)
+  const position = positionQuery === 'null' || positionQuery === '' ? undefined : Number(positionQuery)
+  const specialtyId = specialty_id === 'null' || specialty_id === '' ? undefined : specialty_id
+  const doctors = await doctorsService.getFullDoctorsByHospitalId({hospital_id, search, gender, position, specialtyId})
   return res.json({
     message: DOCTORS_MESSAGE.GET_DOCTORS_SUCCESS,
     data: doctors

@@ -299,10 +299,37 @@ class DoctorsService {
       .toArray()
     return result
   }
-  async getFullDoctorsByHospitalId({hospital_id}: {hospital_id: string}) {
+  async getFullDoctorsByHospitalId({
+    hospital_id,
+    search,
+    gender,
+    position,
+    specialtyId
+  }: {
+    hospital_id: string
+    search?: string
+    gender?: number
+    position?: number
+    specialtyId?: string
+  }) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {
+      hospital_id: new ObjectId(hospital_id)
+    }
+    if (searchString) {
+      $match.$or = [{name: {$regex: searchString, $options: 'i'}}]
+    }
+    if (gender !== undefined && numberEnumToArray(GenderType).includes(gender)) {
+      $match['gender'] = gender
+    }
+    if (position !== undefined && numberEnumToArray(PositionDoctorType).includes(position)) {
+      $match['position'] = position
+    }
+    if (specialtyId && ObjectId.isValid(specialtyId)) {
+      $match['specialty._id'] = new ObjectId(specialtyId)
+    }
     const result = await databaseService.doctors
       .aggregate([
-        {$match: {hospital_id: new ObjectId(hospital_id)}},
         {
           $lookup: {
             from: 'users',
@@ -359,7 +386,8 @@ class DoctorsService {
             position: '$doctor.position'
           }
         },
-        {$unset: 'doctor'}
+        {$unset: 'doctor'},
+        {$match}
       ])
       .toArray()
     return result
