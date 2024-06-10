@@ -184,7 +184,9 @@ export const SERVICES_MESSAGE = {
   UPDATE_SERVICES_SUCCESS: 'Update services successfully',
   DELETE_SERVICES_SUCCESS: 'Delete services successfully',
   GET_SERVICES_SUCCESS: 'Get services successfully',
-  SPECIALTY_NOT_BELONG_TO_HOSPITAL: 'Specialty not belong to hospital'
+  SPECIALTY_NOT_BELONG_TO_HOSPITAL: 'Specialty not belong to hospital',
+  TYPE_IS_REQUIRED: 'Type is required',
+  TYPE_MUST_BE_STRING: 'Type must be a string'
 }
 
 export const SPECIALTIES_MESSAGE = {

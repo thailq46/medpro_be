@@ -57,7 +57,8 @@ servicesRoutes.patch(
     'note',
     'price',
     'session',
-    'specialty_id'
+    'specialty_id',
+    'type'
   ]),
   wrapRequestHandler(updateServicesController)
 )

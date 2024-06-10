@@ -77,7 +77,12 @@ export const createServicesValidator = validate(
           }
         }
       },
-      session: sessionCheckSchema
+      session: sessionCheckSchema,
+      type: {
+        notEmpty: {errorMessage: SERVICES_MESSAGE.TYPE_IS_REQUIRED},
+        isString: {errorMessage: SERVICES_MESSAGE.TYPE_MUST_BE_STRING},
+        trim: true
+      }
     },
     ['body']
   )
@@ -152,7 +157,13 @@ export const updateServicesValidator = validate(
           }
         }
       },
-      session: {optional: true, ...sessionCheckSchema}
+      session: {optional: true, ...sessionCheckSchema},
+      type: {
+        optional: true,
+        notEmpty: {errorMessage: SERVICES_MESSAGE.TYPE_IS_REQUIRED},
+        isString: {errorMessage: SERVICES_MESSAGE.TYPE_MUST_BE_STRING},
+        trim: true
+      }
     },
     ['body']
   )

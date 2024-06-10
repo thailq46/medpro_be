@@ -10,6 +10,7 @@ export interface CreateServicesReqBody {
   note: string | null
   price: number
   session: string
+  type: string
 }
 export interface UpdateServicesReqBody {
   hospital_id?: string
@@ -19,6 +20,7 @@ export interface UpdateServicesReqBody {
   note?: string | null
   price?: number
   session?: string
+  type?: string
 }
 export interface GetServicesParamsReq extends ParamsDictionary {
   id: string

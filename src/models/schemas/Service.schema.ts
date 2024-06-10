@@ -9,6 +9,7 @@ interface ServicesType {
   note: string | null
   price: number
   session: string
+  type: string
   created_at?: Date
   updated_at?: Date
 }
@@ -22,6 +23,7 @@ export default class Service {
   note: string | null
   price: number
   session: string
+  type: string
   created_at: Date
   updated_at: Date
   constructor({
@@ -33,6 +35,7 @@ export default class Service {
     specialty_id,
     note,
     _id,
+    type,
     created_at,
     updated_at
   }: ServicesType) {
@@ -45,6 +48,7 @@ export default class Service {
     this.specialty_id = specialty_id || null
     this.note = note || null
     this.session = session
+    this.type = type
     this.created_at = created_at || date
     this.updated_at = updated_at || date
   }
