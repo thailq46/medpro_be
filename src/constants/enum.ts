@@ -17,6 +17,13 @@ export enum PositionType {
   Professor = 4 // Giáo sư
 }
 
+export enum PositionDoctorType {
+  Master = 1, // Thạc sĩ
+  Doctor = 2, // Tiến sĩ
+  AssociateProfessor = 3, // Phó giáo sư
+  Professor = 4 // Giáo sư
+}
+
 export enum UserVerifyStatus {
   Unverified = 0, // chưa xác thực email, mặc định = 0
   Verified = 1, // đã xác thực emails

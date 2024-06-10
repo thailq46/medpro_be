@@ -30,4 +30,6 @@ export interface QueryDoctorsBySpecialty extends Query {
   hospital_id: string
   specialty_id: string
   search?: string
+  gender?: string
+  position?: string
 }

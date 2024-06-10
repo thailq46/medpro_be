@@ -81,8 +81,16 @@ export const getFullDoctorsBySpecialtyIdController = async (
   res: Response
 ) => {
   console.log(req.query)
-  const {hospital_id, specialty_id, search} = req.query
-  const doctors = await doctorsService.getFullDoctorsBySpecialtyId({hospital_id, specialty_id, search})
+  const {hospital_id, specialty_id, search, gender: genderQuery, position: positionQuery} = req.query
+  const gender = genderQuery === 'null' ? undefined : Number(genderQuery)
+  const position = positionQuery === 'null' ? undefined : Number(positionQuery)
+  const doctors = await doctorsService.getFullDoctorsBySpecialtyId({
+    hospital_id,
+    specialty_id,
+    search,
+    gender,
+    position
+  })
   return res.json({
     message: DOCTORS_MESSAGE.GET_DOCTORS_SUCCESS,
     data: doctors

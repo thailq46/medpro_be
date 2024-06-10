@@ -1,5 +1,5 @@
 import {ObjectId} from 'mongodb'
-import {PositionType} from '~/constants/enum'
+import {GenderType, PositionDoctorType, PositionType} from '~/constants/enum'
 import {CreateDoctorsReqBody, UpdateDoctorsReqBody} from '~/models/request/Doctor.request'
 import Doctor from '~/models/schemas/Doctor.schema'
 import databaseService from '~/services/database.service'
@@ -211,11 +211,15 @@ class DoctorsService {
   async getFullDoctorsBySpecialtyId({
     hospital_id,
     specialty_id,
-    search
+    search,
+    gender,
+    position
   }: {
     hospital_id: string
     specialty_id: string
     search?: string
+    gender?: number
+    position?: number
   }) {
     const searchString = typeof search === 'string' ? search : ''
     const $match: any = {
@@ -224,6 +228,12 @@ class DoctorsService {
     }
     if (searchString) {
       $match.$or = [{name: {$regex: searchString, $options: 'i'}}]
+    }
+    if (gender && gender !== undefined && numberEnumToArray(GenderType).includes(gender)) {
+      $match['gender'] = gender
+    }
+    if (position && position !== undefined && numberEnumToArray(PositionDoctorType).includes(position)) {
+      $match['position'] = position
     }
     const result = await databaseService.doctors
       .aggregate([
