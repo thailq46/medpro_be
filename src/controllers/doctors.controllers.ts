@@ -56,7 +56,6 @@ export const getFullDoctorsController = async (
   req: Request<ParamsDictionary, any, any, QueryDoctors>,
   res: Response
 ) => {
-  console.log(req.query)
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
   const position = Number(req.query.position)
@@ -80,10 +79,9 @@ export const getFullDoctorsBySpecialtyIdController = async (
   req: Request<ParamsDictionary, any, any, QueryDoctorsBySpecialty>,
   res: Response
 ) => {
-  console.log(req.query)
   const {hospital_id, specialty_id, search, gender: genderQuery, position: positionQuery} = req.query
-  const gender = genderQuery === 'null' ? undefined : Number(genderQuery)
-  const position = positionQuery === 'null' ? undefined : Number(positionQuery)
+  const gender = genderQuery === 'null' || genderQuery === '' ? undefined : Number(genderQuery)
+  const position = positionQuery === 'null' || positionQuery === '' ? undefined : Number(positionQuery)
   const doctors = await doctorsService.getFullDoctorsBySpecialtyId({
     hospital_id,
     specialty_id,
@@ -91,6 +89,15 @@ export const getFullDoctorsBySpecialtyIdController = async (
     gender,
     position
   })
+  return res.json({
+    message: DOCTORS_MESSAGE.GET_DOCTORS_SUCCESS,
+    data: doctors
+  })
+}
+
+export const getFullDoctorsByHospitalIdController = async (req: Request<GetDoctorsParamsReq>, res: Response) => {
+  const {hospital_id} = req.params
+  const doctors = await doctorsService.getFullDoctorsByHospitalId({hospital_id})
   return res.json({
     message: DOCTORS_MESSAGE.GET_DOCTORS_SUCCESS,
     data: doctors

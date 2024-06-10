@@ -3,6 +3,7 @@ import {
   createDoctorsController,
   deleteDoctorsController,
   getDoctorsByIdController,
+  getFullDoctorsByHospitalIdController,
   getFullDoctorsBySpecialtyIdController,
   getFullDoctorsController,
   updateDoctorsController
@@ -10,6 +11,7 @@ import {
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {filterMiddleware, isUserLoggedInValidator, paginationValidator} from '~/middlewares/common.middlewares'
 import {
+  checkParamsDoctorByHospitalId,
   checkParamsDoctorsID,
   createDoctorsValidator,
   queryValidator,
@@ -76,6 +78,18 @@ doctorsRouter.delete(
  * Query: { hospital_id: string, specialty_id: string }
  */
 doctorsRouter.get('/specialty', queryValidator, wrapRequestHandler(getFullDoctorsBySpecialtyIdController))
+
+/**
+ * Description: Get full doctors by hospital_id
+ * Path: /doctors/hospital_id/:hospital_id
+ * Method: GET
+ * Params: { hospital_id: string }
+ */
+doctorsRouter.get(
+  '/hospital/:hospital_id',
+  checkParamsDoctorByHospitalId,
+  wrapRequestHandler(getFullDoctorsByHospitalIdController)
+)
 
 /**
  * Description: Get doctors by id
