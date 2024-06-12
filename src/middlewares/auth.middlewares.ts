@@ -1,26 +1,26 @@
-import {checkSchema} from 'express-validator'
-import {USERS_MESSAGE} from '~/constants/messages'
-import usersService from '~/services/auth.service'
-import validate from '~/utils/validate'
-import {
-  nameCheckSchema,
-  emailCheckSchema,
-  dateOfBirthCheckSchema,
-  passwordCheckSchema,
-  genderCheckSchema,
-  confirmPasswordCheckSchema
-} from '~/constants/checkSchema'
-import {ErrorWithStatus} from '~/models/Errors'
-import HTTP_STATUS from '~/constants/httpStatus'
-import databaseService from '~/services/database.service'
-import {hashPassword} from '~/utils/crypto'
 import {Request} from 'express'
-import {verifyAccessToken} from '~/utils/common'
-import {envConfig} from '~/constants/config'
-import {TokenPayload, verifyToken} from '~/utils/jwt'
-import {ObjectId} from 'mongodb'
+import {checkSchema} from 'express-validator'
 import {JsonWebTokenError} from 'jsonwebtoken'
 import {capitalize} from 'lodash'
+import {ObjectId} from 'mongodb'
+import {
+  confirmPasswordCheckSchema,
+  dateOfBirthCheckSchema,
+  emailCheckSchema,
+  genderCheckSchema,
+  nameCheckSchema,
+  passwordCheckSchema
+} from '~/constants/checkSchema'
+import {envConfig} from '~/constants/config'
+import HTTP_STATUS from '~/constants/httpStatus'
+import {USERS_MESSAGE} from '~/constants/messages'
+import {ErrorWithStatus} from '~/models/Errors'
+import usersService from '~/services/auth.service'
+import databaseService from '~/services/database.service'
+import {verifyAccessToken} from '~/utils/common'
+import {hashPassword} from '~/utils/crypto'
+import {TokenPayload, verifyToken} from '~/utils/jwt'
+import validate from '~/utils/validate'
 
 export const registerValidator = validate(
   checkSchema(
@@ -167,7 +167,7 @@ export const forgotPasswordValidator = validate(
             const user = await databaseService.users.findOne({email: value})
             if (!user) {
               throw new ErrorWithStatus({
-                status: HTTP_STATUS.UNAUTHORIZED,
+                status: HTTP_STATUS.NOT_FOUND,
                 message: USERS_MESSAGE.EMAIL_DOES_NOT_EXIST
               })
             }

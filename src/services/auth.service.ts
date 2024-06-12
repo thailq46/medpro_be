@@ -158,6 +158,10 @@ class UsersService {
   }
 
   async forgotPassword({user_id, verify}: {user_id: string; verify: UserVerifyStatus}) {
+    const user = await databaseService.users.findOne({_id: new ObjectId(user_id)})
+    if (!user) {
+      return {message: USERS_MESSAGE.USER_NOT_FOUND}
+    }
     const forgot_password_token = await this.signForgotPasswordToken({user_id, verify})
     await databaseService.users.updateOne(
       {
@@ -167,9 +171,12 @@ class UsersService {
     )
     // Giả bộ gửi email kèm đường link đến email người dùng: https://example.com/reset-password?token=<forgot_password_token>
     console.log('forgot_password_token', forgot_password_token)
-    return {
-      message: USERS_MESSAGE.CHECK_EMAIL_TO_RESET_PASSWORD
-    }
+    await sendMail({
+      to: user.email,
+      subject: 'Verify forgot password',
+      htmlContent: `<a href="${envConfig.clientUrl}/verify-forgot-password?token=${forgot_password_token}">Verify forgot password nek</a>`
+    })
+    return {message: USERS_MESSAGE.CHECK_EMAIL_TO_RESET_PASSWORD}
   }
 
   async resetPassword({user_id, password}: {user_id: string; password: string}) {
@@ -231,7 +238,7 @@ class UsersService {
     await sendMail({
       to: user.email,
       subject: 'Verify email',
-      htmlContent: `<a href="http://localhost:${envConfig.port}/verify-email?token=${email_verify_token}"> Verify Email nek</a>`
+      htmlContent: `<a href="${envConfig.clientUrl}/verify-email?token=${email_verify_token}"> Verify Email nek</a>`
     })
     return res.json({
       message: USERS_MESSAGE.RESEND_EMAIL_VERIFY_SUCCESS
