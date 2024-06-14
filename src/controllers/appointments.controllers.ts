@@ -5,6 +5,7 @@ import {
   CreateAppointmentsReqBody,
   DeleteAppointmentReqParams,
   GetAppointmentByDoctorIdReqParams,
+  QueryAppointment,
   QueryAppointmentByDoctorId
 } from '~/models/request/Appointment.request'
 import appointmentService from '~/services/appointment.service'
@@ -24,12 +25,25 @@ export const deleteAppointmentsController = async (req: Request<DeleteAppointmen
   return res.json({message: APPOINTMENTS_MESSAGE.DELETE_SUCCESS})
 }
 
-export const getFullAppointmentsController = async (req: Request, res: Response) => {
-  const result = await appointmentService.getFullAppointments()
-  return res.json({
-    message: APPOINTMENTS_MESSAGE.GET_SUCCESS,
-    data: result
-  })
+export const getFullAppointmentsController = async (
+  req: Request<ParamsDictionary, any, any, QueryAppointment>,
+  res: Response
+) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const {appointments, totalItems} = await appointmentService.getFullAppointments({limit, page})
+  return res.json(
+    responseMessage({
+      message: APPOINTMENTS_MESSAGE.GET_SUCCESS,
+      data: appointments,
+      meta: {
+        total_page: Math.ceil(totalItems / limit),
+        limit,
+        current_page: page,
+        total_items: totalItems
+      }
+    })
+  )
 }
 
 export const getAppointmentByDoctorIdController = async (

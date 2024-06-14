@@ -24,6 +24,7 @@ export interface DeleteAppointmentReqParams extends ParamsDictionary {
 export interface GetAppointmentByDoctorIdReqParams extends ParamsDictionary {
   doctor_id: string
 }
+export interface QueryAppointment extends Pagination, Query {}
 export interface QueryAppointmentByDoctorId extends Pagination, Query {
   search?: string
   date?: string

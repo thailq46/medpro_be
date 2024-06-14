@@ -64,5 +64,5 @@ appointmentsRouter.get(
  * Path: /appointments
  * Method: GET
  */
-appointmentsRouter.get('/', wrapRequestHandler(getFullAppointmentsController))
+appointmentsRouter.get('/', paginationValidator, wrapRequestHandler(getFullAppointmentsController))
 export default appointmentsRouter
