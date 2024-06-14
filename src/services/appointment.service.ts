@@ -15,6 +15,10 @@ class AppointmentService {
     )
   }
 
+  async deleteAppointment(id: string) {
+    return await databaseService.appointments.deleteOne({_id: new ObjectId(id)})
+  }
+
   async getFullAppointments() {
     const appointments = await databaseService.appointments
       .aggregate([

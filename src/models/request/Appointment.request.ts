@@ -1,3 +1,5 @@
+import {ParamsDictionary} from 'express-serve-static-core'
+
 export interface CreateAppointmentsReqBody {
   doctor_id: string
   patient_id: string
@@ -14,4 +16,7 @@ export interface CreateAppointmentsReqBody {
   reason: string
   status: boolean
   isPayment: boolean
+}
+export interface DeleteAppointmentReqParams extends ParamsDictionary {
+  id: string
 }

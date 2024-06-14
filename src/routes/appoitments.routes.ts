@@ -1,6 +1,10 @@
 import {Router} from 'express'
-import {createAppointmentsController, getFullAppointmentsController} from '~/controllers/appointments.controllers'
-import {createAppointmentsValidator} from '~/middlewares/appointments.middlewares'
+import {
+  createAppointmentsController,
+  deleteAppointmentsController,
+  getFullAppointmentsController
+} from '~/controllers/appointments.controllers'
+import {checkParamsAppointmentId, createAppointmentsValidator} from '~/middlewares/appointments.middlewares'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {wrapRequestHandler} from '~/utils/handlers'
@@ -20,6 +24,21 @@ appointmentsRouter.post(
   verifiedUserValidator,
   createAppointmentsValidator,
   wrapRequestHandler(createAppointmentsController)
+)
+
+/**
+ * Desscription: Delete an appointment
+ * Path: /appointments/delete/id
+ * Method: DELETE
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { id: string }
+ */
+appointmentsRouter.delete(
+  '/delete/:id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  checkParamsAppointmentId,
+  wrapRequestHandler(deleteAppointmentsController)
 )
 
 appointmentsRouter.get('/', wrapRequestHandler(getFullAppointmentsController))
