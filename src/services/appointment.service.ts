@@ -68,6 +68,82 @@ class AppointmentService {
       .toArray()
     return appointments
   }
+
+  async getAppointmentByDoctorId({
+    doctor_id,
+    limit,
+    page,
+    search,
+    date
+  }: {
+    doctor_id: string
+    limit: number
+    page: number
+    search?: string
+    date?: string
+  }) {
+    const searchString = typeof search === 'string' ? search : ''
+    const $match: any = {doctor_id: new ObjectId(doctor_id)}
+    if (searchString) {
+      $match.$or = [{fullname: {$regex: searchString, $options: 'i'}}]
+    }
+    if (date) {
+      $match.date = date
+    }
+    const [appointments, totalItems] = await Promise.all([
+      databaseService.appointments
+        .aggregate([
+          {$match},
+          {
+            $lookup: {
+              from: 'doctors',
+              localField: 'doctor_id',
+              foreignField: 'doctor_id',
+              as: 'doctor'
+            }
+          },
+          {
+            $lookup: {
+              from: 'services',
+              localField: 'service_id',
+              foreignField: '_id',
+              as: 'service'
+            }
+          },
+          {$unwind: {path: '$doctor'}},
+          {$unwind: {path: '$service'}},
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'doctor.doctor_id',
+              foreignField: '_id',
+              as: 'doctor.result'
+            }
+          },
+          {$unwind: {path: '$doctor.result'}},
+          {
+            $set: {
+              'doctor.name': '$doctor.result.name',
+              'doctor.email': '$doctor.result.email',
+              'doctor.data_of_birth': '$doctor.result.data_of_birth',
+              'doctor.gender': '$doctor.result.gender',
+              'doctor.address': '$doctor.result.address',
+              'doctor.username': '$doctor.result.username',
+              'doctor.avatar': '$doctor.result.avatar',
+              'doctor.role': '$doctor.result.role',
+              'doctor.phone_number': '$doctor.result.phone_number',
+              'doctor.position': '$doctor.result.position'
+            }
+          },
+          {$unset: 'doctor.result'},
+          {$skip: limit * (page - 1)},
+          {$limit: limit}
+        ])
+        .toArray(),
+      databaseService.appointments.countDocuments($match)
+    ])
+    return {appointments, totalItems}
+  }
 }
 const appointmentService = new AppointmentService()
 export default appointmentService

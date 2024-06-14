@@ -171,3 +171,26 @@ export const checkParamsAppointmentId = validate(
     ['params']
   )
 )
+
+export const checkParamsAppointmentByDoctorId = validate(
+  checkSchema(
+    {
+      doctor_id: {
+        notEmpty: {errorMessage: APPOINTMENTS_MESSAGE.DOCTOR_ID_REQUIRED},
+        custom: {
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              throw new Error(APPOINTMENTS_MESSAGE.INVALID_OBJECT_ID)
+            }
+            const isExist = await databaseService.appointments.findOne({doctor_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(APPOINTMENTS_MESSAGE.APPOINTMENT_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
+  )
+)

@@ -2,10 +2,16 @@ import {Router} from 'express'
 import {
   createAppointmentsController,
   deleteAppointmentsController,
+  getAppointmentByDoctorIdController,
   getFullAppointmentsController
 } from '~/controllers/appointments.controllers'
-import {checkParamsAppointmentId, createAppointmentsValidator} from '~/middlewares/appointments.middlewares'
+import {
+  checkParamsAppointmentByDoctorId,
+  checkParamsAppointmentId,
+  createAppointmentsValidator
+} from '~/middlewares/appointments.middlewares'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
+import {paginationValidator} from '~/middlewares/common.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {wrapRequestHandler} from '~/utils/handlers'
 
@@ -28,7 +34,7 @@ appointmentsRouter.post(
 
 /**
  * Desscription: Delete an appointment
- * Path: /appointments/delete/id
+ * Path: /appointments/delete/:id
  * Method: DELETE
  * Headers: { Authorization: Bearer <access_token> }
  * Params: { id: string }
@@ -40,6 +46,23 @@ appointmentsRouter.delete(
   checkParamsAppointmentId,
   wrapRequestHandler(deleteAppointmentsController)
 )
+/**
+ * Desscription: Get all appointments of a doctor
+ * Path: /appointments/doctor/:doctor_id
+ * Method: GET
+ * Params: { doctor_id: string }
+ */
+appointmentsRouter.get(
+  '/doctor/:doctor_id',
+  paginationValidator,
+  checkParamsAppointmentByDoctorId,
+  wrapRequestHandler(getAppointmentByDoctorIdController)
+)
 
+/**
+ * Desscription: Get all appointments
+ * Path: /appointments
+ * Method: GET
+ */
 appointmentsRouter.get('/', wrapRequestHandler(getFullAppointmentsController))
 export default appointmentsRouter

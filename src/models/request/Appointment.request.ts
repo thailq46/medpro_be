@@ -1,4 +1,5 @@
-import {ParamsDictionary} from 'express-serve-static-core'
+import {ParamsDictionary, Query} from 'express-serve-static-core'
+import {Pagination} from '~/models/request/Common.request'
 
 export interface CreateAppointmentsReqBody {
   doctor_id: string
@@ -19,4 +20,11 @@ export interface CreateAppointmentsReqBody {
 }
 export interface DeleteAppointmentReqParams extends ParamsDictionary {
   id: string
+}
+export interface GetAppointmentByDoctorIdReqParams extends ParamsDictionary {
+  doctor_id: string
+}
+export interface QueryAppointmentByDoctorId extends Pagination, Query {
+  search?: string
+  date?: string
 }
