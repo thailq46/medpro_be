@@ -255,3 +255,26 @@ export const SCHEDULES_MESSAGE = {
   GET_SCHEDULES_SUCCESSFULLY: 'Get schedules successfully',
   DOCTOR_NOT_BELONG_TO_HOSPITAL: 'Doctor not belong to hospital'
 }
+
+export const APPOINTMENTS_MESSAGE = {
+  DOCTOR_ID_REQUIRED: 'Doctor id is required',
+  DOCTOR_NOT_FOUND: 'Doctor not found',
+  PATIENT_ID_REQUIRED: 'Patient id is required',
+  PATIENT_NOT_FOUND: 'Patient not found',
+  INVALID_OBJECT_ID: 'Invalid ObjectId',
+  SERVICE_ID_REQUIRED: 'Service id is required',
+  SERVICE_NOT_FOUND: 'Service not found',
+  DATE_REQUIRED: 'Date is required',
+  DATE_MUST_BE_STRING: 'Date must be a string',
+  TIME_REQUIRED: 'Time is required',
+  TIME_MUST_BE_STRING: 'Time must be a string',
+  REASON_REQUIRED: 'Reason is required',
+  REASON_MUST_BE_STRING: 'Reason must be a string',
+  REASON_NOT_EXCEED_500: 'Reason must not exceed 500 characters',
+  STATUS_REQUIRED: 'Status is required',
+  STATUS_MUST_BE_BOOLEAN: 'Status must be a boolean',
+  IS_PAYMENT_REQUIRED: 'Is payment is required',
+  IS_PAYMENT_MUST_BE_BOOLEAN: 'Is payment must be a boolean',
+  CREATE_SUCCESS: 'Create appointment successfully',
+  IS_BOOKED: 'You have already booked an appointment, please choose another service or select a different date'
+}

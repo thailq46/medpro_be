@@ -1,4 +1,5 @@
 import {Express} from 'express-serve-static-core'
+import appointmentsRouter from '~/routes/appoitments.routes'
 import authRouter from '~/routes/auth.routes'
 import categoriesRouter from '~/routes/categories.routes'
 import doctorsRouter from '~/routes/doctors.routes'
@@ -25,6 +26,7 @@ function router(app: Express) {
   app.use('/doctors', doctorsRouter)
   app.use('/schedules', schedulesRouter)
   app.use('/search', searchRouter)
+  app.use('/appointments', appointmentsRouter)
 }
 
 export default router

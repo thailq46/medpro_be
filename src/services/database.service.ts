@@ -1,5 +1,6 @@
 import {Collection, Db, MongoClient} from 'mongodb'
 import {envConfig} from '~/constants/config'
+import Appointment from '~/models/schemas/Appointment.schema'
 import Category from '~/models/schemas/Category.schema'
 import Doctor from '~/models/schemas/Doctor.schema'
 import Hospital from '~/models/schemas/Hospital.schema'
@@ -151,6 +152,9 @@ class DatabaseService {
   }
   get schedules(): Collection<Schedule> {
     return this.db.collection(envConfig.dbSchedulesCollection)
+  }
+  get appointments(): Collection<Appointment> {
+    return this.db.collection(envConfig.dbAppointmentsCollection)
   }
 }
 
