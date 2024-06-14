@@ -276,5 +276,6 @@ export const APPOINTMENTS_MESSAGE = {
   IS_PAYMENT_REQUIRED: 'Is payment is required',
   IS_PAYMENT_MUST_BE_BOOLEAN: 'Is payment must be a boolean',
   CREATE_SUCCESS: 'Create appointment successfully',
-  IS_BOOKED: 'You have already booked an appointment, please choose another service or select a different date'
+  IS_BOOKED: 'You have already booked an appointment, please choose another service or select a different date',
+  GET_SUCCESS: 'Get appointments successfully'
 }
