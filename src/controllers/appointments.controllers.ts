@@ -6,7 +6,8 @@ import {
   DeleteAppointmentReqParams,
   GetAppointmentByDoctorIdReqParams,
   QueryAppointment,
-  QueryAppointmentByDoctorId
+  QueryAppointmentByDoctorId,
+  UpdateAppointment
 } from '~/models/request/Appointment.request'
 import appointmentService from '~/services/appointment.service'
 import {responseMessage} from '~/utils/common'
@@ -74,4 +75,10 @@ export const getAppointmentByDoctorIdController = async (
       }
     })
   )
+}
+
+export const UpdateStatusAppointmentsController = async (req: Request<UpdateAppointment>, res: Response) => {
+  const {id} = req.params
+  await appointmentService.updateStatusAppointment(id)
+  return res.json({message: APPOINTMENTS_MESSAGE.UPDATE_STATUS_SUCCESS})
 }

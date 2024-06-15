@@ -280,5 +280,6 @@ export const APPOINTMENTS_MESSAGE = {
   GET_SUCCESS: 'Get appointments successfully',
   APPOINTMENT_ID_REQUIRED: 'Appointment id is required',
   APPOINTMENT_NOT_FOUND: 'Appointment not found',
-  DELETE_SUCCESS: 'Delete appointment successfully'
+  DELETE_SUCCESS: 'Delete appointment successfully',
+  UPDATE_STATUS_SUCCESS: 'Update status appointment successfully'
 }

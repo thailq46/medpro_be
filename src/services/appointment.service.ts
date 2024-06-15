@@ -149,6 +149,14 @@ class AppointmentService {
     ])
     return {appointments, totalItems}
   }
+
+  async updateStatusAppointment(id: string) {
+    return await databaseService.appointments.findOneAndUpdate(
+      {_id: new ObjectId(id)},
+      [{$set: {status: true, updated_at: '$$NOW'}}],
+      {returnDocument: 'after'}
+    )
+  }
 }
 const appointmentService = new AppointmentService()
 export default appointmentService

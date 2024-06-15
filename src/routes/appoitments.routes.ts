@@ -1,5 +1,6 @@
 import {Router} from 'express'
 import {
+  UpdateStatusAppointmentsController,
   createAppointmentsController,
   deleteAppointmentsController,
   getAppointmentByDoctorIdController,
@@ -46,6 +47,22 @@ appointmentsRouter.delete(
   checkParamsAppointmentId,
   wrapRequestHandler(deleteAppointmentsController)
 )
+
+/**
+ * Desscription: Update status of an appointment
+ * Path: /appointments/update/status/:id
+ * Method: PATCH
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { id: string }
+ */
+appointmentsRouter.patch(
+  '/update/status/:id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  checkParamsAppointmentId,
+  wrapRequestHandler(UpdateStatusAppointmentsController)
+)
+
 /**
  * Desscription: Get all appointments of a doctor
  * Path: /appointments/doctor/:doctor_id

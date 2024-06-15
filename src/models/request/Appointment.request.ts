@@ -21,6 +21,9 @@ export interface CreateAppointmentsReqBody {
 export interface DeleteAppointmentReqParams extends ParamsDictionary {
   id: string
 }
+export interface UpdateAppointment extends ParamsDictionary {
+  id: string
+}
 export interface GetAppointmentByDoctorIdReqParams extends ParamsDictionary {
   doctor_id: string
 }
