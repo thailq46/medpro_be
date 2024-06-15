@@ -27,6 +27,9 @@ export interface UpdateAppointment extends ParamsDictionary {
 export interface GetAppointmentByDoctorIdReqParams extends ParamsDictionary {
   doctor_id: string
 }
+export interface GetAppointmentByPatientIdReqParams extends ParamsDictionary {
+  patient_id: string
+}
 export interface QueryAppointment extends Pagination, Query {}
 export interface QueryAppointmentByDoctorId extends Pagination, Query {
   search?: string

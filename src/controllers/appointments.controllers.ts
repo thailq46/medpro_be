@@ -5,6 +5,7 @@ import {
   CreateAppointmentsReqBody,
   DeleteAppointmentReqParams,
   GetAppointmentByDoctorIdReqParams,
+  GetAppointmentByPatientIdReqParams,
   QueryAppointment,
   QueryAppointmentByDoctorId,
   UpdateAppointment
@@ -24,6 +25,12 @@ export const deleteAppointmentsController = async (req: Request<DeleteAppointmen
   const {id} = req.params
   await appointmentService.deleteAppointment(id)
   return res.json({message: APPOINTMENTS_MESSAGE.DELETE_SUCCESS})
+}
+
+export const updateStatusAppointmentsController = async (req: Request<UpdateAppointment>, res: Response) => {
+  const {id} = req.params
+  await appointmentService.updateStatusAppointment(id)
+  return res.json({message: APPOINTMENTS_MESSAGE.UPDATE_STATUS_SUCCESS})
 }
 
 export const getFullAppointmentsController = async (
@@ -77,8 +84,11 @@ export const getAppointmentByDoctorIdController = async (
   )
 }
 
-export const UpdateStatusAppointmentsController = async (req: Request<UpdateAppointment>, res: Response) => {
-  const {id} = req.params
-  await appointmentService.updateStatusAppointment(id)
-  return res.json({message: APPOINTMENTS_MESSAGE.UPDATE_STATUS_SUCCESS})
+export const getAppointmentByPatientIdController = async (
+  req: Request<GetAppointmentByPatientIdReqParams>,
+  res: Response
+) => {
+  const {patient_id} = req.params
+  const result = await appointmentService.getAppointmentByPatientId(patient_id)
+  return res.json({message: APPOINTMENTS_MESSAGE.GET_SUCCESS, data: result})
 }

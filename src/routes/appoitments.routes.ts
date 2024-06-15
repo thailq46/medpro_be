@@ -1,13 +1,15 @@
 import {Router} from 'express'
 import {
-  UpdateStatusAppointmentsController,
   createAppointmentsController,
   deleteAppointmentsController,
   getAppointmentByDoctorIdController,
-  getFullAppointmentsController
+  getAppointmentByPatientIdController,
+  getFullAppointmentsController,
+  updateStatusAppointmentsController
 } from '~/controllers/appointments.controllers'
 import {
   checkParamsAppointmentByDoctorId,
+  checkParamsAppointmentByPatientId,
   checkParamsAppointmentId,
   createAppointmentsValidator
 } from '~/middlewares/appointments.middlewares'
@@ -60,7 +62,7 @@ appointmentsRouter.patch(
   accessTokenValidator,
   verifiedUserValidator,
   checkParamsAppointmentId,
-  wrapRequestHandler(UpdateStatusAppointmentsController)
+  wrapRequestHandler(updateStatusAppointmentsController)
 )
 
 /**
@@ -74,6 +76,18 @@ appointmentsRouter.get(
   paginationValidator,
   checkParamsAppointmentByDoctorId,
   wrapRequestHandler(getAppointmentByDoctorIdController)
+)
+
+/**
+ * Desscription: Get all appointments of a patient
+ * Path: /appointments/patient/:patient_id
+ * Method: GET
+ * Params: { patient_id: string }
+ */
+appointmentsRouter.get(
+  '/patient/:patient_id',
+  checkParamsAppointmentByPatientId,
+  wrapRequestHandler(getAppointmentByPatientIdController)
 )
 
 /**
