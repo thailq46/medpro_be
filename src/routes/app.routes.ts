@@ -6,6 +6,7 @@ import doctorsRouter from '~/routes/doctors.routes'
 import hospitalsRouter from '~/routes/hospitals.routes'
 import mediasRouter from '~/routes/medias.routes'
 import medicalBookingFormsRouter from '~/routes/medical-booking-forms.routes'
+import paymentRouter from '~/routes/payment.routes'
 import schedulesRouter from '~/routes/schedule.routes'
 import searchRouter from '~/routes/search.routes'
 import servicesRoutes from '~/routes/services.routes'
@@ -27,6 +28,7 @@ function router(app: Express) {
   app.use('/schedules', schedulesRouter)
   app.use('/search', searchRouter)
   app.use('/appointments', appointmentsRouter)
+  app.use('/payment', paymentRouter)
 }
 
 export default router

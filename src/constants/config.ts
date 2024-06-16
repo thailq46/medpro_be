@@ -67,5 +67,10 @@ export const envConfig = {
   mail_password: process.env.MAIL_PASSWORD as string,
   mail_encryption: process.env.MAIL_ENCRYPTION as string,
   mail_from_address: process.env.MAIL_FROM_ADDRESS as string,
-  mail_from_name: process.env.MAIl_FROM_NAME as string
+  mail_from_name: process.env.MAIl_FROM_NAME as string,
+
+  momo_access_key: process.env.MOMO_ACCESS_KEY as string,
+  momo_secret_key: process.env.MOMO_SECRET_KEY as string,
+  momo_partner_code: process.env.MONO_PARTNER_CODE as string,
+  momo_request_type: process.env.MOMO_REQUEST_TYPE as string
 }
