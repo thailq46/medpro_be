@@ -10,7 +10,8 @@ class AppointmentService {
         ...payload,
         doctor_id: new ObjectId(payload.doctor_id),
         patient_id: new ObjectId(payload.patient_id),
-        service_id: new ObjectId(payload.service_id)
+        service_id: new ObjectId(payload.service_id),
+        order_id: payload.order_id ? payload.order_id : null
       })
     )
   }
@@ -154,6 +155,22 @@ class AppointmentService {
     return await databaseService.appointments.findOneAndUpdate(
       {_id: new ObjectId(id)},
       [{$set: {status: true, updated_at: '$$NOW'}}],
+      {returnDocument: 'after'}
+    )
+  }
+
+  async updateOrderIdAppointment(id: string, order_id: string) {
+    return await databaseService.appointments.findOneAndUpdate(
+      {_id: new ObjectId(id)},
+      [{$set: {order_id, updated_at: '$$NOW'}}],
+      {returnDocument: 'after'}
+    )
+  }
+
+  async updatePaymentAppointment(order_id: string) {
+    return await databaseService.appointments.findOneAndUpdate(
+      {order_id},
+      [{$set: {isPayment: true, updated_at: '$$NOW'}}],
       {returnDocument: 'after'}
     )
   }

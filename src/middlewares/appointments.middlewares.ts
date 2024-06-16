@@ -86,6 +86,11 @@ export const createAppointmentsValidator = validate(
           }
         }
       },
+      order_id: {
+        optional: {options: {nullable: true}},
+        isString: {errorMessage: APPOINTMENTS_MESSAGE.ORDER_ID_MUST_BE_STRING},
+        trim: true
+      },
       address: addressCheckSchema,
       date: {
         notEmpty: {errorMessage: APPOINTMENTS_MESSAGE.DATE_REQUIRED},
@@ -206,6 +211,26 @@ export const checkParamsAppointmentByPatientId = validate(
               throw new Error(APPOINTMENTS_MESSAGE.INVALID_OBJECT_ID)
             }
             const isExist = await databaseService.appointments.findOne({patient_id: new ObjectId(value)})
+            if (!isExist) {
+              throw new Error(APPOINTMENTS_MESSAGE.APPOINTMENT_NOT_FOUND)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params']
+  )
+)
+
+export const checkParamsAppointmentByOrderId = validate(
+  checkSchema(
+    {
+      order_id: {
+        notEmpty: {errorMessage: APPOINTMENTS_MESSAGE.ORDER_ID_REQUIRED},
+        custom: {
+          options: async (value: string) => {
+            const isExist = await databaseService.appointments.findOne({order_id: value})
             if (!isExist) {
               throw new Error(APPOINTMENTS_MESSAGE.APPOINTMENT_NOT_FOUND)
             }

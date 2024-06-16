@@ -8,7 +8,9 @@ import {
   GetAppointmentByPatientIdReqParams,
   QueryAppointment,
   QueryAppointmentByDoctorId,
-  UpdateAppointment
+  UpdateAppointment,
+  UpdateAppointmentByOrderId,
+  UpdateOrderIdAppointmentsReqBody
 } from '~/models/request/Appointment.request'
 import appointmentService from '~/services/appointment.service'
 import {responseMessage} from '~/utils/common'
@@ -31,6 +33,22 @@ export const updateStatusAppointmentsController = async (req: Request<UpdateAppo
   const {id} = req.params
   await appointmentService.updateStatusAppointment(id)
   return res.json({message: APPOINTMENTS_MESSAGE.UPDATE_STATUS_SUCCESS})
+}
+
+export const updateOrderIdAppointmentsController = async (
+  req: Request<UpdateAppointment, any, UpdateOrderIdAppointmentsReqBody>,
+  res: Response
+) => {
+  const {id} = req.params
+  const {order_id} = req.body
+  await appointmentService.updateOrderIdAppointment(id, order_id)
+  return res.json({message: APPOINTMENTS_MESSAGE.UPDATE_ORDER_ID_SUCCESS})
+}
+
+export const updatePaymentAppointmentsController = async (req: Request<UpdateAppointmentByOrderId>, res: Response) => {
+  const {order_id} = req.params
+  await appointmentService.updatePaymentAppointment(order_id)
+  return res.json({message: APPOINTMENTS_MESSAGE.UPDATE_PAYMENT_SUCCESS})
 }
 
 export const getFullAppointmentsController = async (

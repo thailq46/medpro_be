@@ -281,5 +281,9 @@ export const APPOINTMENTS_MESSAGE = {
   APPOINTMENT_ID_REQUIRED: 'Appointment id is required',
   APPOINTMENT_NOT_FOUND: 'Appointment not found',
   DELETE_SUCCESS: 'Delete appointment successfully',
-  UPDATE_STATUS_SUCCESS: 'Update status appointment successfully'
+  UPDATE_STATUS_SUCCESS: 'Update status appointment successfully',
+  ORDER_ID_MUST_BE_STRING: 'Order id must be a string',
+  ORDER_ID_REQUIRED: 'Order id is required',
+  UPDATE_ORDER_ID_SUCCESS: 'Update order appointment successfully',
+  UPDATE_PAYMENT_SUCCESS: 'Update payment appointment successfully'
 }

@@ -5,6 +5,7 @@ interface AppointmentType {
   doctor_id: ObjectId
   patient_id: ObjectId
   service_id: ObjectId
+  order_id: string | null
   fullname: string
   email: string
   phone_number: string
@@ -26,6 +27,7 @@ export default class Appointment {
   doctor_id: ObjectId
   patient_id: ObjectId
   service_id: ObjectId
+  order_id: string | null
   fullname: string
   email: string
   phone_number: string
@@ -46,6 +48,7 @@ export default class Appointment {
     this.doctor_id = appointment.doctor_id
     this.patient_id = appointment.patient_id
     this.service_id = appointment.service_id
+    this.order_id = appointment.order_id || null
     this.fullname = appointment.fullname
     this.email = appointment.email
     this.phone_number = appointment.phone_number

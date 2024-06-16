@@ -5,10 +5,13 @@ import {
   getAppointmentByDoctorIdController,
   getAppointmentByPatientIdController,
   getFullAppointmentsController,
+  updateOrderIdAppointmentsController,
+  updatePaymentAppointmentsController,
   updateStatusAppointmentsController
 } from '~/controllers/appointments.controllers'
 import {
   checkParamsAppointmentByDoctorId,
+  checkParamsAppointmentByOrderId,
   checkParamsAppointmentByPatientId,
   checkParamsAppointmentId,
   createAppointmentsValidator
@@ -63,6 +66,37 @@ appointmentsRouter.patch(
   verifiedUserValidator,
   checkParamsAppointmentId,
   wrapRequestHandler(updateStatusAppointmentsController)
+)
+
+/**
+ * Desscription: Update order_id of an appointment
+ * Path: /appointments/update/:id/order-id
+ * Method: PATCH
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { id: string }
+ * Body: { order_id: string }
+ */
+appointmentsRouter.patch(
+  '/update/:id/order-id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  checkParamsAppointmentId,
+  wrapRequestHandler(updateOrderIdAppointmentsController)
+)
+
+/**
+ * Desscription: Update isPayment of an appointment
+ * Path: /appointments/update/:id/payment
+ * Method: PATCH
+ * Headers: { Authorization: Bearer <access_token> }
+ * Params: { order_id: string }
+ */
+appointmentsRouter.patch(
+  '/update/:order_id/payment',
+  accessTokenValidator,
+  verifiedUserValidator,
+  checkParamsAppointmentByOrderId,
+  wrapRequestHandler(updatePaymentAppointmentsController)
 )
 
 /**

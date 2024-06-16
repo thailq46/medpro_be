@@ -5,6 +5,7 @@ export interface CreateAppointmentsReqBody {
   doctor_id: string
   patient_id: string
   service_id: string
+  order_id: string | null
   address: string
   date: string
   time: string
@@ -18,11 +19,17 @@ export interface CreateAppointmentsReqBody {
   status: boolean
   isPayment: boolean
 }
+export interface UpdateOrderIdAppointmentsReqBody {
+  order_id: string
+}
 export interface DeleteAppointmentReqParams extends ParamsDictionary {
   id: string
 }
 export interface UpdateAppointment extends ParamsDictionary {
   id: string
+}
+export interface UpdateAppointmentByOrderId extends ParamsDictionary {
+  order_id: string
 }
 export interface GetAppointmentByDoctorIdReqParams extends ParamsDictionary {
   doctor_id: string
