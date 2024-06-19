@@ -2,7 +2,7 @@ import {ObjectId} from 'mongodb'
 
 interface AppointmentType {
   _id?: ObjectId
-  doctor_id: ObjectId
+  doctor_id: ObjectId | null
   patient_id: ObjectId
   service_id: ObjectId
   order_id: string | null
@@ -24,7 +24,7 @@ interface AppointmentType {
 
 export default class Appointment {
   _id?: ObjectId
-  doctor_id: ObjectId
+  doctor_id: ObjectId | null
   patient_id: ObjectId
   service_id: ObjectId
   order_id: string | null
@@ -45,7 +45,7 @@ export default class Appointment {
   constructor(appointment: AppointmentType) {
     const date = new Date()
     this._id = appointment._id || new ObjectId()
-    this.doctor_id = appointment.doctor_id
+    this.doctor_id = appointment.doctor_id || null
     this.patient_id = appointment.patient_id
     this.service_id = appointment.service_id
     this.order_id = appointment.order_id || null

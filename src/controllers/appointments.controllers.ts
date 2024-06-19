@@ -107,6 +107,7 @@ export const getAppointmentByPatientIdController = async (
   res: Response
 ) => {
   const {patient_id} = req.params
+  console.log('patient_id', patient_id)
   const result = await appointmentService.getAppointmentByPatientId(patient_id)
   return res.json({message: APPOINTMENTS_MESSAGE.GET_SUCCESS, data: result})
 }

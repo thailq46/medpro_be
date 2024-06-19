@@ -18,9 +18,11 @@ export const createAppointmentsValidator = validate(
   checkSchema(
     {
       doctor_id: {
-        notEmpty: {errorMessage: APPOINTMENTS_MESSAGE.DOCTOR_ID_REQUIRED},
+        optional: {options: {nullable: true}},
+        isString: {errorMessage: APPOINTMENTS_MESSAGE.DOCTOR_ID_MUST_BE_STRING},
         custom: {
-          options: async (value: string, {req}) => {
+          options: async (value: string | null, {req}) => {
+            if (value === null) return true
             if (!ObjectId.isValid(value)) {
               throw new Error(APPOINTMENTS_MESSAGE.INVALID_OBJECT_ID)
             }

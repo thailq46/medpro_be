@@ -259,6 +259,7 @@ export const SCHEDULES_MESSAGE = {
 export const APPOINTMENTS_MESSAGE = {
   DOCTOR_ID_REQUIRED: 'Doctor id is required',
   DOCTOR_NOT_FOUND: 'Doctor not found',
+  DOCTOR_ID_MUST_BE_STRING: 'Doctor id must be a string',
   PATIENT_ID_REQUIRED: 'Patient id is required',
   PATIENT_NOT_FOUND: 'Patient not found',
   INVALID_OBJECT_ID: 'Invalid ObjectId',

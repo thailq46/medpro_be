@@ -8,7 +8,7 @@ class AppointmentService {
     return await databaseService.appointments.insertOne(
       new Appointment({
         ...payload,
-        doctor_id: new ObjectId(payload.doctor_id),
+        doctor_id: payload.doctor_id ? new ObjectId(payload.doctor_id) : null,
         patient_id: new ObjectId(payload.patient_id),
         service_id: new ObjectId(payload.service_id),
         order_id: payload.order_id ? payload.order_id : null
@@ -195,8 +195,8 @@ class AppointmentService {
             as: 'service'
           }
         },
-        {$unwind: {path: '$doctor'}},
-        {$unwind: {path: '$service'}},
+        {$unwind: {path: '$doctor', preserveNullAndEmptyArrays: true}},
+        {$unwind: {path: '$service', preserveNullAndEmptyArrays: true}},
         {
           $lookup: {
             from: 'users',
@@ -205,7 +205,7 @@ class AppointmentService {
             as: 'doctor.result'
           }
         },
-        {$unwind: {path: '$doctor.result'}},
+        {$unwind: {path: '$doctor.result', preserveNullAndEmptyArrays: true}},
         {
           $set: {
             'doctor.name': '$doctor.result.name',
