@@ -126,10 +126,10 @@ class DoctorsService {
     const searchString = typeof search === 'string' ? search : ''
     const $match: any = {}
     if (searchString) {
-      $match.or = [{name: {$regex: searchString, $options: 'i'}}]
+      $match['doctor.name'] = {$regex: searchString, $options: 'i'}
     }
     if (position !== undefined && numberEnumToArray(PositionType).includes(position)) {
-      $match['position'] = position
+      $match['doctor.position'] = position
     }
     if (hospital && ObjectId.isValid(hospital)) {
       $match['hospital_id'] = new ObjectId(hospital)
@@ -168,6 +168,7 @@ class DoctorsService {
           },
           {$unwind: {path: '$doctor'}},
           {$unwind: {path: '$specialty.hospital'}},
+          {$match},
           {
             $project: {
               specialty_id: 0,
@@ -198,7 +199,6 @@ class DoctorsService {
             }
           },
           {$unset: 'doctor'},
-          {$match},
           {$skip: limit * (page - 1)},
           {$limit: limit}
         ])
