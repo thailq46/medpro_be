@@ -2,6 +2,7 @@ import {Collection, Db, MongoClient} from 'mongodb'
 import {envConfig} from '~/constants/config'
 import Appointment from '~/models/schemas/Appointment.schema'
 import Category from '~/models/schemas/Category.schema'
+import Conversation from '~/models/schemas/Conversation.schema'
 import Doctor from '~/models/schemas/Doctor.schema'
 import Hospital from '~/models/schemas/Hospital.schema'
 import MedicalBookingForms from '~/models/schemas/MedicalBookingForms.schema'
@@ -126,6 +127,14 @@ class DatabaseService {
       this.doctors.createIndex({name: 'text'})
     }
   }
+
+  async indexConversations() {
+    const isExist = await this.conversations.indexExists(['created_at_-1'])
+    if (!isExist) {
+      this.appointments.createIndex({created_at: -1})
+    }
+  }
+
   get users(): Collection<User> {
     return this.db.collection(envConfig.dbUsersCollection)
   }
@@ -155,6 +164,9 @@ class DatabaseService {
   }
   get appointments(): Collection<Appointment> {
     return this.db.collection(envConfig.dbAppointmentsCollection)
+  }
+  get conversations(): Collection<Conversation> {
+    return this.db.collection(envConfig.dbConversationsCollection)
   }
 }
 

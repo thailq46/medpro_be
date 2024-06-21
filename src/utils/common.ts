@@ -1,12 +1,12 @@
-import {NextFunction, Request} from 'express'
+import {Request} from 'express'
+import {JsonWebTokenError} from 'jsonwebtoken'
+import {capitalize} from 'lodash'
+import {envConfig} from '~/constants/config'
 import HTTP_STATUS from '~/constants/httpStatus'
 import {USERS_MESSAGE} from '~/constants/messages'
-import {ErrorWithStatus} from '~/models/Errors'
-import {JsonWebTokenError} from 'jsonwebtoken'
-import {envConfig} from '~/constants/config'
-import {verifyToken} from '~/utils/jwt'
-import {capitalize, pick} from 'lodash'
 import {CHECK_DATE_REGEX} from '~/constants/regax'
+import {ErrorWithStatus} from '~/models/Errors'
+import {verifyToken} from '~/utils/jwt'
 
 interface IMetaData {
   total_page?: number
@@ -32,6 +32,7 @@ export function isValidDateFormat(date: string) {
   const regex = CHECK_DATE_REGEX
   return regex.test(date)
 }
+
 export async function verifyAccessToken(access_token: string, req?: Request) {
   if (!access_token) {
     throw new ErrorWithStatus({

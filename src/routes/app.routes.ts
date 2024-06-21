@@ -2,6 +2,7 @@ import {Express} from 'express-serve-static-core'
 import appointmentsRouter from '~/routes/appoitments.routes'
 import authRouter from '~/routes/auth.routes'
 import categoriesRouter from '~/routes/categories.routes'
+import conversationsRouter from '~/routes/conversations.routes'
 import doctorsRouter from '~/routes/doctors.routes'
 import hospitalsRouter from '~/routes/hospitals.routes'
 import mediasRouter from '~/routes/medias.routes'
@@ -29,6 +30,7 @@ function router(app: Express) {
   app.use('/search', searchRouter)
   app.use('/appointments', appointmentsRouter)
   app.use('/payment', paymentRouter)
+  app.use('/conversations', conversationsRouter)
 }
 
 export default router

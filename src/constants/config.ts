@@ -28,6 +28,7 @@ export const envConfig = {
   dbDoctorsCollection: process.env.DB_DOCTORS_COLLECTION as string,
   dbSchedulesCollection: process.env.DB_SCHEDULES_COLLECTION as string,
   dbAppointmentsCollection: process.env.DB_APPOINTMENTS_COLLECTION as string,
+  dbConversationsCollection: process.env.DB_CONVERSATIONS_COLLECTION as string,
 
   secretOrPrivateKey: process.env.SECRET_OR_PRIVATE_KEY as string,
 

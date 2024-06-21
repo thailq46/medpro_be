@@ -43,10 +43,9 @@ usersRouter.patch(
  * Desscription: Get user by username
  * Path: /users/:username
  * Method: GET
- * Headers: { Authorization: Bearer <access_token> }
  * Params: { username: string }
  */
-usersRouter.get('/:username', accessTokenValidator, wrapRequestHandler(getUserByUsernameController))
+usersRouter.get('/:username', wrapRequestHandler(getUserByUsernameController))
 
 /**
  * Desscription: Update user by username
