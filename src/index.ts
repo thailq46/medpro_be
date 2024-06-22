@@ -91,6 +91,10 @@ io.use(async (socket, next) => {
         status: HTTP_STATUS.UNAUTHORIZED
       })
     }
+    // Truyền decoded_authorization vào socket để có thể sử dụng ở các middleware khác
+    socket.handshake.auth.decoded_authorization = decoded_authorization
+    socket.handshake.auth.access_token = access_token
+    next()
   } catch (error) {
     next({
       message: 'Unauthorized',
@@ -107,19 +111,33 @@ io.use(async (socket, next) => {
  * Socket từ client 1 bắn 1 cái events thì socket client 1 bên server lắng nghe thì mới nhận được chứ socket client 2 bên server lắng nghe events cũng không thể nhận được
  */
 io.on('connection', (socket) => {
-  const user_id = socket.handshake.auth._id
+  const {user_id} = socket.handshake.auth.decoded_authorization as TokenPayload
   console.log(`user ${socket.id} + ${user_id} connected`)
   if (user_id) {
     users[user_id] = {
       socket_id: socket.id
     }
+
+    socket.use(async (_, next) => {
+      const {access_token} = socket.handshake.auth
+      try {
+        await verifyAccessToken(access_token)
+        next()
+      } catch (error) {
+        next(new Error('Unauthorized'))
+      }
+    })
+
+    socket.on('error', (error) => {
+      if (error.message === 'Unauthorized') {
+        socket.disconnect()
+      }
+    })
+
     socket.on('send_message', async (data) => {
       console.log(data)
       const {receiver_id, sender_id, content} = data.payload
       const receiver_socket_id = users[receiver_id]?.socket_id
-      if (!receiver_socket_id) {
-        return
-      }
       const conversation = new Conversation({
         sender_id: new ObjectId(sender_id),
         receiver_id: new ObjectId(receiver_id),
@@ -127,9 +145,11 @@ io.on('connection', (socket) => {
       })
       const result = await databaseService.conversations.insertOne(conversation)
       conversation._id = result.insertedId
-      socket.to(receiver_socket_id).emit('receive_message', {
-        payload: conversation
-      })
+      if (receiver_socket_id) {
+        socket.to(receiver_socket_id).emit('receive_message', {
+          payload: conversation
+        })
+      }
     })
     console.log(users)
   }
