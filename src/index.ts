@@ -10,7 +10,13 @@ import databaseService from './services/database.service'
 import {createServer} from 'http'
 import {ObjectId} from 'mongodb'
 import {Server} from 'socket.io'
+import {UserVerifyStatus} from '~/constants/enum'
+import HTTP_STATUS from '~/constants/httpStatus'
+import {USERS_MESSAGE} from '~/constants/messages'
+import {ErrorWithStatus} from '~/models/Errors'
 import Conversation from '~/models/schemas/Conversation.schema'
+import {verifyAccessToken} from '~/utils/common'
+import {TokenPayload} from '~/utils/jwt'
 import {initFolder} from './utils/file'
 
 const app = express()
@@ -70,6 +76,30 @@ const users: {
   }
 } = {}
 /**
+ * Middleware này sẽ được gọi trước khi socket.io nó connection => nên khi có lỗi thì sẽ không listen được ở trong connection vì chưa có socket nào kết nối
+ */
+io.use(async (socket, next) => {
+  const {Authorization} = socket.handshake.auth
+  const access_token = Authorization?.split(' ')[1]
+  try {
+    const decoded_authorization = await verifyAccessToken(access_token)
+    const {verify} = decoded_authorization as TokenPayload
+    if (verify !== UserVerifyStatus.Verified) {
+      // throw 1 error nó sẽ nhảy xuống catch ngay
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGE.USER_NOT_VERIFIED,
+        status: HTTP_STATUS.UNAUTHORIZED
+      })
+    }
+  } catch (error) {
+    next({
+      message: 'Unauthorized',
+      name: 'UnauthorizedError',
+      data: error
+    })
+  }
+})
+/**
  * func này sẽ có nhều lần gọi khác nhau
  * VD client 1 kết nối tới server thì sẽ gọi lần đầu tiên và có 1 socket instance của client 1
  * client 2 kết nối tới server thì sẽ gọi lần thứ 2 và có 1 socket instance của client 2
@@ -83,22 +113,22 @@ io.on('connection', (socket) => {
     users[user_id] = {
       socket_id: socket.id
     }
-    socket.on('private_message', async (data) => {
+    socket.on('send_message', async (data) => {
       console.log(data)
-      const receiver_socket_id = users[data.to]?.socket_id
+      const {receiver_id, sender_id, content} = data.payload
+      const receiver_socket_id = users[receiver_id]?.socket_id
       if (!receiver_socket_id) {
         return
       }
-      await databaseService.conversations.insertOne(
-        new Conversation({
-          sender_id: new ObjectId(data.from),
-          receiver_id: new ObjectId(data.to),
-          content: data.content
-        })
-      )
-      socket.to(receiver_socket_id).emit('receive_private_message', {
-        content: data.content,
-        from: data.from
+      const conversation = new Conversation({
+        sender_id: new ObjectId(sender_id),
+        receiver_id: new ObjectId(receiver_id),
+        content
+      })
+      const result = await databaseService.conversations.insertOne(conversation)
+      conversation._id = result.insertedId
+      socket.to(receiver_socket_id).emit('receive_message', {
+        payload: conversation
       })
     })
     console.log(users)

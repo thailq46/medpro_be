@@ -288,3 +288,9 @@ export const APPOINTMENTS_MESSAGE = {
   UPDATE_ORDER_ID_SUCCESS: 'Update order appointment successfully',
   UPDATE_PAYMENT_SUCCESS: 'Update payment appointment successfully'
 }
+
+export const CONVERSATION_MESSAGE = {
+  RECEIVER_ID_IS_REQUIRED: 'Receiver id is required',
+  INVALID_OBJECT_ID: 'Invalid ObjectId',
+  RECEIVER_NOT_FOUND: 'Receiver not found'
+}

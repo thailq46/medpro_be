@@ -33,6 +33,9 @@ export function isValidDateFormat(date: string) {
   return regex.test(date)
 }
 
+/**
+ * req là optional vì file auth.middleware.ts ta sẽ truyền req vào còn ở socket.io ta không truyền req vào
+ */
 export async function verifyAccessToken(access_token: string, req?: Request) {
   if (!access_token) {
     throw new ErrorWithStatus({

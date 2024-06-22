@@ -2,6 +2,7 @@ import {Router} from 'express'
 import {getConversationByReceiverIdController} from '~/controllers/conversations.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {paginationValidator} from '~/middlewares/common.middlewares'
+import {checkParamsConversationByReceiverId} from '~/middlewares/conversations.middlewares'
 import {verifiedUserValidator} from '~/middlewares/users.middlewares'
 import {wrapRequestHandler} from '~/utils/handlers'
 
@@ -19,6 +20,7 @@ conversationsRouter.get(
   accessTokenValidator,
   verifiedUserValidator,
   paginationValidator,
+  checkParamsConversationByReceiverId,
   wrapRequestHandler(getConversationByReceiverIdController)
 )
 
