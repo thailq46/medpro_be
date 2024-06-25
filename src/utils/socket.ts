@@ -21,6 +21,7 @@ export const initSocket = (httpServer: ServerHttp) => {
       socket_id: string
     }
   } = {}
+  const onlineUser = new Map<string, {last_online: Date | null}>()
   /**
    * Middleware này sẽ được gọi trước khi socket.io nó connection => nên khi có lỗi thì sẽ không listen được ở trong connection vì chưa có socket nào kết nối
    */
@@ -64,6 +65,16 @@ export const initSocket = (httpServer: ServerHttp) => {
         socket_id: socket.id
       }
 
+      socket.join(user_id)
+      onlineUser.set(user_id, {last_online: null})
+      io.emit(
+        'online_users',
+        Array.from(onlineUser.entries()).map(([user_id, {last_online}]) => ({
+          user_id,
+          last_online
+        }))
+      )
+
       socket.use(async (_, next) => {
         const {access_token} = socket.handshake.auth
         try {
@@ -102,6 +113,15 @@ export const initSocket = (httpServer: ServerHttp) => {
 
     socket.on('disconnect', () => {
       delete users[user_id]
+      onlineUser.delete(user_id)
+      onlineUser.set(user_id, {last_online: new Date()})
+      io.emit(
+        'online_users',
+        Array.from(onlineUser.entries()).map(([user_id, {last_online}]) => ({
+          user_id,
+          last_online
+        }))
+      )
       console.log(`user ${socket.id} disconnected`)
       console.log(users)
     })

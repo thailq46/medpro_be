@@ -129,9 +129,9 @@ class DatabaseService {
   }
 
   async indexConversations() {
-    const isExist = await this.conversations.indexExists(['created_at_1'])
+    const isExist = await this.conversations.indexExists(['created_at_-1'])
     if (!isExist) {
-      this.appointments.createIndex({created_at: 1})
+      this.appointments.createIndex({created_at: -1})
     }
   }
 
