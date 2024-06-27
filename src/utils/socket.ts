@@ -11,6 +11,13 @@ import databaseService from '~/services/database.service'
 import {verifyAccessToken} from '~/utils/common'
 import {TokenPayload} from '~/utils/jwt'
 
+interface IConversationBody {
+  sender_id: string
+  receiver_id: string
+  content: string
+  imgUrl: string
+}
+
 export const initSocket = (httpServer: ServerHttp) => {
   const io = new Server(httpServer, {
     // Cấp phép cho domain có thể kết nối tới server
@@ -92,8 +99,7 @@ export const initSocket = (httpServer: ServerHttp) => {
         }
       })
 
-      socket.on('send_message', async (data) => {
-        console.log(data)
+      socket.on('send_message', async (data: {payload: IConversationBody}) => {
         const {receiver_id, sender_id, content, imgUrl} = data.payload
         const receiver_socket_id = users[receiver_id]?.socket_id
         const conversation = new Conversation({
@@ -110,8 +116,10 @@ export const initSocket = (httpServer: ServerHttp) => {
           })
         }
         //send conversation
-        const conversationSender = await conversationService.getConversationsWithSocket(sender_id)
-        const conversationReceiver = await conversationService.getConversationsWithSocket(receiver_id)
+        const [conversationSender, conversationReceiver] = await Promise.all([
+          conversationService.getConversationsWithSocket(sender_id),
+          conversationService.getConversationsWithSocket(receiver_id)
+        ])
         io.to(sender_id).emit('conversation', conversationSender)
         io.to(receiver_id).emit('conversation', conversationReceiver)
       })
