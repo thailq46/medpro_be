@@ -72,6 +72,58 @@ class ConversationService {
       .toArray()
     return users
   }
+
+  async getConversationsWithSocket(currentUserId: string) {
+    if (!currentUserId) return []
+    const match = {
+      $or: [{sender_id: new ObjectId(currentUserId)}, {receiver_id: new ObjectId(currentUserId)}]
+    }
+
+    const conversations = await databaseService.conversations.find(match).sort({created_at: -1}).toArray()
+
+    const userIds = new Set<string>()
+
+    conversations.forEach((conversation) => {
+      if (conversation.sender_id.toString() !== currentUserId) {
+        userIds.add(conversation.sender_id.toString())
+      }
+      if (conversation.receiver_id.toString() !== currentUserId) {
+        userIds.add(conversation.receiver_id.toString())
+      }
+    })
+
+    const users = await databaseService.users
+      .find({_id: {$in: Array.from(userIds).map((id) => new ObjectId(id))}})
+      .toArray()
+
+    // Xử lý để lấy tin nhắn cuối cùng của mỗi user mà bạn đã nhắn tin
+    const lastMessagesMap = new Map<string, any>()
+    conversations.forEach((conversation) => {
+      const otherUserId =
+        conversation.sender_id.toString() === currentUserId
+          ? conversation.receiver_id.toString()
+          : conversation.sender_id.toString()
+      if (!lastMessagesMap.has(otherUserId)) {
+        lastMessagesMap.set(otherUserId, conversation)
+      }
+    })
+    // Chuyển đổi Map thành mảng các tin nhắn cuối cùng
+    const lastMessages = Array.from(lastMessagesMap.values())
+    const usersWithLastMessages = users.map((user) => {
+      return {
+        _id: user._id.toString(),
+        username: user.username,
+        avatar: user.avatar,
+        name: user.name,
+        lastMessage: lastMessages.find(
+          (message) =>
+            message.sender_id.toString() === user._id.toString() ||
+            message.receiver_id.toString() === user._id.toString()
+        )
+      }
+    })
+    return usersWithLastMessages
+  }
 }
 
 const conversationService = new ConversationService()

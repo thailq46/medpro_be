@@ -6,6 +6,7 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import {USERS_MESSAGE} from '~/constants/messages'
 import {ErrorWithStatus} from '~/models/Errors'
 import Conversation from '~/models/schemas/Conversation.schema'
+import conversationService from '~/services/conversations.service'
 import databaseService from '~/services/database.service'
 import {verifyAccessToken} from '~/utils/common'
 import {TokenPayload} from '~/utils/jwt'
@@ -13,7 +14,7 @@ import {TokenPayload} from '~/utils/jwt'
 export const initSocket = (httpServer: ServerHttp) => {
   const io = new Server(httpServer, {
     // Cấp phép cho domain có thể kết nối tới server
-    cors: {origin: 'http://localhost:3000'}
+    cors: {origin: 'http://localhost:3000', credentials: true}
   })
 
   const users: {
@@ -107,9 +108,19 @@ export const initSocket = (httpServer: ServerHttp) => {
             payload: conversation
           })
         }
+        //send conversation
+        const conversationSender = await conversationService.getConversationsWithSocket(sender_id)
+        const conversationReceiver = await conversationService.getConversationsWithSocket(receiver_id)
+        io.to(sender_id).emit('conversation', conversationSender)
+        io.to(receiver_id).emit('conversation', conversationReceiver)
       })
       console.log(users)
     }
+
+    socket.on('sidebar', async (currentUserId: string) => {
+      const conversation = await conversationService.getConversationsWithSocket(currentUserId)
+      socket.emit('conversation', conversation)
+    })
 
     socket.on('disconnect', () => {
       delete users[user_id]
