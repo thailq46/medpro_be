@@ -5,6 +5,7 @@ interface ConversationType {
   sender_id: ObjectId
   receiver_id: ObjectId
   content: string
+  imgUrl?: string
   created_at?: Date
   updated_at?: Date
 }
@@ -14,6 +15,7 @@ export default class Conversation {
   sender_id: ObjectId
   receiver_id: ObjectId
   content: string
+  imgUrl: string
   created_at: Date
   updated_at: Date
   constructor(conversation: ConversationType) {
@@ -22,6 +24,7 @@ export default class Conversation {
     this.sender_id = conversation.sender_id
     this.receiver_id = conversation.receiver_id
     this.content = conversation.content
+    this.imgUrl = conversation.imgUrl || ''
     this.created_at = conversation.created_at || date
     this.updated_at = conversation.updated_at || date
   }

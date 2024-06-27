@@ -94,12 +94,13 @@ export const initSocket = (httpServer: ServerHttp) => {
 
       socket.on('send_message', async (data) => {
         console.log(data)
-        const {receiver_id, sender_id, content} = data.payload
+        const {receiver_id, sender_id, content, imgUrl} = data.payload
         const receiver_socket_id = users[receiver_id]?.socket_id
         const conversation = new Conversation({
           sender_id: new ObjectId(sender_id),
           receiver_id: new ObjectId(receiver_id),
-          content
+          content: content.trim(),
+          imgUrl
         })
         const result = await databaseService.conversations.insertOne(conversation)
         conversation._id = result.insertedId

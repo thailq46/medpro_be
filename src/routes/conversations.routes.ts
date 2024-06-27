@@ -1,8 +1,5 @@
 import {Router} from 'express'
-import {
-  getConversationByReceiverIdController,
-  getConversationsOfMeController
-} from '~/controllers/conversations.controllers'
+import {getConversationByReceiverIdController} from '~/controllers/conversations.controllers'
 import {accessTokenValidator} from '~/middlewares/auth.middlewares'
 import {paginationValidator} from '~/middlewares/common.middlewares'
 import {checkParamsConversationByReceiverId} from '~/middlewares/conversations.middlewares'
@@ -27,16 +24,4 @@ conversationsRouter.get(
   wrapRequestHandler(getConversationByReceiverIdController)
 )
 
-/**
- * Desscription: Get conversations
- * Path: /conversations/me
- * Method: GET
- * Headers: { Authorization: Bearer <access_token> }
- */
-conversationsRouter.get(
-  '/me',
-  accessTokenValidator,
-  verifiedUserValidator,
-  wrapRequestHandler(getConversationsOfMeController)
-)
 export default conversationsRouter
