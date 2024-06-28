@@ -47,7 +47,10 @@ class SchedulesService {
       $match['date'] = date
     }
     const [schedules, totalItems] = await Promise.all([
-      databaseService.schedules.aggregate([{$match}, {$skip: limit * (page - 1)}, {$limit: limit}]).toArray(),
+      databaseService.schedules
+        .aggregate([{$match}, {$skip: limit * (page - 1)}, {$limit: limit}])
+        .sort({created_at: -1})
+        .toArray(),
       databaseService.schedules.countDocuments($match)
     ])
     return {schedules, totalItems}
