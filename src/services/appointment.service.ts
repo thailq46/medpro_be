@@ -40,8 +40,8 @@ class AppointmentService {
               as: 'service'
             }
           },
-          {$unwind: {path: '$doctor'}},
-          {$unwind: {path: '$service'}},
+          {$unwind: {path: '$doctor', preserveNullAndEmptyArrays: true}},
+          {$unwind: {path: '$service', preserveNullAndEmptyArrays: true}},
           {
             $lookup: {
               from: 'users',
@@ -50,7 +50,7 @@ class AppointmentService {
               as: 'doctor.result'
             }
           },
-          {$unwind: {path: '$doctor.result'}},
+          {$unwind: {path: '$doctor.result', preserveNullAndEmptyArrays: true}},
           {
             $set: {
               'doctor.name': '$doctor.result.name',
@@ -69,6 +69,7 @@ class AppointmentService {
           {$skip: limit * (page - 1)},
           {$limit: limit}
         ])
+        .sort({created_at: -1})
         .toArray(),
       databaseService.appointments.countDocuments()
     ])
@@ -145,6 +146,7 @@ class AppointmentService {
           {$skip: limit * (page - 1)},
           {$limit: limit}
         ])
+        .sort({created_at: -1})
         .toArray(),
       databaseService.appointments.countDocuments($match)
     ])
