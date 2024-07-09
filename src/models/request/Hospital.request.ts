@@ -15,6 +15,7 @@ export interface CreateHospitalsReqBody {
   images: string[] | null
   types: number[]
   booking_forms: string[]
+  description_detail?: string | null
 }
 export interface UpdateHospitalsReqBody {
   categoryId?: string
@@ -31,6 +32,7 @@ export interface UpdateHospitalsReqBody {
   images?: string[] | null
   booking_forms?: string[]
   types?: number[]
+  description_detail?: string | null
 }
 export interface GetHospitalsParamsReq extends ParamsDictionary {
   id: string

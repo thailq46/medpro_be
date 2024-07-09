@@ -64,7 +64,8 @@ hospitalsRoutes.patch(
     'slug',
     'start_time',
     'types',
-    'booking_forms'
+    'booking_forms',
+    'description_detail'
   ]),
   wrapRequestHandler(updateHospitalController)
 )

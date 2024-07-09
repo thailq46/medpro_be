@@ -138,6 +138,11 @@ export const createHospitalValidator = validate(
             return true
           }
         }
+      },
+      description_detail: {
+        optional: {options: {nullable: true}},
+        isString: {errorMessage: HOSPITALS_MESSAGE.DESCRIPTION_DETAIL_MUST_BE_STRING},
+        trim: true
       }
     },
     ['body']
@@ -280,6 +285,11 @@ export const updateHospitalValidator = validate(
             return true
           }
         }
+      },
+      description_detail: {
+        optional: {options: {nullable: true}},
+        isString: {errorMessage: HOSPITALS_MESSAGE.DESCRIPTION_DETAIL_MUST_BE_STRING},
+        trim: true
       }
     },
     ['body']

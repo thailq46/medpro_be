@@ -165,7 +165,8 @@ export const HOSPITALS_MESSAGE = {
   HOSPITAL_NOT_FOUND: 'Hospital not found',
   HOSPITAL_ID_IS_REQUIRED: 'HospitalId is required',
   BOOKING_FORM_NOT_FOUND: 'Some booking forms not found in medicalBookingForms collection.',
-  INVALID_TYPES: `Types must be ${numberEnumToArray(HospitalsType).join(', ')}`
+  INVALID_TYPES: `Types must be ${numberEnumToArray(HospitalsType).join(', ')}`,
+  DESCRIPTION_DETAIL_MUST_BE_STRING: 'Description detail must be a string'
 }
 
 export const SERVICES_MESSAGE = {

@@ -15,6 +15,7 @@ interface HospitalsType {
   banner?: string | null
   images?: string[] | null
   booking_forms: ObjectId[]
+  description_detail?: string | null
   types: number[]
   created_at?: Date
   updated_at?: Date
@@ -36,6 +37,7 @@ export default class Hospital {
   images: string[] | null
   booking_forms: ObjectId[]
   types: number[]
+  description_detail: string | null
   created_at: Date
   updated_at: Date
   constructor({
@@ -55,6 +57,7 @@ export default class Hospital {
     slug,
     booking_forms,
     start_time,
+    description_detail,
     updated_at
   }: HospitalsType) {
     const date = new Date()
@@ -73,6 +76,7 @@ export default class Hospital {
     this.images = images || null
     this.types = types
     this.booking_forms = booking_forms
+    this.description_detail = description_detail || null
     this.created_at = created_at || date
     this.updated_at = updated_at || date
   }
