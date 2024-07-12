@@ -95,10 +95,11 @@ export const createHospitalValidator = validate(
         },
         custom: {
           options: (value: string[] | null) => {
-            if (value !== null && value.some((item: string) => typeof item !== 'string')) {
+            const urlString = value?.filter((item: string) => typeof item === 'string')
+            if (value !== null && urlString?.some((item: string) => typeof item !== 'string')) {
               throw new Error(HOSPITALS_MESSAGE.IMAGE_MUST_BE_STRING)
             }
-            return true
+            return urlString
           }
         }
       },
@@ -240,10 +241,11 @@ export const updateHospitalValidator = validate(
         },
         custom: {
           options: (value: string[] | null) => {
-            if (value !== null && value.some((item: string) => typeof item !== 'string')) {
+            const urlString = value?.filter((item: string) => typeof item === 'string')
+            if (value !== null && urlString?.some((item: string) => typeof item !== 'string')) {
               throw new Error(HOSPITALS_MESSAGE.IMAGE_MUST_BE_STRING)
             }
-            return true
+            return urlString
           }
         }
       },

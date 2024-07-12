@@ -5,11 +5,13 @@ import databaseService from '~/services/database.service'
 
 class HospitalsService {
   async createHospital(payload: CreateHospitalsReqBody) {
+    const imagesUrl = payload?.images !== null ? payload?.images?.filter((url) => typeof url === 'string') : null
     return await databaseService.hospitals.insertOne(
       new Hospital({
         ...payload,
         categoryId: new ObjectId(payload.categoryId),
-        booking_forms: payload.booking_forms.map((type) => new ObjectId(type))
+        booking_forms: payload.booking_forms.map((type) => new ObjectId(type)),
+        images: imagesUrl
       })
     )
   }
@@ -79,6 +81,7 @@ class HospitalsService {
   }
 
   async updateHospital(id: string, payload: UpdateHospitalsReqBody) {
+    const imagesUrl = payload?.images !== null ? payload?.images?.filter((url) => typeof url === 'string') : null
     return await databaseService.hospitals.findOneAndUpdate(
       {_id: new ObjectId(id)},
       [
@@ -87,6 +90,7 @@ class HospitalsService {
             ...payload,
             categoryId: new ObjectId(payload.categoryId),
             booking_forms: payload.booking_forms?.map((type) => new ObjectId(type)),
+            images: imagesUrl,
             updated_at: '$$NOW'
           }
         }
