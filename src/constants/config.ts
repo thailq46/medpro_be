@@ -73,5 +73,10 @@ export const envConfig = {
   momo_access_key: process.env.MOMO_ACCESS_KEY as string,
   momo_secret_key: process.env.MOMO_SECRET_KEY as string,
   momo_partner_code: process.env.MONO_PARTNER_CODE as string,
-  momo_request_type: process.env.MOMO_REQUEST_TYPE as string
+  momo_request_type: process.env.MOMO_REQUEST_TYPE as string,
+
+  googleClientId: process.env.GOOGLE_CLIENT_ID as string,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+  googleRedirectUri: process.env.GOOGLE_REDIRECT_URI as string,
+  clientRedirectCallback: process.env.CLIENT_REDIRECT_CALLBACK as string
 }

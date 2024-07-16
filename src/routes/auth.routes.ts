@@ -5,6 +5,7 @@ import {
   forgotPasswordController,
   loginController,
   logoutController,
+  oauthController,
   refreshTokenController,
   registerController,
   resendVerifyEmailController,
@@ -26,7 +27,7 @@ import {wrapRequestHandler} from '../utils/handlers'
 
 const authRouter = Router()
 /**
- * Desscription: Register new user
+ * Description: Register new user
  * Path: /auth/register
  * Method: POST
  * Body: { name: string, email: string, password: string, confirm_password: string, date_of_birth: ISO8601, gender: GenderType }
@@ -34,7 +35,7 @@ const authRouter = Router()
 authRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 
 /**
- * Desscription: Login user
+ * Description: Login user
  * Path: /auth/login
  * Method: POST
  * Body: { email: string, password: string }
@@ -42,7 +43,7 @@ authRouter.post('/register', registerValidator, wrapRequestHandler(registerContr
 authRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 
 /**
- * Desscription: Logout user
+ * Description: Logout user
  * Path: /auth/logout
  * Method: POST
  * Headers: { Authorization: Bearer <access_token> }
@@ -51,7 +52,15 @@ authRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 authRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
 
 /**
- * Desscription: Submit email to reset password, then send email to user
+ * Description: Login user with google
+ * Path: /auth/oauth/google
+ * Method: GET
+ * Query: { code: string }
+ */
+authRouter.get('/oauth/google', wrapRequestHandler(oauthController))
+
+/**
+ * Description: Submit email to reset password, then send email to user
  * Path: /auth/forgot-password
  * Method: POST
  * Body: { email: string }
@@ -59,7 +68,7 @@ authRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequ
 authRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController))
 
 /**
- * Desscription: Verify link in email to reset password
+ * Description: Verify link in email to reset password
  * Path: /auth/verify-forgot-password
  * Method: POST
  * Body: { forgot_password_token: string }
@@ -71,7 +80,7 @@ authRouter.post(
 )
 
 /**
- * Desscription: Reset password
+ * Description: Reset password
  * Path: /auth/reset-password
  * Method: POST
  * Body: { forgot_password_token: string, password: string, confirm_password: string }
@@ -79,7 +88,7 @@ authRouter.post(
 authRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))
 
 /**
- * Desscription: Verify email when user client click on the link in email
+ * Description: Verify email when user client click on the link in email
  * Path: /auth/verify-email
  * Method: POST
  * Body: { email_verify_token : string }
@@ -87,7 +96,7 @@ authRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(re
 authRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(emailVerifyController))
 
 /**
- * Desscription: Verify email when user client click on the link in email
+ * Description: Verify email when user client click on the link in email
  * Path: /auth/resend-verify-email
  * Method: POST
  * Headers: { Authorization: Bearer <access_token> }
@@ -96,7 +105,7 @@ authRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(e
 authRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
 
 /**
- * Desscription: Refresh Token
+ * Description: Refresh Token
  * Path: /auth/refresh-token
  * Method: POST
  * Body: { refresh_token: string }
@@ -104,7 +113,7 @@ authRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler
 authRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshTokenController))
 
 /**
- * Desscription: Change password
+ * Description: Change password
  * Path: /auth/change-password
  * Method: PUT
  * Headers: { Authorization: Bearer <access_token> }

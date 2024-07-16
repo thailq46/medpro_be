@@ -1,6 +1,7 @@
 import {Request, Response} from 'express'
 import {ParamsDictionary} from 'express-serve-static-core'
 import {ObjectId} from 'mongodb'
+import {envConfig} from '~/constants/config'
 import {USERS_MESSAGE} from '~/constants/messages'
 import {
   ChangePasswordReqBody,
@@ -42,6 +43,13 @@ export const logoutController = async (req: Request<ParamsDictionary, any, Logou
   return res.json({
     message: USERS_MESSAGE.LOGOUT_SUCCESS
   })
+}
+
+export const oauthController = async (req: Request<ParamsDictionary, any, any>, res: Response) => {
+  const {code} = req.query
+  const result = await authService.oauthGoogle(code as string)
+  const urlRedirect = `${envConfig.clientRedirectCallback}?access_token=${result.access_token}&refresh_token=${result.refresh_token}&new_user=${result.newUser}&verify=${result.verify}`
+  return res.redirect(urlRedirect)
 }
 
 export const forgotPasswordController = async (

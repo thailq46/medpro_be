@@ -68,6 +68,7 @@ export const USERS_MESSAGE = {
   EMAIL_VERIFY_SUCCESS: 'Email verify success',
   EMAIL_ALREADY_VERIFIED_BEFORE: 'Email already verified before',
   RESEND_EMAIL_VERIFY_SUCCESS: 'Resend email verify success',
+  GMAIL_NOT_VERIFIED: 'Gmail not verified',
 
   GET_ME_SUCCESS: 'Get information account in use success',
   USER_NOT_VERIFIED: 'User not verified',
