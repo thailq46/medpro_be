@@ -60,6 +60,9 @@ app.use(defaultErrorHandler)
 
 initSocket(httpServer)
 
+// logger.info('Hello created log files', {foo: 'bar'})
+// logger.log('info', 'Hello created log files', {foo: 'bar'})
+
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
