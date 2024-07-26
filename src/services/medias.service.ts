@@ -1,12 +1,12 @@
 import {Request} from 'express'
+import fs from 'fs-extra'
+import {google} from 'googleapis'
 import path from 'path'
 import sharp from 'sharp'
-import {UPLOAD_IMAGE_DIR} from '~/constants/dir'
-import {getNameFromFullname, handleUploadImage} from '~/utils/file'
 import {envConfig} from '~/constants/config'
+import {UPLOAD_IMAGE_DIR} from '~/constants/dir'
 import {Media, MediaType} from '~/constants/enum'
-import {google} from 'googleapis'
-import fs from 'fs-extra'
+import {getNameFromFullname, handleUploadImage} from '~/utils/file'
 
 const oauth2Client = new google.auth.OAuth2(
   envConfig.ggdriver_client_id,
@@ -41,7 +41,7 @@ class MediasService {
           })
 
         return {
-          url: `http://localhost:${envConfig.port}/static/image/${newName}.jpg`,
+          url: `http://${envConfig.host}:${envConfig.port}/api/static/image/${newName}.jpg`,
           type: MediaType.Image
         }
       })

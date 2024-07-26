@@ -16,21 +16,21 @@ import staticRouter from '~/routes/static.routes'
 import usersRouter from '~/routes/users.routes'
 
 function router(app: Express) {
-  app.use('/auth', authRouter)
-  app.use('/users', usersRouter)
-  app.use('/categories', categoriesRouter)
-  app.use('/medical-booking-forms', medicalBookingFormsRouter)
-  app.use('/medias', mediasRouter)
-  app.use('/static', staticRouter)
-  app.use('/hospitals', hospitalsRouter)
-  app.use('/services', servicesRoutes)
-  app.use('/specialties', specialtiesRouter)
-  app.use('/doctors', doctorsRouter)
-  app.use('/schedules', schedulesRouter)
-  app.use('/search', searchRouter)
-  app.use('/appointments', appointmentsRouter)
-  app.use('/payment', paymentRouter)
-  app.use('/conversations', conversationsRouter)
+  app.use('/api/auth', authRouter)
+  app.use('/api/users', usersRouter)
+  app.use('/api/categories', categoriesRouter)
+  app.use('/api/medical-booking-forms', medicalBookingFormsRouter)
+  app.use('/api/medias', mediasRouter)
+  app.use('/api/static', staticRouter)
+  app.use('/api/hospitals', hospitalsRouter)
+  app.use('/api/services', servicesRoutes)
+  app.use('/api/specialties', specialtiesRouter)
+  app.use('/api/doctors', doctorsRouter)
+  app.use('/api/schedules', schedulesRouter)
+  app.use('/api/search', searchRouter)
+  app.use('/api/appointments', appointmentsRouter)
+  app.use('/api/payment', paymentRouter)
+  app.use('/api/conversations', conversationsRouter)
 }
 
 export default router

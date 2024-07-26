@@ -128,6 +128,7 @@ export const initSocket = (httpServer: ServerHttp) => {
 
     socket.on('sidebar', async (currentUserId: string) => {
       const conversation = await conversationService.getConversationsWithSocket(currentUserId)
+      console.log('conversation', conversation)
       socket.emit('conversation', conversation)
     })
 
