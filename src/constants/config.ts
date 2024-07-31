@@ -1,16 +1,19 @@
 import {config} from 'dotenv'
+import dotenvExpand from 'dotenv-expand'
 import argv from 'minimist'
 
 const options = argv(process.argv.slice(2))
 export const isProduction = options.env === 'production'
 
-config({
-  path: options.env ? `.env.${options.env}` : '.env'
-})
+dotenvExpand.expand(
+  config({
+    path: options.env ? `.env.${options.env}` : '.env'
+  })
+)
 
 export const envConfig = {
   port: (process.env.PORT as string) || 10000,
-  host: process.env.HOST as string,
+  appUrl: process.env.APP_URL as string,
   clientUrl: process.env.CLIENT_URL as string,
   passwordSecret: process.env.PASSWORD_SECRET as string,
 
