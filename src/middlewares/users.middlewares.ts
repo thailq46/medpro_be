@@ -1,22 +1,22 @@
-import {Request, Response, NextFunction} from 'express'
+import {NextFunction, Request, Response} from 'express'
 import {checkSchema} from 'express-validator'
 import {RoleType, UserVerifyStatus} from '~/constants/enum'
 import HTTP_STATUS from '~/constants/httpStatus'
 import {USERS_MESSAGE} from '~/constants/messages'
+import {CHECK_PHONE_NUMBER_REGEX} from '~/constants/regax'
 import {ErrorWithStatus} from '~/models/Errors'
+import databaseService from '~/services/database.service'
+import {numberEnumToArray} from '~/utils/common'
 import {TokenPayload} from '~/utils/jwt'
 import validate from '~/utils/validate'
 import {
-  nameCheckSchema,
-  dateOfBirthCheckSchema,
-  genderCheckSchema,
   addressCheckSchema,
   avatarCheckSchema,
+  dateOfBirthCheckSchema,
+  genderCheckSchema,
+  nameCheckSchema,
   positionCheckSchema
 } from './../constants/checkSchema'
-import databaseService from '~/services/database.service'
-import {numberEnumToArray} from '~/utils/common'
-import {CHECK_PHONE_NUMBER_REGEX} from '~/constants/regax'
 
 export const verifiedUserValidator = (req: Request, res: Response, next: NextFunction) => {
   const {verify} = req.decode_authorization as TokenPayload

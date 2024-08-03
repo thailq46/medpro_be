@@ -286,24 +286,25 @@ class UsersService {
   async emailVerify(user_id: string, res: Response) {
     const user = await databaseService.users.findOne({_id: new ObjectId(user_id)})
     if (!user) {
-      return res.json({
-        message: USERS_MESSAGE.USER_NOT_FOUND
-      })
+      return res.json({message: USERS_MESSAGE.USER_NOT_FOUND})
     }
     if (user.email_verify_token === '' || user.verify === UserVerifyStatus.Verified) {
-      return res.json({
-        message: USERS_MESSAGE.EMAIL_ALREADY_VERIFIED_BEFORE
-      })
+      return res.json({message: USERS_MESSAGE.EMAIL_ALREADY_VERIFIED_BEFORE})
     }
-    const result = await databaseService.users.updateOne(
-      {
-        _id: new ObjectId(user_id)
-      },
-      [{$set: {email_verify_token: '', verify: UserVerifyStatus.Verified, updated_at: '$$NOW'}}]
-    )
+    await databaseService.users.updateOne({_id: new ObjectId(user_id)}, [
+      {$set: {email_verify_token: '', verify: UserVerifyStatus.Verified, updated_at: '$$NOW'}}
+    ])
+    const [access_token, refresh_token] = await this.signAccessTokenAndRefreshToken({
+      user_id,
+      verify: UserVerifyStatus.Verified,
+      role: user.role
+    })
     return res.json({
       message: USERS_MESSAGE.EMAIL_VERIFY_SUCCESS,
-      data: result
+      data: {
+        new_access_token: access_token,
+        new_refresh_token: refresh_token
+      }
     })
   }
 
@@ -319,7 +320,7 @@ class UsersService {
       user_id,
       verify: UserVerifyStatus.Verified
     })
-    const result = await databaseService.users.updateOne(
+    await databaseService.users.updateOne(
       {
         _id: new ObjectId(user_id)
       },
@@ -332,10 +333,7 @@ class UsersService {
       subject: 'Verify email',
       htmlContent: `<a href="${envConfig.clientUrl}/verify-email?token=${email_verify_token}"> Verify Email nek</a>`
     })
-    return res.json({
-      message: USERS_MESSAGE.RESEND_EMAIL_VERIFY_SUCCESS
-      // data: result
-    })
+    return res.json({message: USERS_MESSAGE.RESEND_EMAIL_VERIFY_SUCCESS})
   }
 
   async refreshToken({

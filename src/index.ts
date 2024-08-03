@@ -1,6 +1,5 @@
 import cors from 'cors'
 import express from 'express'
-import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import {envConfig} from './constants/config'
 import {defaultErrorHandler} from './middlewares/error.middlewares'
@@ -17,19 +16,19 @@ const port = envConfig.port
 const httpServer = createServer(app)
 
 const corsOptions: cors.CorsOptions = {
-  origin: '*',
+  origin: ['https://lequangthai-medpro.io.vn', /\.lequangthai-medpro\.io.vn$/, 'http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
 app.use(cors(corsOptions))
 
-const limiter = rateLimit({
-  // windowMs: 15 * 60 * 1000, // 15 minutes
-  // max: 100, // limit each IP to 100 requests per windowMs
-  // standardHeaders: true,
-  // legacyHeaders: false
-})
+// const limiter = rateLimit({
+//   windowMs: 5 * 60 * 1000, // 5 minutes
+//   max: 100, // limit each IP to 100 requests per windowMs
+//   standardHeaders: true,
+//   legacyHeaders: false
+// })
 // app.use(limiter)
 app.use(
   helmet({
