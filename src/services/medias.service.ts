@@ -41,7 +41,7 @@ class MediasService {
           })
 
         return {
-          url: `http://${envConfig.host}:${envConfig.port}/api/static/image/${newName}.jpg`,
+          url: `${envConfig.appUrl}/api/static/image/${newName}.jpg`,
           type: MediaType.Image
         }
       })
