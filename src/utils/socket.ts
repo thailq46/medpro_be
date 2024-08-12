@@ -18,6 +18,16 @@ interface IConversationBody {
   imgUrl: string
 }
 
+const emitOnlineUsers = (io: Server, onlineUser: Map<string, {last_online: Date | null}>) => {
+  io.emit(
+    'online_users',
+    Array.from(onlineUser.entries()).map(([user_id, {last_online}]) => ({
+      user_id,
+      last_online
+    }))
+  )
+}
+
 export const initSocket = (httpServer: ServerHttp) => {
   const io = new Server(httpServer, {
     // Cấp phép cho domain có thể kết nối tới server
@@ -72,16 +82,9 @@ export const initSocket = (httpServer: ServerHttp) => {
       users[user_id] = {
         socket_id: socket.id
       }
-
       socket.join(user_id)
       onlineUser.set(user_id, {last_online: null})
-      io.emit(
-        'online_users',
-        Array.from(onlineUser.entries()).map(([user_id, {last_online}]) => ({
-          user_id,
-          last_online
-        }))
-      )
+      emitOnlineUsers(io, onlineUser)
 
       socket.use(async (_, next) => {
         const {access_token} = socket.handshake.auth
@@ -123,26 +126,20 @@ export const initSocket = (httpServer: ServerHttp) => {
         io.to(sender_id).emit('conversation', conversationSender)
         io.to(receiver_id).emit('conversation', conversationReceiver)
       })
-      console.log(users)
+      // console.log(users)
     }
 
     socket.on('sidebar', async (currentUserId: string) => {
       const conversation = await conversationService.getConversationsWithSocket(currentUserId)
-      console.log('conversation', conversation)
       socket.emit('conversation', conversation)
+      emitOnlineUsers(io, onlineUser)
     })
 
     socket.on('disconnect', () => {
       delete users[user_id]
       onlineUser.delete(user_id)
       onlineUser.set(user_id, {last_online: new Date()})
-      io.emit(
-        'online_users',
-        Array.from(onlineUser.entries()).map(([user_id, {last_online}]) => ({
-          user_id,
-          last_online
-        }))
-      )
+      emitOnlineUsers(io, onlineUser)
       console.log(`user ${socket.id} disconnected`)
       console.log(users)
     })
